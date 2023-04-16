@@ -19,7 +19,7 @@
     "build": "rmdir /s /q build && set GENERATE_SOURCEMAP=true && react-scripts build",
     "release": "rmdir /s /q build && set GENERATE_SOURCEMAP=false && react-scripts build",
     "test": "react-scripts test",
-    "deploy": "aws s3 sync ./build s3://essay617503825053",
+    "deploy": "aws s3 sync ./build s3://pixelpen.net",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

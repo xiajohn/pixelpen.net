@@ -38,7 +38,7 @@ app.post('/generate-essay', async (req, res) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer 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`,
         },
       }
     );
