@@ -11,7 +11,7 @@ export class EssayStack extends cdk.Stack {
     const domainName = 'pixelpen.net';
 
     // Import your existing S3 bucket
-    const s3Bucket = s3.Bucket.fromBucketName(this, 'ImportedBucket', 'essay617503825053');
+    const s3Bucket = s3.Bucket.fromBucketName(this, 'ImportedBucket', domainName);
 
     // Create a Route 53 Hosted Zone
     const hostedZone = new route53.HostedZone(this, 'HostedZone', {
