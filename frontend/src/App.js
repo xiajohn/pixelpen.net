@@ -3,10 +3,12 @@ import logo from './logo.svg';
 import './Header.css'; // add this line to import the styles from the Header.css file
 import { Navbar, Nav, Container, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-
+import './App.css'
 
 function App() {
+  const isProduction = false; // set to true if deploying to production
   const [grade, setGrade] = useState('');
+  const [language, setLanguage] = useState('');
   const [wordCount, setWordCount] = useState('');
   const [topic, setTopic] = useState('');
   const [essay, setEssay] = useState('');
@@ -14,14 +16,16 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true); // set loading indicator to true
-  
+    const generateEssayURL = isProduction ? 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com/generate-essay' :
+      'http://localhost:3001/generate-essay';
     try {
-      const response = await axios.post('http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com/generate-essay', {
+      const response = await axios.post(generateEssayURL, {
         grade,
         wordCount,
         topic,
+        language
       });
-  
+
       const essay = response.data.essay;
       console.log('Generated Essay:', essay);
       setEssay(essay); // set essay state
@@ -30,12 +34,16 @@ function App() {
     }
     setIsLoading(false); // set loading indicator to false
   };
-  
+
 
   return (
     <div className="App">
-      
-      {isLoading && <div className="loading-mask"></div>}
+
+      {isLoading && (
+        <div className="loading-mask">
+          <div className="loader"></div>
+        </div>
+      )}
       <Navbar className="App-header" expand="lg">
         <Container>
           <Navbar.Brand href="#home">
@@ -45,7 +53,7 @@ function App() {
               className="d-inline-block align-top"
               alt="ChatGPT Logo"
             />
-            {' John Xia'}
+            {'Pixel Pen'}
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -58,7 +66,7 @@ function App() {
         </Container>
       </Navbar>
       <header className="App-header-text"></header>
-      <div className="center-text">
+      <div>
         <h1>Finish your essay free</h1>
       </div>
       <div className="input-form">
@@ -90,6 +98,15 @@ function App() {
               onChange={(e) => setTopic(e.target.value)}
             />
           </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Language</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter Language"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+            />
+          </Form.Group>
           <Button variant="primary" type="submit">
             Generate Essay
           </Button>
@@ -97,7 +114,7 @@ function App() {
       </div>
 
       {/* Display generated essay */}
-      <div className="center-text">
+      <div>
         <h2>Essay</h2>
         <p>{essay}</p>
       </div>

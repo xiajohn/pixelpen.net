@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/generate-essay', async (req, res) => {
-  const { grade, wordCount, topic } = req.body;
+  const { grade, wordCount, topic, language } = req.body;
 
   if (!grade || !wordCount || !topic) {
     return res.status(400).json({ error: 'All fields are required.' });
@@ -23,12 +23,12 @@ app.post('/generate-essay', async (req, res) => {
   try {
     // Set up OpenAI API call
     const openaiURL = 'https://api.openai.com/v1/completions';
-    const prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words.`;
+    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}.`;
 
     const response = await axios.post(
       openaiURL,
       {
-        model: 'text-davinci-002', // Update this with the desired model name
+        model: 'text-davinci-003', // Update this with the desired model name
         prompt,
         max_tokens: parseInt(wordCount) + 50,
         n: 1,
@@ -38,7 +38,7 @@ app.post('/generate-essay', async (req, res) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       }
     );
