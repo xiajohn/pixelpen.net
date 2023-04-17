@@ -13,7 +13,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
     event.preventDefault();
     setIsLoading(true);
     let generateEssayURL = '';
-    if(process.env.IS_DEV_ENV === 'true') {
+    if(!process.env.IS_DEV_ENV) {
       generateEssayURL = 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com/generate-essay'
     }
     else{
@@ -45,6 +45,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
         <Form.Group key={key} className="form-group">
           <Form.Label className="form-label">{key}</Form.Label>
           <Form.Control
+            className="form-field"
             type="text"
             placeholder={`Enter ${key}`}
             name={key}
@@ -53,7 +54,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
           />
         </Form.Group>
       ))}
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" className="form-btn">
         Generate Essay
       </Button>
     </Form>
