@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
-  const isProduction = false;
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -12,9 +12,12 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    const generateEssayURL = isProduction
-      ? 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com/generate-essay'
-      : 'http://localhost:3001/generate-essay';
+    if(process.env.IS_DEV_ENV === 'true') {
+      generateEssayURL = 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com/generate-essay'
+    }
+    else{
+      generateEssayURL = 'http://localhost:3001/generate-essay'
+    }
     const payload = {
       grade: formData.Grade,
       wordCount: formData.Word_Count,
