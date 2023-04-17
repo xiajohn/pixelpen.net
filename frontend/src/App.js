@@ -8,10 +8,10 @@ import './css/App.css';
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    Grade: '',
-    Word_Count: '',
+    Grade: '12',
+    Word_Count: '100',
     Topic: '',
-    Language: '',
+    Language: 'English',
   });
   const [essay, setEssay] = useState('');
 

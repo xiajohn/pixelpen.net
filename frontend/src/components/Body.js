@@ -1,9 +1,8 @@
 import React from 'react';
-
+import styles from '../css/Body.module.css';
 function Body({ children }) {
   return (
-    <div>
-      <h1>Finish your essay free</h1>
+    <div className={styles.body}>
       {children}
     </div>
   );

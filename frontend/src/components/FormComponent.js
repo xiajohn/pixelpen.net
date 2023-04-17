@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-
+import '../css/Form.css';
 function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   
 
@@ -12,6 +12,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+    let generateEssayURL = '';
     if(process.env.IS_DEV_ENV === 'true') {
       generateEssayURL = 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com/generate-essay'
     }
@@ -37,10 +38,12 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} className="form">
+      
+      <h1>Finish your essay free</h1>
       {Object.keys(formData).map((key) => (
-        <Form.Group key={key} className="mb-3">
-          <Form.Label>{key}</Form.Label>
+        <Form.Group key={key} className="form-group">
+          <Form.Label className="form-label">{key}</Form.Label>
           <Form.Control
             type="text"
             placeholder={`Enter ${key}`}

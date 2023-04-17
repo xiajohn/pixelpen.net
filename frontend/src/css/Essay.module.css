@@ -1,5 +1,7 @@
 .essay {
     padding: 2rem;
+    margin: 1rem;
+    flex: 0.8;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -8,7 +10,7 @@
   
   @media (min-width: 768px) {
     .essay {
-      width: 45%;
+      width: 100%;
       margin-top: 0;
     }
   }
