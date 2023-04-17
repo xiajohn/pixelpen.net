@@ -1,0 +1,13 @@
+.body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  @media (min-width: 768px) {
+    .body {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  

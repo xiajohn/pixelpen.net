@@ -30,7 +30,7 @@ app.post('/generate-essay', async (req, res) => {
       {
         model: 'text-davinci-003', // Update this with the desired model name
         prompt,
-        max_tokens: parseInt(wordCount) + 50,
+        max_tokens: parseInt(wordCount) + 100,
         n: 1,
         stop: null,
         temperature: 0.7,
@@ -38,12 +38,12 @@ app.post('/generate-essay', async (req, res) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Authorization': `Bearer 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`,
         },
       }
     );
 
-    const essay = response.data.choices[0].text.trim();
+    const essay = response.data.choices[0].text;
     res.status(200).json({ essay });
   } catch (error) {
     console.error('Error generating essay:', error.message);

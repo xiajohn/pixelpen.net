@@ -1,0 +1,57 @@
+import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import axios from 'axios';
+
+function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
+  const isProduction = false;
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    const generateEssayURL = isProduction
+      ? 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com/generate-essay'
+      : 'http://localhost:3001/generate-essay';
+    const payload = {
+      grade: formData.Grade,
+      wordCount: formData.Word_Count,
+      topic: formData.Topic,
+      language: formData.Language,
+    };
+
+    try {
+      const response = await axios.post(generateEssayURL, payload);
+      const essay = response.data.essay;
+      console.log('Generated Essay:', essay);
+      setEssay(essay);
+    } catch (error) {
+      console.error('Error generating essay:', error.message);
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <Form onSubmit={handleSubmit}>
+      {Object.keys(formData).map((key) => (
+        <Form.Group key={key} className="mb-3">
+          <Form.Label>{key}</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder={`Enter ${key}`}
+            name={key}
+            value={formData[key]}
+            onChange={handleChange}
+          />
+        </Form.Group>
+      ))}
+      <Button variant="primary" type="submit">
+        Generate Essay
+      </Button>
+    </Form>
+  );
+}
+
+export default FormComponent;
