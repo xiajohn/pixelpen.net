@@ -6,9 +6,10 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+const bodyParser = require('body-parser');
+const AWS = require('aws-sdk');
 const PORT = process.env.PORT || 3001;
-
+const ses = new AWS.SES({ region: 'us-west-2' });
 app.get('/', (req, res) => {
   res.send('Hello from the backend server!');
 });
@@ -48,6 +49,35 @@ app.post('/generate-essay', async (req, res) => {
   } catch (error) {
     console.error('Error generating essay:', error.message);
     res.status(500).json({ error: 'Error generating essay.' });
+  }
+});
+
+app.post('/send-email', async (req, res) => {
+  const { name, email, message } = req.body;
+
+  const params = {
+    Destination: {
+      ToAddresses: ['xiajohn@hotmail.com', 'meszter.17@gmail.com'],
+    },
+    Message: {
+      Body: {
+        Text: {
+          Data: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+        },
+      },
+      Subject: {
+        Data: 'New message from your website',
+      },
+    },
+    Source: 'no-reply@pixelpen.net',
+  };
+
+  try {
+    await ses.sendEmail(params).promise();
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error sending email' });
   }
 });
 

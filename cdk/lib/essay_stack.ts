@@ -3,6 +3,7 @@ import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+import * as ses from 'aws-cdk-lib/aws-ses';
 export class EssayStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -30,5 +31,18 @@ export class EssayStack extends cdk.Stack {
       recordName: `www.${domainName}`,
       domainName: s3Bucket.bucketWebsiteDomainName,
     });
+    const identity = new ses.EmailIdentity(this, 'Identity', {
+      identity: ses.Identity.publicHostedZone(hostedZone)
+    });
+
+    // Verify additional email addresses
+new ses.CfnEmailIdentity(this, 'XiajohnEmail', {
+  emailIdentity: 'xiajohn@hotmail.com',
+});
+
+new ses.CfnEmailIdentity(this, 'MeszterEmail', {
+  emailIdentity: 'meszter.17@gmail.com',
+});
+
   }
 }
