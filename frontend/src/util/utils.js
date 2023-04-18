@@ -1,9 +1,9 @@
 // urlHelper.js
+export const isDev = () => { return false; };
 export function getServerURL() {
     let generateEssayURL;
-  
-    if (!process.env.REACT_APP_IS_DEV_ENV) {
-        console.log(process.env.IS_DEV_ENV);
+   
+    if (!isDev()) {
       generateEssayURL = 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com';
     } else {
       generateEssayURL = 'http://localhost:3001';

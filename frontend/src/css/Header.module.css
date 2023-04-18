@@ -23,6 +23,10 @@
   align-items: flex-end;
   justify-content: flex-end;
 }
+.logo {
+  height: 30px; /* Adjust the height according to your desired size */
+  margin-right: 10px;
+}
 
 .nav-link {
   color: #ffffff !important;

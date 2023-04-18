@@ -1,12 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-const bodyParser = require('body-parser');
+app.use(
+  cors({
+    origin: 'http://pixelpen.net',
+  })
+);
+
+app.use(express.json()); // Add this line to parse incoming JSON data
+
 const AWS = require('aws-sdk');
 const PORT = process.env.PORT || 3001;
 const ses = new AWS.SES({ region: 'us-west-2' });
@@ -22,14 +28,13 @@ app.post('/generate-essay', async (req, res) => {
   }
 
   try {
-    // Set up OpenAI API call
     const openaiURL = 'https://api.openai.com/v1/completions';
     let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}.`;
 
     const response = await axios.post(
       openaiURL,
       {
-        model: 'text-davinci-003', // Update this with the desired model name
+        model: 'text-davinci-003',
         prompt,
         max_tokens: parseInt(wordCount) + 100,
         n: 1,
@@ -39,7 +44,7 @@ app.post('/generate-essay', async (req, res) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, // Remove extra closing curly brace '}'
         },
       }
     );
