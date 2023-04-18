@@ -23,9 +23,13 @@
   align-items: flex-end;
   justify-content: flex-end;
 }
+
 .logo {
-  height: 30px; /* Adjust the height according to your desired size */
+  height: 88px;
+  position: absolute;
+  top: -8px;
   margin-right: 10px;
+  left: -1px;
 }
 
 .nav-link {

@@ -4,6 +4,7 @@ import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as ses from 'aws-cdk-lib/aws-ses';
+import * as iam from 'aws-cdk-lib/aws-iam'; // Import the IAM module
 export class EssayStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -36,13 +37,22 @@ export class EssayStack extends cdk.Stack {
     });
 
     // Verify additional email addresses
-new ses.CfnEmailIdentity(this, 'XiajohnEmail', {
-  emailIdentity: 'xiajohn@hotmail.com',
-});
+    new ses.CfnEmailIdentity(this, 'XiajohnEmail', {
+      emailIdentity: 'xiajohn@hotmail.com',
+    });
 
-new ses.CfnEmailIdentity(this, 'MeszterEmail', {
-  emailIdentity: 'meszter.17@gmail.com',
-});
+    new ses.CfnEmailIdentity(this, 'MeszterEmail', {
+      emailIdentity: 'meszter.17@gmail.com',
+    });
+    // Create a ManagedPolicy with the necessary permissions for sending emails
+    const sesSendEmailPolicy = new iam.ManagedPolicy(this, 'SESSendEmailPolicy', {
+      statements: [
+        new iam.PolicyStatement({
+          actions: ['ses:SendEmail', 'ses:SendRawEmail'],
+          resources: ['*'],
+        }),
+      ],
+    });
 
   }
 }
