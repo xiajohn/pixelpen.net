@@ -5,10 +5,10 @@ import '../css/Contact.css';
 
 const Contact = () => {
   const [emailData, setEmailData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
+    Name: '',
+    Email: '',
+    Subject: '',
+    Message: '',
   });
 
   const [responseMessage, setResponseMessage] = useState('');
