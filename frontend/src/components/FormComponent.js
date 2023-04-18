@@ -2,18 +2,28 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import '../css/Form.css';
-import {getServerURL} from '../util/utils'
+import {getServerURL} from '../util/utils';
+
 function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
-  
+  const [showTopicError, setShowTopicError] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setShowTopicError(false);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     let generateEssayURL = getServerURL() + '/generate-essay';
+
+    // Check if the topic field is empty
+    if (!formData.Topic) {
+      setShowTopicError(true);
+      setIsLoading(false);
+      return;
+    }
+
     const payload = {
       grade: formData.Grade,
       wordCount: formData.Word_Count,
@@ -34,7 +44,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
 
   return (
     <Form onSubmit={handleSubmit} className="form">
-      
       <h1>Finish your essay free</h1>
       {Object.keys(formData).map((key) => (
         <Form.Group key={key} className="form-group">
@@ -42,13 +51,19 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
           <Form.Control
             className="form-field"
             type="text"
-            placeholder={`Enter ${key}`}
             name={key}
             value={formData[key]}
             onChange={handleChange}
           />
         </Form.Group>
       ))}
+
+      {showTopicError && (
+        <div className="form-error" style={{ color: 'red' }}>
+          Please enter a topic
+        </div>
+      )}
+
       <Button variant="primary" type="submit" className="form-btn">
         Generate Essay
       </Button>

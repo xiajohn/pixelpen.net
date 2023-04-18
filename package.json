@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "react-router-dom": "^6.10.0"
+  },
+  "scripts": {
+    "deploy": "cd frontend && npm run deploy && cd ../server && npm run deploy"
+
   }
 }

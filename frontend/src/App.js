@@ -26,9 +26,9 @@ function App() {
 function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
+    Topic: '',
     Grade: '12',
     Word_Count: '100',
-    Topic: '',
     Language: 'English',
   });
   const [essay, setEssay] = useState('');

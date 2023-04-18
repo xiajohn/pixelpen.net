@@ -5,7 +5,7 @@ function Essay({content}) {
   return (
     <div className={styles.essay}>
       <h2>Essay</h2>
-      <p>{content}</p>
+      <p dangerouslySetInnerHTML={{__html: content.replace(/\n/g, '<br>')}}></p>
     </div>
   );
 }

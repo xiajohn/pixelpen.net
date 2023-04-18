@@ -6,9 +6,7 @@ require('dotenv').config();
 
 const app = express();
 app.use(
-  cors({
-    origin: 'http://pixelpen.net',
-  })
+  cors()
 );
 
 app.use(express.json()); // Add this line to parse incoming JSON data
@@ -29,7 +27,7 @@ app.post('/generate-essay', async (req, res) => {
 
   try {
     const openaiURL = 'https://api.openai.com/v1/completions';
-    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}.`;
+    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}. The essay will be rendered in html so use paragraph break instead of spaces.`;
 
     const response = await axios.post(
       openaiURL,
