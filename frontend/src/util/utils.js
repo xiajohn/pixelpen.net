@@ -6,9 +6,9 @@ export const isDev = () => {
     let generateEssayURL;
   
     if (!isDev()) {
-      generateEssayURL = 'http://nodejs-example-express-rds.eba-hqmwcdh2.us-west-2.elasticbeanstalk.com';
+      generateEssayURL = 'https://oajkssts69.execute-api.us-west-2.amazonaws.com/production';
     } else {
-      generateEssayURL = 'http://localhost:3001';
+      generateEssayURL = 'https://oajkssts69.execute-api.us-west-2.amazonaws.com/production';
     }
   
     return generateEssayURL;

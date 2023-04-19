@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rmdir /s /q dist && webpack",
-    "start": "node dist/index.js",
-    "deploy": "npm run build && eb deploy"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",

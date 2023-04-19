@@ -21,13 +21,13 @@ app.get('/', (req, res) => {
 app.post('/generate-essay', async (req, res) => {
   const { grade, wordCount, topic, language } = req.body;
 
-  if (!grade || !wordCount || !topic) {
-    return res.status(400).json({ error: 'All fields are required.' });
+  if (!topic) {
+    return res.status(400).json({ error: 'Topic is required.' });
   }
 
   try {
     const openaiURL = 'https://api.openai.com/v1/completions';
-    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}. The essay will be rendered in html so use paragraph break instead of spaces.`;
+    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}. Use a single html new line character to seperate paragraphs`;
 
     const response = await axios.post(
       openaiURL,
