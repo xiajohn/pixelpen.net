@@ -1,7 +1,7 @@
 const axios = require('axios');
-import { createLambdaResponse } from './utils';
+const { createLambdaResponse } = require('./utils');
 
-exports.handler = async (event) => {
+async function generateEssay(event) {
   const { grade, wordCount, topic, language } = JSON.parse(event.body);
 
   if (!topic) {
@@ -25,7 +25,7 @@ exports.handler = async (event) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Authorization': `Bearer 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`,
         },
       }
     );
@@ -37,4 +37,6 @@ exports.handler = async (event) => {
     console.error('Error generating essay:', error.message);
     return createLambdaResponse(500, { error: 'Error generating essay.' });
   }
-};
+}
+
+module.exports = { generateEssay };

@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk');
 const ses = new AWS.SES({ region: 'us-west-2' });
-import { createLambdaResponse } from './utils';
+const { createLambdaResponse } = require('./utils');
 
-exports.handler = async (event) => {
+async function sendEmail(event) {
   const { name, email, message } = JSON.parse(event.body);
 
   const params = {
@@ -29,4 +29,6 @@ exports.handler = async (event) => {
     console.error(error);
     return createLambdaResponse(500, { message: 'Error sending email' });
   }
-};
+}
+
+module.exports = { sendEmail };

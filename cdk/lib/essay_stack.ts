@@ -101,24 +101,45 @@ export class EssayStack extends cdk.Stack {
     });
 
 
-    // Create a Lambda function
-    const myLambda = new lambda.Function(this, 'MyLambdaFunction', {
-      runtime: lambda.Runtime.NODEJS_14_X, // Choose your runtime here
-      handler: 'index.handler', // The handler function in your Lambda code
-      code: lambda.Code.fromAsset('../server/src'), // Replace with the path to your Lambda code
-      environment: {
-        CURRENT_TIMESTAMP: new Date().toISOString(), // Add this line
-      },
-    });
+    // Create an IAM role for Lambda logging
+const lambdaLoggingRole = new iam.Role(this, 'LambdaLoggingRole', {
+  assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+});
+
+// Attach the AWS managed policy "AWSLambdaBasicExecutionRole" to the role
+lambdaLoggingRole.addManagedPolicy(
+  iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
+);
+
+const myLambda = new lambda.Function(this, 'MyLambdaFunction', {
+  runtime: lambda.Runtime.NODEJS_14_X,
+  handler: 'index.handler',
+  code: lambda.Code.fromAsset('../server/dist'),
+  role: lambdaLoggingRole,
+  environment: {
+    CURRENT_TIMESTAMP: new Date().toISOString(),
+  },
+  timeout: cdk.Duration.seconds(10),
+  description: `My Lambda function. Last updated on ${new Date().toISOString()}.`,
+});
+
 
     // Create an API Gateway
     const api = new apigateway.RestApi(this, 'MyApiGateway', {
       restApiName: 'My Service',
       description: 'API Gateway for My Service',
-      defaultCorsPreflightOptions: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
-        allowMethods: apigateway.Cors.ALL_METHODS,
-        allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token']
+      policy: new iam.PolicyDocument({
+        statements: [
+          new iam.PolicyStatement({
+            actions: ['execute-api:Invoke'],
+            resources: ['*'],
+            effect: iam.Effect.ALLOW,
+            principals: [new iam.ArnPrincipal('*')],
+          }),
+        ],
+      }),
+      defaultMethodOptions: {
+        authorizationType: apigateway.AuthorizationType.NONE,
       },
       deployOptions: {
 
@@ -132,23 +153,55 @@ export class EssayStack extends cdk.Stack {
 
     // Connect the Lambda function to the API Gateway
     const lambdaIntegration = new apigateway.LambdaIntegration(myLambda);
-    api.root.addMethod('ANY', lambdaIntegration);
-    const essay = api.root.addResource('generate-essay');
-    essay.addMethod('POST');
+    
+    
     
     // Create a deployment and stage for the API Gateway
     const deployment = new apigateway.Deployment(this, 'MyApiDeployment', {
       api: api
     });
 
-    const stage = new apigateway.Stage(this, 'MyApiStage', {
-      deployment: deployment,
-      stageName: 'production',
-    });
 
+    const essay = api.root.addResource('generate-essay');
+    essay.addMethod('POST', lambdaIntegration);
+// Add a GET method to the resource
+essay.addMethod('GET', lambdaIntegration);
+  // Add MockIntegration for the OPTIONS method
+const mockIntegration = new apigateway.MockIntegration({
+  integrationResponses: [
+    {
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        'method.response.header.Access-Control-Allow-Origin': "'*'",
+        'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,POST'",
+        'method.response.header.Access-Control-Allow-Credentials': "'false'",
+      },
+    },
+  ],
+  passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
+  requestTemplates: {
+    'application/json': '{"statusCode": 200}',
+  },
+});
+
+// Add the OPTIONS method to the essay resource
+essay.addMethod('OPTIONS', mockIntegration, {
+  methodResponses: [
+    {
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': true,
+        'method.response.header.Access-Control-Allow-Origin': true,
+        'method.response.header.Access-Control-Allow-Methods': true,
+        'method.response.header.Access-Control-Allow-Credentials': true,
+      },
+    },
+  ],
+});
     // Add the API Gateway URL to the stack output
     new cdk.CfnOutput(this, 'ApiUrl', {
-      value: `https://${api.restApiId}.execute-api.${this.region}.amazonaws.com/${stage.stageName}/`,
+      value: `https://${api.restApiId}.execute-api.${this.region}.amazonaws.com/`,
     });
 
     

@@ -23,8 +23,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       setIsLoading(false);
       return;
     }
-
-    const payload = {
+     const payload = {
       grade: formData.Grade,
       wordCount: formData.Word_Count,
       topic: formData.Topic,

@@ -1,12 +1,13 @@
-const { handler: generateEssayHandler } = require('./generateEssay');
-const { handler: sendEmailHandler } = require('./sendEmail');
 
+const { generateEssay } = require('./generateEssay');
+const { sendEmail } = require('./sendEmail');
 exports.handler = async (event) => {
+    console.log('Received event: and is latest change', JSON.stringify(event, null, 2));
   const path = event.path.toLowerCase();
   if (path === '/generate-essay') {
-    return await generateEssayHandler(event);
+    return await generateEssay(event);
   } else if (path === '/send-email') {
-    return await sendEmailHandler(event);
+    return await sendEmail(event);
   } else {
     return {
       statusCode: 404,
