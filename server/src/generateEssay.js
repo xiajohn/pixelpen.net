@@ -10,7 +10,7 @@ async function generateEssay(event) {
 
   try {
     const openaiURL = 'https://api.openai.com/v1/completions';
-    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}. Use a single html new line character to separate paragraphs`;
+    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. The essay should be written in ${language}. Use a single html new line character to separate paragraphs Include a title`;
 
     const response = await axios.post(
       openaiURL,
