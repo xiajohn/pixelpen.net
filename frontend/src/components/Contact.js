@@ -5,9 +5,8 @@ import '../css/Contact.css';
 
 const Contact = () => {
   const [emailData, setEmailData] = useState({
-    Name: '',
+    name: '',
     Email: '',
-    Subject: '',
     Message: '',
   });
 
@@ -35,7 +34,6 @@ const Contact = () => {
         setEmailData({
           name: '',
           email: '',
-          subject: '',
           message: '',
         });
       }
