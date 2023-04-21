@@ -26,10 +26,9 @@ function App() {
 function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    Topic: 'Pixel Pen',
+    Topic: '',
     Grade: '12',
-    Word_Count: '100',
-    Language: 'English',
+    Word_Count: '100'
   });
   const [essay, setEssay] = useState(
     "Title: The Legend of Pixel Pen\n\n" +

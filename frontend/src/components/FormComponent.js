@@ -9,7 +9,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   const [showWordCountError, setShowWordCountError] = useState(false);
   const [showTopicChangedError, setShowTopicChangedError] = useState(false);
 
-  const initialTopic = 'Pixel Pen'; // Set the initial topic value here
+  const initialTopic = ''; // Set the initial topic value here
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,13 +36,13 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       setShowWordCountError(false);
     }
 
-    // Check if the topic has changed
-    if (formData.Topic === initialTopic) {
-      setShowTopicChangedError(true);
-      valid = false;
-    } else {
-      setShowTopicChangedError(false);
-    }
+    // // Check if the topic has changed
+    // if (formData.Topic === initialTopic) {
+    //   setShowTopicChangedError(true);
+    //   valid = false;
+    // } else {
+    //   setShowTopicChangedError(false);
+    // }
 
     return valid;
   }
@@ -52,15 +52,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
     event.preventDefault();
     setIsLoading(true);
     let generateEssayURL = getServerURL() + '/generate-essay';
-
-    // Check if the topic has changed
-    if (formData.Topic === initialTopic) {
-      setShowTopicChangedError(true);
-      setIsLoading(false);
-      return;
-    } else {
-      setShowTopicChangedError(false);
-    }
 
     if (validateFormData(formData)) {
       const payload = {

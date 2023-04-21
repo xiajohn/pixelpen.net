@@ -15,7 +15,7 @@ async function generateEssay(event) {
     const response = await axios.post(
       openaiURL,
       {
-        model: 'text-davinci-003',
+        model: 'text-davinci-002',
         prompt,
         max_tokens: parseInt(wordCount) + 100,
         n: 1,
