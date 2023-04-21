@@ -11,20 +11,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
 
   const initialTopic = 'Pixel Pen'; // Set the initial topic value here
 
-  // ... (rest of the code)
-
-  // Add error messages for word count and topic change in the form
-  {showWordCountError && (
-    <div className="form-error" style={{ color: 'red' }}>
-      Word count must be less than 2000
-    </div>
-  )}
-  
-  {showTopicChangedError && (
-    <div className="form-error" style={{ color: 'red' }}>
-      Please change the topic
-    </div>
-  )}
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setShowTopicError(false);
@@ -33,7 +19,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   function validateFormData(formData) {
     // Initialize validation flags
     let valid = true;
-  
+
     // Check if the topic field is empty
     if (!formData.Topic) {
       setShowTopicError(true);
@@ -41,15 +27,15 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
     } else {
       setShowTopicError(false);
     }
-  
+
     // Check if the word count is less than 2000
-    if (formData.WordCount > 2000) {
+    if (parseInt(formData.Word_Count) > 2000) {
       setShowWordCountError(true);
       valid = false;
     } else {
       setShowWordCountError(false);
     }
-  
+
     // Check if the topic has changed
     if (formData.Topic === initialTopic) {
       setShowTopicChangedError(true);
@@ -57,16 +43,16 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
     } else {
       setShowTopicChangedError(false);
     }
-  
+
     return valid;
   }
-  
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     let generateEssayURL = getServerURL() + '/generate-essay';
-  
+
     // Check if the topic has changed
     if (formData.Topic === initialTopic) {
       setShowTopicChangedError(true);
@@ -75,7 +61,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
     } else {
       setShowTopicChangedError(false);
     }
-  
+
     if (validateFormData(formData)) {
       const payload = {
         grade: formData.Grade,
@@ -83,11 +69,10 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
         topic: formData.Topic,
         language: formData.Language,
       };
-  
+
       try {
         const response = await axios.post(generateEssayURL, payload);
         const essay = response.data.essay;
-        console.log('Generated Essay:', essay);
         setEssay(essay);
       } catch (error) {
         console.error('Error generating essay:', error.message);
@@ -98,7 +83,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       return;
     }
   };
-  
+
 
   return (
     <Form onSubmit={handleSubmit} className="form">
@@ -115,7 +100,17 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
           />
         </Form.Group>
       ))}
+      {showWordCountError && (
+        <div className="form-error" style={{ color: 'red' }}>
+          Word count must be less than 2000
+        </div>
+      )}
 
+      {showTopicChangedError && (
+        <div className="form-error" style={{ color: 'red' }}>
+          Please change the topic
+        </div>
+      )}
       {showTopicError && (
         <div className="form-error" style={{ color: 'red' }}>
           Please enter a topic
