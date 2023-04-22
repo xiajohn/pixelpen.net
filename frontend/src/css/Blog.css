@@ -1,0 +1,36 @@
+/* Blog.css */
+
+.blog {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  
+  .blog h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .blog h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .blog h3 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  
+  .blog p {
+    margin-bottom: 20px;
+  }
+  
+  .blog ul {
+    margin-bottom: 20px;
+  }
+  
+  .blog li {
+    margin-bottom: 10px;
+  }
+  

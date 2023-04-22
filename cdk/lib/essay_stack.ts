@@ -96,6 +96,13 @@ export class EssayStack extends cdk.Stack {
       viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(sslCertificate, {
         aliases: [domainName, `www.${domainName}`],
       }),
+      errorConfigurations: [
+        {
+          errorCode: 403,
+          responseCode: 200,
+          responsePagePath: '/index.html',
+        },
+      ],
     });
   }
   createRoute53Records(hostedZone: route53.HostedZone, distribution: cloudfront.CloudFrontWebDistribution, domainName: string) {
