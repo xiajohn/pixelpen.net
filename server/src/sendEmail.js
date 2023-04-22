@@ -7,7 +7,7 @@ async function sendEmail(event) {
 
   const params = {
     Destination: {
-      ToAddresses: ['xiajohn@hotmail.com', 'meszter.17@gmail.com'],
+      ToAddresses: ['xiajohn@hotmail.com'],
     },
     Message: {
       Body: {

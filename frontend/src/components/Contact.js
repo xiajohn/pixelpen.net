@@ -6,8 +6,8 @@ import '../css/Contact.css';
 const Contact = () => {
   const [emailData, setEmailData] = useState({
     name: '',
-    Email: '',
-    Message: '',
+    email: '',
+    message: '',
   });
 
   const [responseMessage, setResponseMessage] = useState('');
