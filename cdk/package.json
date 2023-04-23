@@ -25,6 +25,7 @@
     "@aws-cdk/aws-route53": "^1.198.1",
     "@aws-cdk/aws-route53-targets": "^1.198.1",
     "@aws-cdk/aws-s3-assets": "^1.198.1",
+    "@aws-cdk/aws-s3-deployment": "^1.199.0",
     "aws-cdk-lib": "^2.74.0",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"

@@ -10,7 +10,8 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
-
+import * as s3_assets from 'aws-cdk-lib/aws-s3-assets';
+import * as s3_deployment from 'aws-cdk-lib/aws-s3-deployment';
 export class EssayStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -35,7 +36,18 @@ export class EssayStack extends cdk.Stack {
     });
   }
   createS3Bucket(domainName: string) {
-    return s3.Bucket.fromBucketName(this, 'ImportedBucket', domainName);
+    const bucket = s3.Bucket.fromBucketName(this, 'ImportedBucket', domainName);
+      // Create an S3 asset from your local directory
+
+  
+      // Deploy the assets to the existing S3 bucket
+      new s3_deployment.BucketDeployment(this, 'DeployAssets', {
+        sources: [s3_deployment.Source.asset('../frontend/build'), s3_deployment.Source.asset('../content')],
+        destinationBucket: bucket,
+        // Optional: Invalidate CloudFront cache, if you're using CloudFront with your S3 bucket
+        // distribution: yourCloudFrontDistribution,
+      });
+    return bucket;
   }
 
   createHostedZone(domainName: string) {
