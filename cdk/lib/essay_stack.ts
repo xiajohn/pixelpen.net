@@ -15,8 +15,8 @@ export interface EssayStackProps extends cdk.StackProps {
 }
 
 export class EssayStack extends cdk.Stack {
-   // Declare the OAI as a class property
-   public readonly originAccessIdentity: cloudfront.OriginAccessIdentity;
+  // Declare the OAI as a class property
+  public readonly originAccessIdentity: cloudfront.OriginAccessIdentity;
 
   constructor(scope: Construct, id: string, props: EssayStackProps) {
     super(scope, id, props);
@@ -50,22 +50,19 @@ export class EssayStack extends cdk.Stack {
     });
     bucket.grantRead(this.originAccessIdentity);
 
-  // CORS configuration to allow all requests from everywhere
-  bucket.addCorsRule({
-    allowedMethods: [s3.HttpMethods.PUT, s3.HttpMethods.POST, s3.HttpMethods.GET, s3.HttpMethods.HEAD],
-    allowedOrigins: ['*'],
-    allowedHeaders: ['*'],
-  });
+    // CORS configuration to allow all requests from everywhere
+    bucket.addCorsRule({
+      allowedMethods: [s3.HttpMethods.PUT, s3.HttpMethods.POST, s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+      allowedOrigins: ['*'],
+      allowedHeaders: ['*'],
+    });
 
 
-  
-      // Deploy the assets to the existing S3 bucket
-      new s3_deployment.BucketDeployment(this, 'DeployAssets', {
-        sources: [s3_deployment.Source.asset('../frontend/build'), s3_deployment.Source.asset('../content')],
-        destinationBucket: bucket
-        // Optional: Invalidate CloudFront cache, if you're using CloudFront with your S3 bucket
-        // distribution: yourCloudFrontDistribution,
-      });
+
+    new s3_deployment.BucketDeployment(this, 'DeployAssets', {
+      sources: [s3_deployment.Source.asset('../frontend/build'), s3_deployment.Source.asset('../content')],
+      destinationBucket: bucket
+    });
     return bucket;
   }
 
@@ -100,11 +97,6 @@ export class EssayStack extends cdk.Stack {
     });
   }
   createCloudFrontDistribution(s3Bucket: s3.IBucket, sslCertificate: acm.DnsValidatedCertificate, domainName: string) {
-    const blogContentBucket = new s3.Bucket(this, 'BlogContentBucket', {
-      // Configure your bucket as required
-      versioned: false,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
     return new cloudfront.CloudFrontWebDistribution(this, 'CloudFrontDistribution', {
       originConfigs: [
         {
@@ -125,37 +117,32 @@ export class EssayStack extends cdk.Stack {
                 ],
               },
               isDefaultBehavior: true,
-              
-              viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,          
-            },
-          ],
-        },
-        {
-          s3OriginSource: {
-            s3BucketSource: blogContentBucket,
-          },
-          behaviors: [
-            {
-              pathPattern: '/blog/*',
-              defaultTtl: cdk.Duration.seconds(0),
-              allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
-              forwardedValues: {
-                queryString: true,
-                headers: [
-                  'Access-Control-Request-Headers',
-                  'Access-Control-Request-Method',
-                  'Origin',
-                ],
-              },
+
               viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             },
+            {
+              pathPattern: '/sitemap.xml', // add this line to match requests to /sitemap.xml
+              allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
+              forwardedValues: {
+                queryString: false,
+              },
+              defaultTtl: cdk.Duration.hours(1),
+              maxTtl: cdk.Duration.hours(1),
+              minTtl: cdk.Duration.minutes(1),
+              compress: true,
+            },
           ],
-        },
+        }
       ],
       viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(sslCertificate, {
         aliases: [domainName, `www.${domainName}`],
       }),
       errorConfigurations: [
+        {
+          errorCode: 404,
+          responseCode: 200,
+          responsePagePath: '/index.html',
+        },
         {
           errorCode: 403,
           responseCode: 200,
@@ -169,7 +156,11 @@ export class EssayStack extends cdk.Stack {
       zone: hostedZone,
       target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
     });
-
+    new route53.CnameRecord(this, 'GoogleCnameRecord', {
+      zone: hostedZone,
+      recordName: 'qshtfjw6qnm6',
+      domainName: 'gv-lp65xxcad3glo6.dv.googlehosted.com',
+    });
     new route53.CnameRecord(this, 'CnameRecord', {
       zone: hostedZone,
       recordName: `www.${domainName}`,
