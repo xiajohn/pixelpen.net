@@ -4,9 +4,11 @@ import * as cdk from 'aws-cdk-lib';
 import { EssayStack } from '../lib/essay_stack';
 
 const app = new cdk.App();
-new EssayStack(app, 'EssayStack',{
+
+const essayStack = new EssayStack(app, 'EssayStack', {
   env: {
     account: '617503825053',
-    region: 'us-west-2'
+    region: 'us-west-1',
   }
 });
+app.synth();

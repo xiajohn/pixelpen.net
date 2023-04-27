@@ -7,8 +7,8 @@ import './css/App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import About from './components/About';
 import Contact from './components/Contact';
-import Blog from './components/Blog'; // Import the Blog component
-
+import BlogIndex from './blog/Blog'; // Import the Blog component
+import BlogPost from './blog/soil/Blogpost'; // Import the Blog component
 function App() {
   return (
     <Router>
@@ -18,7 +18,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/blog" element={<Blog />} /> 
+          <Route exact path="/blog" element={<BlogIndex />} /> 
+          <Route path="/blog/:blog_name" element={<BlogPost />} />
         </Routes>
       </div>
     </Router>

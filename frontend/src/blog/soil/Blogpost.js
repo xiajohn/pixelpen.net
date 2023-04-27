@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import '../css/Blog.css'; // Add this line to import the Blog CSS file
-
-const Blog = () => {
+import '../../css/Blog.css'; // Add this line to import the Blog CSS file
+import { useParams } from 'react-router-dom';
+const Blogpost = () => {
+  const { blog_name } = useParams();
   const blogContent = `
 # Top 10 Tips for Testing Your Soil and Choosing the Best Products for a Healthier Garden
 
@@ -51,5 +52,5 @@ return (
   );
 };
 
-export default Blog;
+export default Blogpost;
 

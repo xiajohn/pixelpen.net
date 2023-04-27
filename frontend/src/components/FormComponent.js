@@ -7,9 +7,6 @@ import { getServerURL } from '../util/utils';
 function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   const [showTopicError, setShowTopicError] = useState(false);
   const [showWordCountError, setShowWordCountError] = useState(false);
-  const [showTopicChangedError, setShowTopicChangedError] = useState(false);
-
-  const initialTopic = ''; // Set the initial topic value here
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -94,12 +91,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       {showWordCountError && (
         <div className="form-error" style={{ color: 'red' }}>
           Word count must be less than 2000
-        </div>
-      )}
-
-      {showTopicChangedError && (
-        <div className="form-error" style={{ color: 'red' }}>
-          Please change the topic
         </div>
       )}
       {showTopicError && (

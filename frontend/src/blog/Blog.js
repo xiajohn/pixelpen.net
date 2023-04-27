@@ -1,6 +1,13 @@
 // src/blog.js
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Blog from './components/Blog';
 
-ReactDOM.render(<Blog />, document.getElementById('blog-root'));
+const BlogIndex = () => {
+  return (
+    <div>
+      <h1>Blog Index</h1>
+      {/* Add your blog index content here */}
+    </div>
+  );
+};
+
+export default BlogIndex;

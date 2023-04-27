@@ -10,11 +10,17 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
-import * as s3_assets from 'aws-cdk-lib/aws-s3-assets';
 import * as s3_deployment from 'aws-cdk-lib/aws-s3-deployment';
+export interface EssayStackProps extends cdk.StackProps {
+}
+
 export class EssayStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+   // Declare the OAI as a class property
+   public readonly originAccessIdentity: cloudfront.OriginAccessIdentity;
+
+  constructor(scope: Construct, id: string, props: EssayStackProps) {
     super(scope, id, props);
+    this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI');
 
     const domainName = 'pixelpen.net';
     const s3Bucket = this.createS3Bucket(domainName);
@@ -36,14 +42,27 @@ export class EssayStack extends cdk.Stack {
     });
   }
   createS3Bucket(domainName: string) {
-    const bucket = s3.Bucket.fromBucketName(this, 'ImportedBucket', domainName);
-      // Create an S3 asset from your local directory
+
+    const bucket = new s3.Bucket(this, 'StaticSiteBucket', {
+      bucketName: domainName, // Use the same name as your existing bucket if you want to keep the same domain name
+      websiteIndexDocument: 'index.html',
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // Update this based on your requirements
+    });
+    bucket.grantRead(this.originAccessIdentity);
+
+  // CORS configuration to allow all requests from everywhere
+  bucket.addCorsRule({
+    allowedMethods: [s3.HttpMethods.PUT, s3.HttpMethods.POST, s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+    allowedOrigins: ['*'],
+    allowedHeaders: ['*'],
+  });
+
 
   
       // Deploy the assets to the existing S3 bucket
       new s3_deployment.BucketDeployment(this, 'DeployAssets', {
         sources: [s3_deployment.Source.asset('../frontend/build'), s3_deployment.Source.asset('../content')],
-        destinationBucket: bucket,
+        destinationBucket: bucket
         // Optional: Invalidate CloudFront cache, if you're using CloudFront with your S3 bucket
         // distribution: yourCloudFrontDistribution,
       });
@@ -81,11 +100,17 @@ export class EssayStack extends cdk.Stack {
     });
   }
   createCloudFrontDistribution(s3Bucket: s3.IBucket, sslCertificate: acm.DnsValidatedCertificate, domainName: string) {
+    const blogContentBucket = new s3.Bucket(this, 'BlogContentBucket', {
+      // Configure your bucket as required
+      versioned: false,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
     return new cloudfront.CloudFrontWebDistribution(this, 'CloudFrontDistribution', {
       originConfigs: [
         {
           s3OriginSource: {
             s3BucketSource: s3Bucket,
+            originAccessIdentity: this.originAccessIdentity
           },
           behaviors: [
             {
@@ -100,6 +125,28 @@ export class EssayStack extends cdk.Stack {
                 ],
               },
               isDefaultBehavior: true,
+              
+              viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,          
+            },
+          ],
+        },
+        {
+          s3OriginSource: {
+            s3BucketSource: blogContentBucket,
+          },
+          behaviors: [
+            {
+              pathPattern: '/blog/*',
+              defaultTtl: cdk.Duration.seconds(0),
+              allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
+              forwardedValues: {
+                queryString: true,
+                headers: [
+                  'Access-Control-Request-Headers',
+                  'Access-Control-Request-Method',
+                  'Origin',
+                ],
+              },
               viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             },
           ],
@@ -186,13 +233,14 @@ export class EssayStack extends cdk.Stack {
       defaultMethodOptions: {
         authorizationType: apigateway.AuthorizationType.NONE,
       },
-      deployOptions: {
-        accessLogDestination: new apigateway.LogGroupLogDestination(new logs.LogGroup(this, 'ApiAccessLogs', {
-          logGroupName: `/aws/api-gateway/pixelpen`,
-          retention: logs.RetentionDays.ONE_WEEK,
-        })),
-        accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields(),
-      }
+      // deployOptions: {
+      //   accessLogDestination: new apigateway.LogGroupLogDestination(new logs.LogGroup(this, 'ApiAccessLogs', {
+      //     logGroupName: `/aws/api-gateway/pixelpen`,
+      //     retention: logs.RetentionDays.ONE_WEEK,
+      //     removalPolicy: cdk.RemovalPolicy.DESTROY
+      //   })),
+      //   accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields(),
+      // }
     });
   }
 
