@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const ses = new AWS.SES({ region: 'us-west-2' });
+const ses = new AWS.SES({ region: 'us-west-1' });
 const { createLambdaResponse } = require('./utils');
 
 async function sendEmail(event) {
