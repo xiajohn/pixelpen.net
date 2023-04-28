@@ -3,7 +3,7 @@
 ## Introduction
 Are you looking to improve the health of your garden and grow thriving plants? A critical first step is testing your soil. In this blog post, we'll guide you through the process of testing your soil and introduce the best products to make your soil healthier. By the end, you'll be well-equipped to optimize your garden's potential.
 
-## Section 1: How to Test Your Soil
+## How to Test Your Soil
 
 ### 1. Importance of Soil Testing
 Understanding the composition of your soil is crucial for the health and growth of your plants. Soil testing helps you determine the pH levels, nutrient content, and other characteristics, allowing you to tailor your gardening approach to your specific soil needs.

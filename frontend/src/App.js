@@ -7,9 +7,21 @@ import './css/App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import About from './components/About';
 import Contact from './components/Contact';
-import BlogIndex from './blog/Blog'; // Import the Blog component
-import BlogPost from './blog/soil/Blogpost'; // Import the Blog component
+import CreativeShowcase from './blog/CreativeShowcase'; // Import the CreativeShowcase component
+import BlogPost from './blog/Blogpost'; // Import the Blog component
+
 function App() {
+  const blogs = {
+    "Best-Workouts-for-Basketball-Players": {
+      title: "Best Workouts for Basketball Players: 5 Exercises to Improve Your Game",
+      filename: "fitness_blog_1.md",
+    },
+    "Top-10-Tips-for-Testing-Your-Soil": {
+      title: "Top 10 Tips for Testing Your Soil and Choosing the Best Products for a Healthier Garden",
+      filename: "soil_blog_1.md",
+    },
+  };
+  
   return (
     <Router>
       <div className="App">
@@ -18,8 +30,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route exact path="/blog" element={<BlogIndex />} /> 
-          <Route path="/blog/:blog_name" element={<BlogPost />} />
+          <Route exact path="/creative-showcase" element={<CreativeShowcase blogs={blogs}/>} /> 
+          <Route path="/blog/:blog_name" element={<BlogPost blogs={blogs} />} />
         </Routes>
       </div>
     </Router>
@@ -39,8 +51,9 @@ function HomePage() {
     "Fast forward to modern society, advances in artificial intelligence have made it possible to bring the legend of Pixel Pen to life. This AI-driven platform harnesses the power of Penelope's mythical invention to help people transform their ideas into compelling narratives, engaging speeches, and captivating visuals.\n\n" +
     "In the digital age, where ideas travel at the speed of light, Pixel Pen has become an indispensable tool for creators and innovators. As it streamlines the creative process, it empowers individuals to focus on the essence of their ideas, while the AI handles the intricacies of expression.\n\n" +
     "The legend of Pixel Pen lives on, inspiring countless creators to tap into their imaginative potential, and in doing so, shape the future of human ingenuity.\n\n" +
-    "So come, write down your idea with Pixel Pen and witness the magic of your vision coming to life!"
+    "So come, write down your idea with Pixel Pen and witness the magic of your vision coming to life! We believe that AI can be integrated into almost every type of business, unlocking new opportunities for growth and innovation. If you share our vision and passion for harnessing the power of AI, we invite you to join us as partners in our quest to reshape the future. Together, we can unleash the full potential of Pixel Pen, revolutionizing industries and redefining what's possible in the realm of human creativity. Reach out to us and let's embark on this exciting journey of partnership and success!"
   );
+  
 
   return (
     <>

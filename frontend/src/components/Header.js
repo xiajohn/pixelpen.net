@@ -26,7 +26,7 @@ function Header() {
         Pixel Pen
       </Navbar.Brand>
       <Nav className={styles.nav}>
-        {renderNavLink('/blog', 'Blog')}
+        {renderNavLink('/creative-showcase', 'Creative Showcase')}
         {renderNavLink('/about', 'About')}
         {renderNavLink('/contact', 'Contact')}
       </Nav>

@@ -106,6 +106,18 @@ export class EssayStack extends cdk.Stack {
           },
           behaviors: [
             {
+              pathPattern: '/blog/*',
+              allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
+              forwardedValues: {
+                queryString: true,
+              },
+              defaultTtl: cdk.Duration.minutes(5),
+              maxTtl: cdk.Duration.minutes(30),
+              minTtl: cdk.Duration.minutes(1),
+              compress: true,
+              isDefaultBehavior: false, // Set isDefaultBehavior to false for the blog post behavior
+            },
+            {
               defaultTtl: cdk.Duration.seconds(0),
               allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
               forwardedValues: {
