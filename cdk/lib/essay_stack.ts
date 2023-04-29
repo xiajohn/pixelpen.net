@@ -56,9 +56,7 @@ export class EssayStack extends cdk.Stack {
       allowedOrigins: ['*'],
       allowedHeaders: ['*'],
     });
-
-
-
+    
     new s3_deployment.BucketDeployment(this, 'DeployAssets', {
       sources: [s3_deployment.Source.asset('../frontend/build'), s3_deployment.Source.asset('../content')],
       destinationBucket: bucket
@@ -111,9 +109,7 @@ export class EssayStack extends cdk.Stack {
               forwardedValues: {
                 queryString: true,
               },
-              defaultTtl: cdk.Duration.minutes(5),
-              maxTtl: cdk.Duration.minutes(30),
-              minTtl: cdk.Duration.minutes(1),
+              defaultTtl: cdk.Duration.seconds(0),
               compress: true,
               isDefaultBehavior: false, // Set isDefaultBehavior to false for the blog post behavior
             },
@@ -129,7 +125,6 @@ export class EssayStack extends cdk.Stack {
                 ],
               },
               isDefaultBehavior: true,
-
               viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             },
             {
@@ -138,9 +133,6 @@ export class EssayStack extends cdk.Stack {
               forwardedValues: {
                 queryString: false,
               },
-              defaultTtl: cdk.Duration.hours(1),
-              maxTtl: cdk.Duration.hours(1),
-              minTtl: cdk.Duration.minutes(1),
               compress: true,
             },
           ],

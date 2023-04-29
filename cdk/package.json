@@ -6,7 +6,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "deploy": "cd ../server && npm run build && cd ../cdk && tsc && cdk deploy --all",
+    "deploy": "tsc && cdk deploy --all",
+    "deployServer": "cd ../server && npm run build && cd ../cdk && tsc && cdk deploy --all",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"

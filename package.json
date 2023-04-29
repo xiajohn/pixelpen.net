@@ -3,7 +3,7 @@
     "react-router-dom": "^6.10.0"
   },
   "scripts": {
-    "deploy": "cd frontend && npm run deploy && cd ../cdk && npm run deploy"
+    "deploy": "cd frontend && npm run deploy && cd ../server && npm run build && cd ../cdk && npm run deploy"
 
   }
 }
