@@ -69,23 +69,19 @@ def save_base64_image(base64_image_data, folder, filename="image_data.jpg"):
         f.write(base64.b64decode(base64_image_data))
 
 def generate_and_save_images(content, folder):
-    image_data = {}
     for i in range(1, 5):
         image_prompt = create_image_prompt(content)
         base64_image_data = generate_image(image_prompt)
         image_filename = f"image_data_{i}.jpg"
         save_base64_image(base64_image_data, folder, image_filename)
-        image_data[f"{{ImagePlaceholder{i}}}"] = image_filename
-    return image_data
 
-
-def save_blog_with_images(content, folder, image_replacements, filename="blog_post.md"):
-    blog_content_with_images = replace_image_placeholders(content, image_replacements)
+def save_blog(content, folder, filename="blog_post.md"):
     file_path = os.path.join(folder, filename)
     with open(file_path, "w") as f:
-        f.write(blog_content_with_images)
+        f.write(content)
 
-topic = "Top 5 places to visit in Cancun"
+
+topic = "Top_10_Tips_for_Testing_Your_Soil_and_Choosing_the_Best_Products_for_a_Healthier_Garden"
 
 # Create a folder for the blog post
 blog_folder = create_blog_folder(topic)
@@ -94,7 +90,8 @@ blog_folder = create_blog_folder(topic)
 blog_content_with_placeholders = create_blog_content(topic)
 
 # Generate and save images
-image_replacements = generate_and_save_images(blog_content_with_placeholders, blog_folder)
+generate_and_save_images(blog_content_with_placeholders, blog_folder)
 
-# Save the final blog content with images
-save_blog_with_images(blog_content_with_placeholders, blog_folder, image_replacements)
+# Save the blog content
+save_blog(blog_content_with_placeholders, blog_folder)
+

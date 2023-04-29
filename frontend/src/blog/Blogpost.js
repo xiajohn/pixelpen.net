@@ -7,10 +7,10 @@ import axios from 'axios';
 const BlogPost = (props) => {
   const { blog_name } = useParams();
   const [blogContent, setBlogContent] = useState('');
-
+  const folderName = blog_name.replace(/ /g, '_');
   const fetchBlogContent = useCallback(async () => {
     try {
-      const folderName = blog_name.replace(/ /g, '_');
+      
 
       if (process.env.NODE_ENV === 'development') {
         // Load content from a local folder
@@ -31,9 +31,20 @@ const BlogPost = (props) => {
     fetchBlogContent();
   }, [fetchBlogContent]);
 
+  const replaceImagePlaceholders = (content) => {
+    return content.replace(/{ImagePlaceholder(\d+)}/g, (match, number) => {
+      const imagePath = process.env.NODE_ENV === 'development'
+        ? `/local_testing/${folderName}/image_data_${number}.jpg`
+        : `https://d3qz51rq344usc.cloudfront.net/blog/${folderName}/image_data_${number}.jpg`;
+      return `![Description](${imagePath})`;
+    });
+  };
+
+  const finalContent = replaceImagePlaceholders(blogContent);
+
   return (
     <div className="blog">
-      <ReactMarkdown>{blogContent}</ReactMarkdown>
+      <ReactMarkdown>{finalContent}</ReactMarkdown>
     </div>
   );
 };
