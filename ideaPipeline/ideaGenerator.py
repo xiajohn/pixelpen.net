@@ -26,6 +26,18 @@ def generate_image(prompt):
     # If you only need the first image data, you can return the first item in the list
     return base64_image_data_list[0]
 
+def sanitize_folder_name(name):
+    invalid_chars = '\/:*?"<>|'
+    sanitized_name = ''.join(c if c not in invalid_chars else '_' for c in name)
+    return sanitized_name
+
+def create_blog_folder(blog_name):
+    sanitized_blog_name = sanitize_folder_name(blog_name)
+    folder_name = sanitized_blog_name.replace(" ", "_")
+    folder_path = os.path.join("generated", folder_name)
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    return folder_path
 
 
 def replace_image_placeholders(content, replacements):
@@ -46,37 +58,43 @@ def create_blog_content(topic):
     outline_prompt = create_blog_prompt(topic, 4)
     return generate_text(outline_prompt)
 
-def save_initial_blog(content, filename="initialBlog.md"):
-    with open(filename, "w") as f:
+def save_initial_blog(content, folder, filename="initialBlog.md"):
+    file_path = os.path.join(folder, filename)
+    with open(file_path, "w") as f:
         f.write(content)
 
-def save_base64_image(base64_image_data, filename):
-    with open(filename, "wb") as f:
+def save_base64_image(base64_image_data, folder, filename="image_data.jpg"):
+    file_path = os.path.join(folder, filename)
+    with open(file_path, "wb") as f:
         f.write(base64.b64decode(base64_image_data))
 
-def generate_and_save_images(content, num_images):
+def generate_and_save_images(content, folder):
     image_data = {}
-    for i in range(1, num_images + 1):
+    for i in range(1, 5):
         image_prompt = create_image_prompt(content)
         base64_image_data = generate_image(image_prompt)
         image_filename = f"image_data_{i}.jpg"
-        save_base64_image(base64_image_data, image_filename)
+        save_base64_image(base64_image_data, folder, image_filename)
         image_data[f"{{ImagePlaceholder{i}}}"] = image_filename
     return image_data
 
 
-def save_blog_with_images(content, image_replacements, filename="blog_post.md"):
+def save_blog_with_images(content, folder, image_replacements, filename="blog_post.md"):
     blog_content_with_images = replace_image_placeholders(content, image_replacements)
-    with open(filename, "w") as f:
+    file_path = os.path.join(folder, filename)
+    with open(file_path, "w") as f:
         f.write(blog_content_with_images)
 
-topic = "Best Workouts for Basketball Players: 5 Exercises to Improve Your Game"
+topic = "Top 5 places to visit in Cancun"
 
-# Generate initial blog content
+# Create a folder for the blog post
+blog_folder = create_blog_folder(topic)
+
+# Generate and save initial blog content
 blog_content_with_placeholders = create_blog_content(topic)
 
 # Generate and save images
-image_replacements = generate_and_save_images(blog_content_with_placeholders, 4)
+image_replacements = generate_and_save_images(blog_content_with_placeholders, blog_folder)
 
 # Save the final blog content with images
-save_blog_with_images(blog_content_with_placeholders, image_replacements)
+save_blog_with_images(blog_content_with_placeholders, blog_folder, image_replacements)

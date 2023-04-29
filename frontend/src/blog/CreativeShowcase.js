@@ -1,7 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const CreativeShowcase = ({ blogs }) => {
+const CreativeShowcase = () => {
+  const [blogs, setBlogs] = useState({});
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        let response;
+        if (process.env.NODE_ENV === 'development') {
+          response = await fetch('/local_testing/blogs.json');
+        } else {
+          response = await fetch('https://d3qz51rq344usc.cloudfront.net/blog/blog_folders.json');
+        }
+        const blogData = await response.json();
+        setBlogs(blogData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
   return (
     <div>
       <h1>Pixel Pen Creative Showcase</h1>
