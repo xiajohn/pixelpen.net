@@ -99,6 +99,11 @@ class BlogGenerator:
             f.write(content)
 
     def create(self):
+        # Check if the folder already exists
+        # if os.path.exists(self.blog_folder):
+        #     print(f"Folder '{self.blog_folder}' already exists. Skipping blog creation.")
+        #     return
+
         # Generate and save initial blog content
         print(self.blog_folder)
         blog_content_with_placeholders = self.create_blog_content(self.topic)
