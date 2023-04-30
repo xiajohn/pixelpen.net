@@ -8,6 +8,8 @@ class BlogGenerator:
     def __init__(self, topic ):
         self.topic = topic
         self.blog_folder = self.create_blog_folder(self.topic)
+        
+        
     def generate_text(self, prompt):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -99,10 +101,12 @@ class BlogGenerator:
             f.write(content)
 
     def create(self):
-        # Check if the folder already exists
-        # if os.path.exists(self.blog_folder):
-        #     print(f"Folder '{self.blog_folder}' already exists. Skipping blog creation.")
-        #     return
+        blog_file = os.path.join(self.blog_folder, "blog_post.md")
+
+        # Check if the blog post file already exists
+        if os.path.isfile(blog_file):
+            print(f"Blog post '{blog_file}' already exists. Skipping blog creation.")
+            return
 
         # Generate and save initial blog content
         print(self.blog_folder)
