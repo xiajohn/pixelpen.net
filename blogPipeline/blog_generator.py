@@ -16,7 +16,7 @@ class BlogGenerator:
             max_tokens=2500,
             messages=[
                 {"role": "system", "content": "You are a blog writer."},
-                {"role": "user", "content": prompt}
+                {"role": "user", "content": f"{prompt}. Pick the first option."}
             ]
         )
         return response.choices[0].message.content
@@ -54,7 +54,7 @@ class BlogGenerator:
             description_prompt = f"Generate a concise and descriptive SEO-friendly summary for a blog post about {topic}."
             description = self.generate_text(description_prompt).strip()
 
-            keywords_prompt = f"Generate a 3 relevant SEO-friendly keywords for a blog post about {topic}."
+            keywords_prompt = f"Generate 3 relevant SEO-friendly keywords for a blog post about {topic}."
             keywords = self.generate_text(keywords_prompt).strip()
             url = self.sanitize_folder_name(title)
 

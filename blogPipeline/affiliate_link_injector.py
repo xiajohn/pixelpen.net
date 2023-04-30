@@ -23,7 +23,7 @@ class AffiliateLinkInjector:
                 links_text = "\n".join([f"- [{link['name']}]({link['url']})" for link in self.affiliate_links])
 
                 # Append the heading and links to the end of the blog content
-                updated_content = f"{content}\n\n---\n\n## {heading}\n\nAs a reader of our blog, we want to share some products and services that we think might be helpful to you. We may earn a small commission for any purchases made through the following affiliate links, at no additional cost to you.\n\n{links_text}\n\nThank you for your support and happy shopping!"
+                updated_content = f"{content}\n\n---\n\n### {heading}\n\nAs a reader of our blog, we want to share some products and services that we think might be helpful to you. We may earn a small commission for any purchases made through the following affiliate links, at no additional cost to you.\n\n{links_text}\n\nThank you for your support and happy shopping!"
 
                 with open(file_path, "w") as f:
                     f.write(updated_content)
