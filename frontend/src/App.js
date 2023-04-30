@@ -11,17 +11,6 @@ import CreativeShowcase from './blog/CreativeShowcase'; // Import the CreativeSh
 import BlogPost from './blog/Blogpost'; // Import the Blog component
 
 function App() {
-  const blogs = {
-    "Best-Workouts-for-Basketball-Players": {
-      title: "Best Workouts for Basketball Players: 5 Exercises to Improve Your Game",
-      filename: "fitness_blog_1.md",
-    },
-    "Top-10-Tips-for-Testing-Your-Soil": {
-      title: "Top 10 Tips for Testing Your Soil and Choosing the Best Products for a Healthier Garden",
-      filename: "soil_blog_1.md",
-    },
-  };
-  
   return (
     <Router>
       <div className="App">
@@ -30,8 +19,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route exact path="/creative-showcase" element={<CreativeShowcase blogs={blogs}/>} /> 
-          <Route path="/blog/:blog_name" element={<BlogPost blogs={blogs} />} />
+          <Route exact path="/creative-showcase" element={<CreativeShowcase />} /> 
+          <Route path="/blog/:blog_name" element={<BlogPost />} />
         </Routes>
       </div>
     </Router>

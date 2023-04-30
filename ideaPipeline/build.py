@@ -78,15 +78,17 @@ def copy_files(src_folder, dest_folder):
             copy_files(src_path, dest_subfolder)
 
 
-def generate_blogs_json(generated_folder, output_folders):
+def generate_blogs_json(generated_folder, output_folders, metadata):
     blogs = {}
     for folder in os.listdir(generated_folder):
         folder_path = os.path.join(generated_folder, folder)
         if os.path.isdir(folder_path):
+            topic = folder.replace('_', ' ')
             blogs[folder] = {
-                "title": folder.replace('_', ' '),
+                "title": metadata[topic]["title"],
                 "filename": "blog_post.md",
-                "folderName": folder
+                "folderName": folder,
+                "meta": metadata[topic]
             }
 
     for output_folder in output_folders:
@@ -96,13 +98,15 @@ def generate_blogs_json(generated_folder, output_folders):
     return blogs
 
 
+
+
 def save_sitemap_to_folders(sitemap_content, output_folders):
     for output_folder in output_folders:
         with open(os.path.join(output_folder, "sitemap.xml"), "w") as f:
             f.write(sitemap_content)
 
 
-def main():
+def build(metadata):
     # Folders
     generated_folder = "generated"
     local_testing_folder = "../frontend/public/local_testing"
@@ -116,7 +120,7 @@ def main():
         copy_files(generated_folder, output_folder)
 
     # Generate blogs.json
-    blogs = generate_blogs_json(generated_folder, output_folders)
+    blogs = generate_blogs_json(generated_folder, output_folders, metadata)
 
     # Generate sitemap.xml
     sitemap_content = generate_sitemap(blogs)
@@ -126,5 +130,3 @@ def main():
         sitemap_content, [generated_folder, frontend_public_folder])
 
 
-if __name__ == "__main__":
-    main()

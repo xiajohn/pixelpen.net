@@ -41,15 +41,28 @@ class BlogGenerator:
 
         # If you only need the first image data, you can return the first item in the list
         return base64_image_data_list[0]
-
-
-        # If you only need the first image data, you can return the first item in the list
-        return base64_image_data_list[0]
-
+    
     def sanitize_folder_name(self,name):
         invalid_chars = '\/:*?"<>|'
         sanitized_name = ''.join(c if c not in invalid_chars else '_' for c in name)
         return sanitized_name
+    
+    def generate_metadata(self, topic):
+            title_prompt = f"Generate a catchy SEO-friendly title for a blog post about {topic}."
+            title = self.generate_text(title_prompt).strip()
+
+            description_prompt = f"Generate a concise and descriptive SEO-friendly summary for a blog post about {topic}."
+            description = self.generate_text(description_prompt).strip()
+
+            keywords_prompt = f"Generate a list of relevant SEO-friendly keywords for a blog post about {topic}."
+            keywords = self.generate_text(keywords_prompt).strip()
+            url = self.sanitize_folder_name(title)
+
+            return {
+                "title": title,
+                "description": description,
+                "keywords": keywords
+            }
 
     def create_blog_folder(self,blog_name):
         sanitized_blog_name = self.sanitize_folder_name(blog_name)

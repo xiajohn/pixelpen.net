@@ -1,13 +1,13 @@
 from blog_generator import BlogGenerator
 from affiliate_link_injector import AffiliateLinkInjector
+from build import build
 
 topics = [
-    "Top 5 Thriller books 2023",
-    "Best Science Fiction Books of 2023",
-    "Top 5 Romance Novels to Read in 2023",
-    "Top 5 Authors 2023",
-    "Best Writers of 2023",
-    "Top 5 Scary Novels to Read in 2023",
+    "Top 5 fashion trends 2023",
+    "Best dresses of 2023",
+    "Top 5 tank tops in 2023",
+    "Top 5 shoes 2023",
+    "Best fashion of 2023"
 ]
 
 affiliate_links = [
@@ -16,14 +16,20 @@ affiliate_links = [
     {"name": "The Worst Wedding Date", "url": "https://amzn.to/41QYLqy"},
 ]
 
-
+blog_metadata = {}
 
 for topic in topics:
     blog_generator = BlogGenerator(topic)
     blog_generator.create()
 
+    # Generate metadata for the blog
+    metadata = blog_generator.generate_metadata(topic)
+
+    # Store metadata in the blog_metadata dictionary
+    blog_metadata[topic] = metadata
+
     affiliate_link_injector = AffiliateLinkInjector(blog_generator, affiliate_links)
     affiliate_link_injector.inject_links()
 
-
-# Do something with generated_blogs, e.g., save to a file or print
+# Call the build function with the generated blog_metadata
+build(blog_metadata)
