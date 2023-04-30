@@ -11,9 +11,9 @@ topics = [
 ]
 
 affiliate_links = [
-    {"name": "Product 1", "url": "https://amzn.to/41QYLqy"},
-    {"name": "Product 2", "url": "https://amzn.to/3n8ukNL"},
-    {"name": "Product 3", "url": "https://amzn.to/3n8ukNL"},
+    {"name": "Dawn Girl", "url": "https://amzn.to/41QYLqy"},
+    {"name": "Foreign Deceit", "url": "https://amzn.to/3n8ukNL"},
+    {"name": "The Worst Wedding Date", "url": "https://amzn.to/41QYLqy"},
 ]
 
 

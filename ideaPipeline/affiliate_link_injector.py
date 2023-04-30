@@ -7,8 +7,7 @@ class AffiliateLinkInjector:
         self.affiliate_links = affiliate_links
 
     def generate_heading(self):
-        prompt = f"Generate a heading for the affiliate links section in a blog post about {self.blog_folder}."
-        return self.blog_generator.generate_text(prompt).strip()
+        return "Recommended Products"
 
     def inject_links(self):
         file_path = os.path.join(self.blog_folder, "blog_post.md")
@@ -23,10 +22,10 @@ class AffiliateLinkInjector:
                 heading = self.generate_heading()
 
                 # Create the affiliate links markdown text
-                links_text = "\n".join([f"[{link['name']}]({link['url']})" for link in self.affiliate_links])
+                links_text = "\n".join([f"- [{link['name']}]({link['url']})" for link in self.affiliate_links])
 
                 # Append the heading and links to the end of the blog content
-                updated_content = f"{content}\n\n{heading}\n\n{links_text}"
+                updated_content = f"{content}\n\n---\n\n## {heading}\n\nAs a reader of our blog, we want to share some products and services that we think might be helpful to you. We may earn a small commission for any purchases made through the following affiliate links, at no additional cost to you.\n\n{links_text}\n\nThank you for your support and happy shopping!"
 
                 with open(file_path, "w") as f:
                     f.write(updated_content)

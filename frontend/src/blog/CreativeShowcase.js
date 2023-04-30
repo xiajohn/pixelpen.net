@@ -11,7 +11,7 @@ const CreativeShowcase = () => {
         if (process.env.NODE_ENV === 'development') {
           response = await fetch('/local_testing/blogs.json');
         } else {
-          response = await fetch('https://d3qz51rq344usc.cloudfront.net/blog/blog_folders.json');
+          response = await fetch('https://d3qz51rq344usc.cloudfront.net/blog/blogs.json');
         }
         const blogData = await response.json();
         setBlogs(blogData);
