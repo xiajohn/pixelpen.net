@@ -23,7 +23,7 @@
     "build": "rimraf build && set GENERATE_SOURCEMAP=true && react-scripts build",
     "release": "rimraf public/local_testing && rimraf build && set GENERATE_SOURCEMAP=false && react-scripts build",
     "test": "react-scripts test",
-    "deploy": "set NODE_ENV=production && npm run release",
+    "deploy": "set NODE_ENV=production && npm run release && set NODE_ENV=dev",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
