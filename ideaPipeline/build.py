@@ -2,9 +2,25 @@ import os
 import shutil
 import json
 
+def clean_generated_folder(topics, base_path="generated"):
+    # Create a set of folder names that should exist, based on the given topics
+    expected_folders = set(topic.replace(" ", "-") for topic in topics)
 
+    # Iterate through the subfolders in the base_path
+    for folder_name in os.listdir(base_path):
+        folder_path = os.path.join(base_path, folder_name)
+
+        # If the folder is not in expected_folders, delete it
+        if folder_name not in expected_folders and os.path.isdir(folder_path):
+            shutil.rmtree(folder_path)
+
+    # Make sure all expected folders exist
+    for folder_name in expected_folders:
+        folder_path = os.path.join(base_path, folder_name)
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
 def sanitize_folder_name(name):
-    return name.replace(':', '').replace(' ', '_')
+    return name.replace(':', '').replace(' ', '-')
 
 
 def generate_sitemap(blog_folders, domain="https://pixelpen.net"):
@@ -45,7 +61,7 @@ def generate_sitemap(blog_folders, domain="https://pixelpen.net"):
 
     blog_urls = [
         {
-            "loc": f"{domain}/blog/{sanitize_folder_name(blog_folders[folder]['title'])}",
+            "loc": f"{domain}/blog/{sanitize_folder_name(folder)}",
             "changefreq": "daily",
             "priority": "0.7"
         }
@@ -83,7 +99,7 @@ def generate_blogs_json(generated_folder, output_folders, metadata):
     for folder in os.listdir(generated_folder):
         folder_path = os.path.join(generated_folder, folder)
         if os.path.isdir(folder_path):
-            topic = folder.replace('_', ' ')
+            topic = folder.replace('-', ' ')
             blogs[folder] = {
                 "title": metadata[topic]["title"],
                 "filename": "blog_post.md",

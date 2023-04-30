@@ -8,7 +8,7 @@ import { fetchMetadata } from '../util/utils.js'
 const BlogPost = () => {
   const { blog_name } = useParams();
   const [blogContent, setBlogContent] = useState('');
-  const folderName = blog_name.replace(/ /g, '_');
+  const folderName = blog_name.replace(/ /g, '-');
 
   const fetchBlogContent = useCallback(async () => {
     try {

@@ -1,16 +1,14 @@
 import os
 
 class AffiliateLinkInjector:
-    def __init__(self, blog_generator, affiliate_links):
-        self.blog_generator = blog_generator
-        self.blog_folder = blog_generator.blog_folder
+    def __init__(self, affiliate_links):
         self.affiliate_links = affiliate_links
 
     def generate_heading(self):
         return "Recommended Products"
 
-    def inject_links(self):
-        file_path = os.path.join(self.blog_folder, "blog_post.md")
+    def inject_links(self, blog_folder):
+        file_path = os.path.join(blog_folder, "blog_post.md")
 
         if os.path.exists(file_path):
             with open(file_path, "r") as f:

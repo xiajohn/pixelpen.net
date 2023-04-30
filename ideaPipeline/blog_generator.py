@@ -54,7 +54,7 @@ class BlogGenerator:
             description_prompt = f"Generate a concise and descriptive SEO-friendly summary for a blog post about {topic}."
             description = self.generate_text(description_prompt).strip()
 
-            keywords_prompt = f"Generate a list of relevant SEO-friendly keywords for a blog post about {topic}."
+            keywords_prompt = f"Generate a 3 relevant SEO-friendly keywords for a blog post about {topic}."
             keywords = self.generate_text(keywords_prompt).strip()
             url = self.sanitize_folder_name(title)
 
@@ -66,7 +66,7 @@ class BlogGenerator:
 
     def create_blog_folder(self,blog_name):
         sanitized_blog_name = self.sanitize_folder_name(blog_name)
-        folder_name = sanitized_blog_name.replace(" ", "_")
+        folder_name = sanitized_blog_name.replace(" ", "-")
         folder_path = os.path.join("generated", folder_name)
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
@@ -119,7 +119,7 @@ class BlogGenerator:
         # Check if the blog post file already exists
         if os.path.isfile(blog_file):
             print(f"Blog post '{blog_file}' already exists. Skipping blog creation.")
-            return
+            return self.blog_folder
 
         # Generate and save initial blog content
         print(self.blog_folder)
@@ -134,16 +134,5 @@ class BlogGenerator:
         # Save the final blog content with images
         self.save_blog(blog_content_with_placeholders, self.blog_folder)
 
+        return self.blog_folder
 
-
-
-    # def inject_affiliate_links(self, affiliate_links):
-    #     injector = AffiliateLinkInjector(affiliate_links)
-    #     file_path = os.path.join(self.blog_folder, "blog_post.md")
-    #     with open(file_path, "r") as f:
-    #         content = f.read()
-
-    #     content_with_links = injector.inject_links(content)
-
-    #     with open(file_path, "w") as f:
-    #         f.write(content_with_links)
