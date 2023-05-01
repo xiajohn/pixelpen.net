@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import '../css/Blog.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { fetchMetadata } from '../util/utils.js'
+import { fetchMetadata } from '../util/utils.js';
 
 const BlogPost = () => {
   const { blog_name } = useParams();
@@ -26,21 +26,38 @@ const BlogPost = () => {
   }, [blog_name]);
 
   useEffect(() => {
-    fetchBlogContent();
-    fetchMetadata()
-      .then(meta => updateMetadata(meta))
-      .catch(error => console.log(error));
+    const fetchData = async () => {
+      await fetchBlogContent();
+      
+      try {
+        const meta = await fetchMetadata();
+        updateMetadata(meta[folderName]['meta']);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
   }, [blog_name, fetchBlogContent]);
 
-  function updateMetadata(response) {
-    var meta = response[folderName]['meta'];
+  function updateMetadata(meta) {
     document.title = meta.title;
-  
+
     const descriptionTag = document.querySelector('meta[name="description"]');
     descriptionTag.setAttribute('content', meta.description);
-  
+
     const keywordsTag = document.querySelector('meta[name="keywords"]');
     keywordsTag.setAttribute('content', meta.keywords);
+
+    const canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (canonicalTag) {
+      canonicalTag.setAttribute('href', `https://www.pixelpen.net/blog/${folderName}`);
+    } else {
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      link.setAttribute('href', `https://www.pixelpen.net/blog/${folderName}`);
+      document.head.appendChild(link);
+    }
   }
 
   const replaceImagePlaceholders = (content) => {
@@ -48,14 +65,14 @@ const BlogPost = () => {
       const imagePath = process.env.NODE_ENV === 'development'
         ? `/local_testing/${folderName}/image_data_${number}.jpg`
         : `https://d3qz51rq344usc.cloudfront.net/blog/${folderName}/image_data_${number}.jpg`;
-      
+
       // You can replace 'Your Alt Text Here' with a relevant description for your image
       const altText = folderName;
-      
+
       return `![${altText}](${imagePath})`;
     });
   };
-  
+
   const finalContent = replaceImagePlaceholders(blogContent);
 
   return (
