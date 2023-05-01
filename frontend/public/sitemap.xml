@@ -46,6 +46,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Best-ways-to-test-soil</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Better-soil</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/Cheap-trash-bags</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -62,6 +72,16 @@
   </url>
   <url>
     <loc>https://pixelpen.net/blog/Moving-with-trash-bags</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Save-the-soil</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Soil-ecosystem</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>

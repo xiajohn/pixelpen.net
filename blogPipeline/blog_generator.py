@@ -66,13 +66,13 @@ class BlogGenerator:
         return sanitized_name
     
     def generate_metadata(self, topic):
-            title_prompt = f"Write a short, concise, and SEO-friendly title for a blog post about {topic}."
+            title_prompt = f"Write a short, concise, and SEO-friendly title for a blog post about {topic}. Response will be used in HTML for SEO purposes."
             title = self.generate_text(title_prompt).strip()
 
-            description_prompt = f"Generate a concise and descriptive SEO-friendly summary for a blog post about {topic}."
+            description_prompt = f"Generate a concise SEO-friendly summary for a blog post about {topic}. Response will be used in HTML for SEO purposes."
             description = self.generate_text(description_prompt).strip()
 
-            keywords_prompt = f"Generate 3 relevant SEO-friendly keywords for a blog post about {topic}."
+            keywords_prompt = f"Generate 3 concise SEO-friendly keywords for a blog post about {topic}. Response will be used in HTML for SEO purposes."
             keywords = self.generate_text(keywords_prompt).strip()
             url = self.sanitize_folder_name(title)
 

@@ -48,10 +48,14 @@ const BlogPost = () => {
       const imagePath = process.env.NODE_ENV === 'development'
         ? `/local_testing/${folderName}/image_data_${number}.jpg`
         : `https://d3qz51rq344usc.cloudfront.net/blog/${folderName}/image_data_${number}.jpg`;
-      return `![Description](${imagePath})`;
+      
+      // You can replace 'Your Alt Text Here' with a relevant description for your image
+      const altText = folderName;
+      
+      return `![${altText}](${imagePath})`;
     });
   };
-
+  
   const finalContent = replaceImagePlaceholders(blogContent);
 
   return (

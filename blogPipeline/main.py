@@ -3,7 +3,7 @@ from affiliate_link_injector import AffiliateLinkInjector
 from build import build, clean_generated_folder
 from internal_link_injector import InternalLinkInjector
 from utils import TopicType
-
+import json
 categories = {
     "pillows": {
         "topics": [
@@ -41,6 +41,19 @@ categories = {
             {"name": "Nature Nate's 100% Pure Organic", "url": "https://amzn.to/3LEZ6aj"},
             {"name": "Wedderspoon Raw Organic Manuka Honey", "url": "https://amzn.to/40Tyh6q"},
             {"name": "Florida Raw Apiaries", "url": "https://amzn.to/3VgRv4Y"},
+        ],
+    },
+    "soil": {
+        "topics": [
+            {"topic": "Best ways to test soil", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Soil ecosystem", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Save the soil", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Better soil", "type": TopicType.TRANSACTIONAL},
+        ],
+        "affiliate_links": [
+            {"name": "Soil Testing", "url": "https://salemsoilsolutions.com"},
+            {"name": "Brut Worm Castings ", "url": "https://amzn.to/3LlWs7X"},
+            {"name": "The Andersons HumiChar Organic Soil", "url": "https://amzn.to/41XWJoU"},
         ],
     }
 }
@@ -80,7 +93,14 @@ def main(categories):
 
     internal_link_injector = InternalLinkInjector(categories)
     internal_link_injector.inject_links()
-    build(blog_metadata)
+        # Save blog_metadata to a JSON file
+    with open("blog_metadata.json", "w") as f:
+        json.dump(blog_metadata, f, indent=2)
+    
+    # Call the build function with the generated blog_metadata
+    with open("blog_metadata.json", "r") as f:
+        loaded_blog_metadata = json.load(f)
+        build(loaded_blog_metadata)
 
 
 if __name__ == "__main__":
