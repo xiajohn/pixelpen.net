@@ -3,13 +3,13 @@ from affiliate_link_injector import AffiliateLinkInjector
 from build import build, clean_generated_folder
 from internal_link_injector import InternalLinkInjector
 from utils import TopicType
+
 categories = {
     "pillows": {
         "topics": [
             {"topic": "Top 5 pillows in 2023", "type": TopicType.TRANSACTIONAL},
             {"topic": "Best Pillows for your neck", "type": TopicType.INFORMATIONAL},
-            {"topic": "Best Pillows for your back", "type": TopicType.INFORMATIONAL},
-            {"topic": "Best Pillows for your head", "type": TopicType.INFORMATIONAL},
+            {"topic": "Best arm pillow", "type": TopicType.INFORMATIONAL},
         ],
         "affiliate_links": [
             {"name": "Royal Therapy Memory Foam Pillow", "url": "https://amzn.to/3LFpUXQ"},
@@ -42,61 +42,46 @@ categories = {
             {"name": "Wedderspoon Raw Organic Manuka Honey", "url": "https://amzn.to/40Tyh6q"},
             {"name": "Florida Raw Apiaries", "url": "https://amzn.to/3VgRv4Y"},
         ],
-    },
-    # "umbrella": {
-    #     "topics": [
-    #         {"topic": "Top 5 places to eat 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Top 5 places to swim 2023", "type": TopicType.INFORMATIONAL},
-    #     ],
-    #     "affiliate_links": [
-    #         {"name": "Dawn Girl", "url": "https://amzn.to/41QYLqy"},
-    #         {"name": "Foreign Deceit", "url": "https://amzn.to/3n8ukNL"},
-    #         {"name": "The Worst Wedding Date", "url": "https://amzn.to/41QYLqy"},
-    #     ],
-    # },
-    # "resistance bands": {
-    #     "topics": [
-    #         {"topic": "Top 5 places to eat 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Top 5 places to swim 2023", "type": TopicType.INFORMATIONAL},
-    #     ],
-    #     "affiliate_links": [
-    #         {"name": "Dawn Girl", "url": "https://amzn.to/41QYLqy"},
-    #         {"name": "Foreign Deceit", "url": "https://amzn.to/3n8ukNL"},
-    #         {"name": "The Worst Wedding Date", "url": "https://amzn.to/41QYLqy"},
-    #     ],
-    # },
+    }
 }
 
 
-blog_metadata = {}
+def clean_files(topic_list):
+    clean_generated_folder(topic_list)
 
-# Iterate through categories
-for category_name, category_data in categories.items():
-    
-    topics = category_data["topics"]
-    affiliate_links = category_data["affiliate_links"]
-    
-    for topic_data in topics:
-        topic = topic_data["topic"]
-        type = topic_data["type"]
-        blog_generator = BlogGenerator(topic)
-        blog_folder = blog_generator.create()
 
-        # Generate metadata for the blog
-        metadata = blog_generator.generate_metadata(topic)
+def process_categories(categories):
+    blog_metadata = {}
 
-        # Store metadata in the blog_metadata dictionary
-        blog_metadata[topic] = metadata
+    for category_name, category_data in categories.items():
+        topics = category_data["topics"]
+        affiliate_links = category_data["affiliate_links"]
 
-        affiliate_link_injector = AffiliateLinkInjector(affiliate_links)
-        if type == TopicType.TRANSACTIONAL:
-            affiliate_link_injector.inject_links(blog_folder)
+        for topic_data in topics:
+            topic = topic_data["topic"]
+            type = topic_data["type"]
+            blog_generator = BlogGenerator(topic)
+            blog_folder = blog_generator.create()
 
-# Clean up the generated folder
-all_topics = [topic_data["topic"] for category_data in categories.values() for topic_data in category_data["topics"]]
-clean_generated_folder(all_topics)
+            metadata = blog_generator.generate_metadata(topic)
+            blog_metadata[topic] = metadata
 
-internal_link_injector = InternalLinkInjector(categories)
-internal_link_injector.inject_links()
-# Call the build function with the generated blog_metadata
-build(blog_metadata)
+            affiliate_link_injector = AffiliateLinkInjector(affiliate_links)
+            if type == TopicType.TRANSACTIONAL:
+                affiliate_link_injector.inject_links(blog_folder)
+
+    return blog_metadata
+
+
+def main(categories):
+    blog_metadata = process_categories(categories)
+    all_topics = [topic_data["topic"] for category_data in categories.values() for topic_data in category_data["topics"]]
+    clean_files(all_topics)
+
+    internal_link_injector = InternalLinkInjector(categories)
+    internal_link_injector.inject_links()
+    build(blog_metadata)
+
+
+if __name__ == "__main__":
+    main(categories)

@@ -2,6 +2,7 @@ import openai
 import os
 from dotenv import load_dotenv
 import base64
+from unidecode import unidecode
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 class BlogGenerator:
@@ -10,34 +11,51 @@ class BlogGenerator:
         self.blog_folder = self.create_blog_folder(self.topic)
         
         
-    def generate_text(self, prompt):
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            max_tokens=2500,
-            messages=[
-                {"role": "system", "content": "You are a blog writer."},
-                {"role": "user", "content": f"{prompt}. Pick the first option."}
-            ]
-        )
-        return response.choices[0].message.content
+    def generate_text(self, prompt, retries=3):
+        for _ in range(retries):
+            try:
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    max_tokens=2500,
+                    messages=[
+                        {"role": "system", "content": "You are a blog writer."},
+                        {"role": "user", "content": f"Write a response on {prompt} without giving any options or lists."}
+                    ]
+                )
+                generated_text = response.choices[0].message.content
+                clean_text = unidecode(generated_text)
+                return clean_text
+            except openai.error.APIError as e:
+                if 'safety' in str(e):
+                    prompt = f"Write a response on a safer version of the topic {prompt} without giving any options or lists."
+                else:
+                    raise e
+        raise Exception("Failed to generate text after multiple retries")
 
-    def generate_image(self, prompt):
-        max_attempts = 2  # total attempts: initial attempt + 1 retry
-        attempt = 0
+
+    def generate_image(self, prompt, retries=3):
         base64_image_data_list = []
 
-        while attempt < max_attempts:
-            response = openai.Image.create(prompt=prompt, n=1, size="256x256", response_format="b64_json")
-            
-            for data_object in response['data']:
-                base64_image_data = data_object['b64_json']
-                base64_image_data_list.append(base64_image_data)
+        for _ in range(retries):
+            try:
+                response = openai.Image.create(prompt=prompt, n=1, size="256x256", response_format="b64_json")
 
-            if base64_image_data_list:
-                # If the list is not empty, the image was generated successfully
-                break
-            else:
-                attempt += 1
+                for data_object in response['data']:
+                    base64_image_data = data_object['b64_json']
+                    base64_image_data_list.append(base64_image_data)
+
+                if base64_image_data_list:
+                    # If the list is not empty, the image was generated successfully
+                    break
+            except openai.error.APIError as e:
+                if 'safety' in str(e):
+                    # Modify the prompt to make it safer
+                    prompt = f"Generate an image for a safer version of the topic {prompt}"
+                else:
+                    # If it's not a safety-related error, raise the exception
+                    raise e
+        else:
+            raise Exception("Failed to generate image after multiple retries")
 
         # If you only need the first image data, you can return the first item in the list
         return base64_image_data_list[0]
@@ -48,7 +66,7 @@ class BlogGenerator:
         return sanitized_name
     
     def generate_metadata(self, topic):
-            title_prompt = f"Generate a catchy SEO-friendly title for a blog post about {topic}."
+            title_prompt = f"Write a short, concise, and SEO-friendly title for a blog post about {topic}."
             title = self.generate_text(title_prompt).strip()
 
             description_prompt = f"Generate a concise and descriptive SEO-friendly summary for a blog post about {topic}."
@@ -81,7 +99,7 @@ class BlogGenerator:
 
     def create_blog_prompt(self,topic, num_images):
         image_placeholders = ", ".join([f"{{ImagePlaceholder{i}}}" for i in range(1, num_images+1)])
-        return f'Generate introduction, main sections, and conclusion for writing a blog post about "{topic}". Include the introduction, title, and conclusion. Use 1700 words. Use markdown. Add {num_images} image placeholders in the format "{image_placeholders}".'
+        return f'Generate introduction, main sections, and conclusion for writing a blog post about "{topic}". Include the introduction, title, and conclusion. Use 1700 words. Use markdown. Add {num_images} image placeholders randomly in the article in the format "{image_placeholders}". Do not use links.'
 
 
     def create_image_prompt(self,text):
