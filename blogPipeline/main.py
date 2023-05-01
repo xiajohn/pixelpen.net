@@ -72,6 +72,22 @@ categories = {
              {"name": "Gildan A-Shirt Tanks", "url": "https://amzn.to/3nfAFGX"},
             {"name": "Neutrogena Beach Defense Water-Resistant", "url": "https://amzn.to/3LiLWyd"},
         ],
+    },
+    "bbq": {
+        "topics": [
+            {"topic": "Best grills summer 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Grill Essentials 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Summer day grilling 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "What to grill this summer", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Is grilling healthy", "type": TopicType.INFORMATIONAL},
+            {"topic": "How to choose your grill", "type": TopicType.INFORMATIONAL},
+        ],
+        "affiliate_links": [
+            {"name": "Royal Gourmet CC1830F Charcoal Grill", "url": "https://amzn.to/3NzkgYV"},
+            {"name": "American Gourmet 463672717  ", "url": "https://amzn.to/41TbitP"},
+             {"name": "Grill brush", "url": "https://amzn.to/44gZwef"},
+            {"name": "GRILLART Grill Brush and Scraper", "url": "https://amzn.to/3LK2f8D"},
+        ],
     }
 }
 

@@ -41,6 +41,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Best-grills-summer-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/Best-honey-in-2023</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -76,7 +81,22 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Grill-Essentials-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/How-to-choose-your-grill</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/How-to-make-honey</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Is-grilling-healthy</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -97,6 +117,11 @@
   </url>
   <url>
     <loc>https://pixelpen.net/blog/Soil-ecosystem</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Summer-day-grilling-2023</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -127,6 +152,11 @@
   </url>
   <url>
     <loc>https://pixelpen.net/blog/What-to-do-this-summer</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/What-to-grill-this-summer</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
