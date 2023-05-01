@@ -19,7 +19,7 @@ categories = {
     },
     "trash bags": {
         "topics": [
-            {"topic": "Top 5 best trash bags 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Reliable trash bags 2023", "type": TopicType.TRANSACTIONAL},
             {"topic": "Good trash bags", "type": TopicType.INFORMATIONAL},
             {"topic": "Cheap trash bags", "type": TopicType.TRANSACTIONAL},
             {"topic": "Moving with trash bags", "type": TopicType.INFORMATIONAL},
@@ -63,8 +63,16 @@ def clean_files(topic_list):
     clean_generated_folder(topic_list)
 
 
+def load_blog_metadata():
+    with open("blog_metadata.json", "r") as file:
+        return json.load(file)
+
+def save_blog_metadata(metadata):
+    with open("blog_metadata.json", "w") as file:
+        json.dump(metadata, file, indent=2, ensure_ascii=False)
+
 def process_categories(categories):
-    blog_metadata = {}
+    blog_metadata = load_blog_metadata()
 
     for category_name, category_data in categories.items():
         topics = category_data["topics"]
@@ -73,16 +81,19 @@ def process_categories(categories):
         for topic_data in topics:
             topic = topic_data["topic"]
             type = topic_data["type"]
-            blog_generator = BlogGenerator(topic)
-            blog_folder = blog_generator.create()
 
-            metadata = blog_generator.generate_metadata(topic)
-            blog_metadata[topic] = metadata
+            if topic not in blog_metadata:
+                blog_generator = BlogGenerator(topic)
+                blog_folder = blog_generator.create()
 
-            affiliate_link_injector = AffiliateLinkInjector(affiliate_links)
-            if type == TopicType.TRANSACTIONAL:
-                affiliate_link_injector.inject_links(blog_folder)
+                metadata = blog_generator.generate_metadata(topic)
+                blog_metadata[topic] = metadata
 
+                affiliate_link_injector = AffiliateLinkInjector(affiliate_links)
+                if type == TopicType.TRANSACTIONAL:
+                    affiliate_link_injector.inject_links(blog_folder)
+
+    save_blog_metadata(blog_metadata)
     return blog_metadata
 
 
@@ -93,14 +104,10 @@ def main(categories):
 
     internal_link_injector = InternalLinkInjector(categories)
     internal_link_injector.inject_links()
-        # Save blog_metadata to a JSON file
-    with open("blog_metadata.json", "w") as f:
-        json.dump(blog_metadata, f, indent=2)
-    
-    # Call the build function with the generated blog_metadata
-    with open("blog_metadata.json", "r") as f:
-        loaded_blog_metadata = json.load(f)
-        build(loaded_blog_metadata)
+
+    # Call the build function with the loaded blog_metadata
+    build(blog_metadata)
+
 
 
 if __name__ == "__main__":

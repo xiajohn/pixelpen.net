@@ -42,7 +42,7 @@ def generate_sitemap(blog_folders, domain="https://pixelpen.net"):
             "priority": "1.0"
         },
         {
-            "loc": f"{domain}/blog",
+            "loc": f"{domain}/creative-showcase",
             "changefreq": "daily",
             "priority": "0.9"
         },

@@ -130,6 +130,7 @@ export class EssayStack extends cdk.Stack {
             {
               pathPattern: '/sitemap.xml', // add this line to match requests to /sitemap.xml
               allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
+              defaultTtl: cdk.Duration.seconds(0),
               forwardedValues: {
                 queryString: false,
               },
