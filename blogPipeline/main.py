@@ -55,6 +55,23 @@ categories = {
             {"name": "Brut Worm Castings ", "url": "https://amzn.to/3LlWs7X"},
             {"name": "The Andersons HumiChar Organic Soil", "url": "https://amzn.to/41XWJoU"},
         ],
+    },
+    "summer": {
+        "topics": [
+            {"topic": "Best products summer 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Beach Essentials 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Summer trends 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "What to do this summer", "type": TopicType.INFORMATIONAL},
+            {"topic": "Summer Essentials", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Sun damage to skin", "type": TopicType.INFORMATIONAL},
+            {"topic": "What Sunburn does to your skin", "type": TopicType.INFORMATIONAL},
+        ],
+        "affiliate_links": [
+            {"name": "FURTALK Sun Visor Hats", "url": "https://amzn.to/3Lp8Bce"},
+            {"name": "NPJY Bucket Hat for Women Men  ", "url": "https://amzn.to/3LHPdZr"},
+             {"name": "Gildan A-Shirt Tanks", "url": "https://amzn.to/3nfAFGX"},
+            {"name": "Neutrogena Beach Defense Water-Resistant", "url": "https://amzn.to/3LiLWyd"},
+        ],
     }
 }
 

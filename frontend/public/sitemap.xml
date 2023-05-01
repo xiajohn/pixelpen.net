@@ -26,6 +26,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Beach-Essentials-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/Benefits-of-honey</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -42,6 +47,11 @@
   </url>
   <url>
     <loc>https://pixelpen.net/blog/Best-Pillows-for-your-neck</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Best-products-summer-2023</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -91,7 +101,32 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Summer-Essentials</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Summer-trends-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Sun-damage-to-skin</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/Top-5-pillows-in-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/What-Sunburn-does-to-your-skin</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/What-to-do-this-summer</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
