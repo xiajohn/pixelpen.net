@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { createLambdaResponse } = require('./utils');
+require('dotenv').config({ path: '../.env' });
 
 async function generateEssay(event) {
   const { grade, wordCount, topic, language } = JSON.parse(event.body);
@@ -25,7 +26,7 @@ async function generateEssay(event) {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       }
     );

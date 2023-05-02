@@ -1,6 +1,7 @@
 
 const { generateEssay } = require('./generateEssay');
 const { sendEmail } = require('./sendEmail');
+
 exports.handler = async (event) => {
     console.log('Received event: and is latest change', JSON.stringify(event, null, 2));
   const path = event.path.toLowerCase();
