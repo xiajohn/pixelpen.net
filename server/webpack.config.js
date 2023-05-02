@@ -1,4 +1,8 @@
 const path = require('path');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+const env = dotenv.config().parsed;
 
 module.exports = {
   entry: './src/index.js',
@@ -9,4 +13,7 @@ module.exports = {
   },
   target: 'node',
   mode: 'production',
+  plugins: [
+    new webpack.EnvironmentPlugin(['OPENAI_API_KEY']),
+  ],
 };

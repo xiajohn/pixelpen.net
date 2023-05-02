@@ -2,7 +2,7 @@ from blog_generator import BlogGenerator
 from affiliate_link_injector import AffiliateLinkInjector
 from build import build, clean_generated_folder
 from internal_link_injector import InternalLinkInjector
-from utils import TopicType
+from utils import TopicType, load_blog_metadata, save_blog_metadata
 import json
 categories = {
     "pillows": {
@@ -94,15 +94,6 @@ categories = {
 
 def clean_files(topic_list):
     clean_generated_folder(topic_list)
-
-
-def load_blog_metadata():
-    with open("blog_metadata.json", "r") as file:
-        return json.load(file)
-
-def save_blog_metadata(metadata):
-    with open("blog_metadata.json", "w") as file:
-        json.dump(metadata, file, indent=2, ensure_ascii=False)
 
 def process_categories(categories):
     blog_metadata = load_blog_metadata()
