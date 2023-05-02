@@ -49,7 +49,7 @@ class BlogGenerator(ContentGenerator):
 
     def create_blog_prompt(self,topic, num_images):
         image_placeholders = ", ".join([f"{{ImagePlaceholder{i}}}" for i in range(1, num_images+1)])
-        return f'Generate introduction, main sections, and conclusion for writing a blog post about "{topic}". Include the introduction, title, and conclusion. Use 1700 words. Use markdown. Add {num_images} image placeholders randomly in the article in the format "{image_placeholders}". Do not use links.'
+        return f'Generate introduction, main sections, and conclusion for writing a blog post about "{topic}". Include the introduction, title, and conclusion. Use 1700 words. Use markdown. Add {num_images} image placeholders randomly in the article in the format "{image_placeholders}". Do not use links. Use a personal tone'
 
 
     def create_image_prompt(self,text):
