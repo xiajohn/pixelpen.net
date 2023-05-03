@@ -27,6 +27,10 @@ class InternalLinkInjector:
     def add_links_to_blog_post(self, blog_folder, links):
         blog_post_path = os.path.join(blog_folder, "blog_post.md")
 
+    # Check if the blog post file exists
+        if not os.path.isfile(blog_post_path):
+            print(f"Blog post '{blog_post_path}' does not exist. Skipping link injection.")
+            return
         with open(blog_post_path, "r") as f:
             content = f.read()
 

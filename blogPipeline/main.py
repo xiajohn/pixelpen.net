@@ -3,7 +3,7 @@ from affiliate_link_injector import AffiliateLinkInjector
 from build import build, clean_generated_folder
 from internal_link_injector import InternalLinkInjector
 from utils import TopicType, load_blog_metadata, save_blog_metadata
-import json
+from blog_reviewer import BlogReviewer
 import os
 import openai
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -59,44 +59,40 @@ categories = {
     #         {"name": "The Andersons HumiChar Organic Soil", "url": "https://amzn.to/41XWJoU"},
     #     ],
     # },
-    # "summer": {
-    #     "topics": [
-    #         {"topic": "Best products summer 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Beach Essentials 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Summer trends 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "What to do this summer", "type": TopicType.INFORMATIONAL},
-    #         {"topic": "Summer Essentials", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Sun damage to skin", "type": TopicType.INFORMATIONAL},
-    #         {"topic": "What Sunburn does to your skin", "type": TopicType.INFORMATIONAL},
-    #     ],
-    #     "affiliate_links": [
-    #         {"name": "FURTALK Sun Visor Hats", "url": "https://amzn.to/3Lp8Bce"},
-    #         {"name": "NPJY Bucket Hat for Women Men  ", "url": "https://amzn.to/3LHPdZr"},
-    #          {"name": "Gildan A-Shirt Tanks", "url": "https://amzn.to/3nfAFGX"},
-    #         {"name": "Neutrogena Beach Defense Water-Resistant", "url": "https://amzn.to/3LiLWyd"},
-    #     ],
-    # },
-    # "bbq": {
-    #     "topics": [
-    #         {"topic": "Best bbq summer 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Grill Hacks 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Summer grilling 2023", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "What to grill", "type": TopicType.TRANSACTIONAL},
-    #         {"topic": "Is grilling healthy for you", "type": TopicType.INFORMATIONAL},
-    #         {"topic": "How to choose a grill", "type": TopicType.INFORMATIONAL},
-    #     ],
-    #     "affiliate_links": [
-    #         {"name": "Royal Gourmet CC1830F Charcoal Grill", "url": "https://amzn.to/3NzkgYV"},
-    #         {"name": "American Gourmet 463672717  ", "url": "https://amzn.to/41TbitP"},
-    #          {"name": "Grill brush", "url": "https://amzn.to/44gZwef"},
-    #         {"name": "GRILLART Grill Brush and Scraper", "url": "https://amzn.to/3LK2f8D"},
-    #     ],
-    # }
+    "summer": {
+        "topics": [
+            {"topic": "Best products summer 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Beach Essentials 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Summer trends 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "What to do this summer", "type": TopicType.INFORMATIONAL},
+            {"topic": "Summer Essentials", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Sun damage to skin", "type": TopicType.INFORMATIONAL},
+            {"topic": "What Sunburn does to your skin", "type": TopicType.INFORMATIONAL},
+        ],
+        "affiliate_links": [
+            {"name": "FURTALK Sun Visor Hats", "url": "https://amzn.to/3Lp8Bce"},
+            {"name": "NPJY Bucket Hat for Women Men  ", "url": "https://amzn.to/3LHPdZr"},
+             {"name": "Gildan A-Shirt Tanks", "url": "https://amzn.to/3nfAFGX"},
+            {"name": "Neutrogena Beach Defense Water-Resistant", "url": "https://amzn.to/3LiLWyd"},
+        ],
+    },
+    "bbq": {
+        "topics": [
+            {"topic": "Best bbq summer 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Grill Hacks 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Summer grilling 2023", "type": TopicType.TRANSACTIONAL},
+            {"topic": "What to grill", "type": TopicType.TRANSACTIONAL},
+            {"topic": "Is grilling healthy for you", "type": TopicType.INFORMATIONAL},
+            {"topic": "How to choose a grill", "type": TopicType.INFORMATIONAL},
+        ],
+        "affiliate_links": [
+            {"name": "Royal Gourmet CC1830F Charcoal Grill", "url": "https://amzn.to/3NzkgYV"},
+            {"name": "American Gourmet 463672717  ", "url": "https://amzn.to/41TbitP"},
+             {"name": "Grill brush", "url": "https://amzn.to/44gZwef"},
+            {"name": "GRILLART Grill Brush and Scraper", "url": "https://amzn.to/3LK2f8D"},
+        ],
+    }
 }
-
-
-def clean_files(topic_list):
-    clean_generated_folder(topic_list)
 
 def process_categories(categories):
     blog_metadata = load_blog_metadata()
@@ -127,13 +123,14 @@ def process_categories(categories):
 def main(categories):
     blog_metadata = process_categories(categories)
     all_topics = [topic_data["topic"] for category_data in categories.values() for topic_data in category_data["topics"]]
-    clean_files(all_topics)
+    clean_generated_folder(all_topics)
 
     internal_link_injector = InternalLinkInjector(categories)
     internal_link_injector.inject_links()
 
     # Call the build function with the loaded blog_metadata
     build(blog_metadata)
+
 
 
 

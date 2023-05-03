@@ -2,6 +2,7 @@ import openai
 from unidecode import unidecode
 import os
 
+
 class ContentGenerator:
     def __init__(self):
         openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -13,8 +14,15 @@ class ContentGenerator:
                     model="gpt-3.5-turbo",
                     max_tokens=max_tokens,
                     messages=[
-                        {"role": "system", "content": "You are a blog writer."},
-                        {"role": "user", "content": f"Write a response on {prompt} without giving any options or lists."}
+                        {
+                            "role": "system",
+                            "content": "You are a blog writer who specializes in writing engaging, informative, and well-structured articles without using lists or enumerating options. Make sure to use natural language and maintain a conversational tone."
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+
                     ]
                 )
                 generated_text = response.choices[0].message.content
@@ -32,7 +40,8 @@ class ContentGenerator:
 
         for _ in range(retries):
             try:
-                response = openai.Image.create(prompt=prompt, n=1, size="256x256", response_format="b64_json")
+                response = openai.Image.create(
+                    prompt=prompt, n=1, size="256x256", response_format="b64_json")
                 for data_object in response['data']:
                     base64_image_data = data_object['b64_json']
                     base64_image_data_list.append(base64_image_data)
