@@ -52,7 +52,7 @@ class BlogGenerator(ContentGenerator):
         return '\n\n'.join(sections)
 
     def create_blog_prompt(self, topic):
-        return f'Generate introduction, main sections, and conclusion for writing a blog post about "{topic}". Write a detailed response discussing {topic}. Include the introduction, title, and conclusion. Use 1700 words. Use markdown. Do not use links. Use a personal tone. while ensuring it is coherent, avoids lists or options, and engages the reader'
+        return f'Generate introduction, main sections, and conclusion for writing a blog post about "{topic}". Write a detailed response discussing {topic}. Include the introduction, title, and conclusion. Use 1700 words. Use markdown. Do not use links. Use a conversational tone. while ensuring it is coherent, avoids lists or options, and engages the reader. Use senteces of varying lengths'
 
     def create_image_prompt(self, topic):
         return self.generate_text(f"Generate a short prompt for generating an image for \"{topic}\".")
@@ -60,8 +60,8 @@ class BlogGenerator(ContentGenerator):
     def create_blog_content(self, topic):
         outline_prompt = self.create_blog_prompt(topic)
         content = self.generate_text(outline_prompt)
-        reviewer = BlogReviewer(content)
-        content = reviewer.review_blog()
+     #   reviewer = BlogReviewer(content)
+      #  content = reviewer.review_blog()
         content_with_images = self.insert_image_placeholders(content, 4)
 
         return content_with_images

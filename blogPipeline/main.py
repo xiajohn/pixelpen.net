@@ -76,22 +76,22 @@ categories = {
             {"name": "Neutrogena Beach Defense Water-Resistant", "url": "https://amzn.to/3LiLWyd"},
         ],
     },
-    "bbq": {
-        "topics": [
-            {"topic": "Best bbq summer 2023", "type": TopicType.TRANSACTIONAL},
-            {"topic": "Grill Hacks 2023", "type": TopicType.TRANSACTIONAL},
-            {"topic": "Summer grilling 2023", "type": TopicType.TRANSACTIONAL},
-            {"topic": "What to grill", "type": TopicType.TRANSACTIONAL},
-            {"topic": "Is grilling healthy for you", "type": TopicType.INFORMATIONAL},
-            {"topic": "How to choose a grill", "type": TopicType.INFORMATIONAL},
-        ],
-        "affiliate_links": [
-            {"name": "Royal Gourmet CC1830F Charcoal Grill", "url": "https://amzn.to/3NzkgYV"},
-            {"name": "American Gourmet 463672717  ", "url": "https://amzn.to/41TbitP"},
-             {"name": "Grill brush", "url": "https://amzn.to/44gZwef"},
-            {"name": "GRILLART Grill Brush and Scraper", "url": "https://amzn.to/3LK2f8D"},
-        ],
-    }
+    # "bbq": {
+    #     "topics": [
+    #         {"topic": "Best bbq summer 2023", "type": TopicType.TRANSACTIONAL},
+    #          {"topic": "Grill Hacks 2023", "type": TopicType.TRANSACTIONAL},
+    #          {"topic": "Summer grilling 2023", "type": TopicType.TRANSACTIONAL},
+    #          {"topic": "What to grill", "type": TopicType.TRANSACTIONAL},
+    #          {"topic": "Is grilling healthy for you", "type": TopicType.INFORMATIONAL},
+    #          {"topic": "How to choose a grill", "type": TopicType.INFORMATIONAL},
+    #     ],
+    #     "affiliate_links": [
+    #         {"name": "Royal Gourmet CC1830F Charcoal Grill", "url": "https://amzn.to/3NzkgYV"},
+    #         {"name": "American Gourmet 463672717  ", "url": "https://amzn.to/41TbitP"},
+    #          {"name": "Grill brush", "url": "https://amzn.to/44gZwef"},
+    #         {"name": "GRILLART Grill Brush and Scraper", "url": "https://amzn.to/3LK2f8D"},
+    #     ],
+    # }
 }
 
 def process_categories(categories):
