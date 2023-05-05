@@ -33,13 +33,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       setShowWordCountError(false);
     }
 
-    // // Check if the topic has changed
-    // if (formData.Topic === initialTopic) {
-    //   setShowTopicChangedError(true);
-    //   valid = false;
-    // } else {
-    //   setShowTopicChangedError(false);
-    // }
+
 
     return valid;
   }

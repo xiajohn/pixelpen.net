@@ -3,7 +3,6 @@ import random
 from dotenv import load_dotenv
 import base64
 from content_generator import ContentGenerator
-from blog_reviewer import BlogReviewer
 load_dotenv()
 
 
@@ -46,7 +45,7 @@ class BlogGenerator(ContentGenerator):
     def insert_image_placeholders(self, content, num_images):
         sections = content.split('\n\n')
         for i in range(1, num_images + 1):
-            img_tag = f'![Description](/image_data_{i}.jpg)'
+            img_tag = f'ImagePlaceholder{i}'
             random_index = random.randint(0, len(sections) - 1)
             sections.insert(random_index, img_tag)
         return '\n\n'.join(sections)
@@ -60,8 +59,8 @@ class BlogGenerator(ContentGenerator):
     def create_blog_content(self, topic):
         outline_prompt = self.create_blog_prompt(topic)
         content = self.generate_text(outline_prompt)
-     #   reviewer = BlogReviewer(content)
-      #  content = reviewer.review_blog()
+        # reviewer = BlogReviewer(content)
+        # content = reviewer.review_blog()
         content_with_images = self.insert_image_placeholders(content, 4)
 
         return content_with_images

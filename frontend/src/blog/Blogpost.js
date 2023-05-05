@@ -61,7 +61,7 @@ const BlogPost = () => {
   }
 
   const replaceImagePlaceholders = (content) => {
-    return content.replace(/{ImagePlaceholder(\d+)}/g, (match, number) => {
+    return content.replace(/ImagePlaceholder(\d+)/g, (match, number) => {
       const imagePath = process.env.NODE_ENV === 'development'
         ? `/local_testing/${folderName}/image_data_${number}.jpg`
         : `https://d3qz51rq344usc.cloudfront.net/blog/${folderName}/image_data_${number}.jpg`;
