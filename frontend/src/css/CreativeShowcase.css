@@ -1,0 +1,36 @@
+/* CreativeShowcase.css */
+
+.CreativeShowcase {
+    padding: 20px;
+  }
+  
+  .CreativeShowcase h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .CreativeShowcase p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .CreativeShowcase .blog-link {
+    display: block;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease;
+  }
+  
+  .CreativeShowcase .blog-link:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .CreativeShowcase h2 {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
+  
