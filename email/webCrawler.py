@@ -17,8 +17,8 @@ class BlogCrawler:
     @staticmethod
     def is_valid_email(email):
         email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
-        return email_regex.match(email)
-    
+        return email_regex.match(email) and not email.endswith('.gov')
+
     def extract_emails(self, url):
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
@@ -46,11 +46,12 @@ class BlogCrawler:
     
 
     def run(self):
+        emailList = []
         for blog in self.blogs:
             emails = self.extract_emails(blog)
             if len(emails) > 0:
+                emailList += emails[:3]
                 print(f"Emails found in {blog}: {emails}")
+        return emailList
 
-if __name__ == "__main__":
-    crawler = BlogCrawler("food blog", 30)
-    crawler.run()
+

@@ -1,0 +1,5 @@
+# .gitignore
+.env
+Auto-GPT
+generated
+__pycache__
