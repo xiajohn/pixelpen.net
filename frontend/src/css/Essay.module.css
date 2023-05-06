@@ -1,17 +1,27 @@
 .essay {
-    padding: 2rem;
-    flex: 0.8;
-    background-color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 1rem;
+  padding: 2rem;
+  flex: 0.8;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 0.5rem; /* Change this from 1rem to 0.5rem */
+}
+
+
+.essay p {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .input-form,
+  .essay {
+    width: 100%;
+    margin-top: 0.5rem; /* Change this from 0 to 0.5rem */
   }
-  
-  @media (min-width: 768px) {
-    .essay {
-      width: 100%;
-      margin-top: 0;
-    }
+
+  .essay {
+    width: 100%;
+    margin-top: 0;
   }
-  
+}

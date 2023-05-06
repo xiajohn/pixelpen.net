@@ -8,8 +8,6 @@ function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     Topic: '',
-    Grade: '12',
-    Word_Count: '100'
   });
   const [essay, setEssay] = useState(
     "Title: The Legend of Pixel Pen\n\n" +

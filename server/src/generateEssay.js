@@ -3,7 +3,7 @@ const { createLambdaResponse } = require('./utils');
 require('dotenv').config({ path: '../.env' });
 
 async function generateEssay(event) {
-  const { grade, wordCount, topic, language } = JSON.parse(event.body);
+  const { topic } = JSON.parse(event.body);
 
   if (!topic) {
     return createLambdaResponse(400, { error: 'Topic is required.' });
@@ -11,14 +11,14 @@ async function generateEssay(event) {
 
   try {
     const openaiURL = 'https://api.openai.com/v1/completions';
-    let prompt = `Write a grade ${grade} level essay on the topic "${topic}" in approximately ${wordCount} words. Use a single html new line character to separate paragraphs Include a title`;
+    let prompt = `Write a interesting story on the topic "${topic}" in approximately 500 words. Use a single html new line character to separate paragraphs Include a title`;
 
     const response = await axios.post(
       openaiURL,
       {
         model: 'text-davinci-002',
         prompt,
-        max_tokens: parseInt(wordCount) + 100,
+        max_tokens: 1000,
         n: 1,
         stop: null,
         temperature: 0.7,

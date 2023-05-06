@@ -6,7 +6,6 @@ import { getServerURL } from '../util/utils';
 
 function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
   const [showTopicError, setShowTopicError] = useState(false);
-  const [showWordCountError, setShowWordCountError] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,16 +24,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       setShowTopicError(false);
     }
 
-    // Check if the word count is less than 2000
-    if (parseInt(formData.Word_Count) > 2000) {
-      setShowWordCountError(true);
-      valid = false;
-    } else {
-      setShowWordCountError(false);
-    }
-
-
-
     return valid;
   }
 
@@ -46,10 +35,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
 
     if (validateFormData(formData)) {
       const payload = {
-        grade: formData.Grade,
-        wordCount: formData.Word_Count,
         topic: formData.Topic,
-        language: formData.Language,
       };
 
       try {
@@ -69,10 +55,10 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
 
   return (
     <Form onSubmit={handleSubmit} className="form">
-      <h1>Finish your essay free</h1>
+      <h1>Bring Your Idea to Life</h1>
       {Object.keys(formData).map((key) => (
         <Form.Group key={key} className="form-group">
-          <Form.Label className="form-label">{key}</Form.Label>
+          <Form.Label className="form-label">Whats on your mind?</Form.Label>
           <Form.Control
             className="form-field"
             type="text"
@@ -82,11 +68,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
           />
         </Form.Group>
       ))}
-      {showWordCountError && (
-        <div className="form-error" style={{ color: 'red' }}>
-          Word count must be less than 2000
-        </div>
-      )}
       {showTopicError && (
         <div className="form-error" style={{ color: 'red' }}>
           Please enter a topic
@@ -94,7 +75,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       )}
 
       <Button variant="primary" type="submit" className="form-btn">
-        Generate Essay
+        Submit
       </Button>
     </Form>
   );
