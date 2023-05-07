@@ -21,15 +21,9 @@ class FacebookCreator(ContentGenerator):
             "Ask an interesting question about any topic"
         ]
 
-        selected_prompt = choice(prompts)
-        question_and_response = self.generate_text(selected_prompt, max_tokens=100)
+        selected_prompt = choice(prompts) + "Limit response to less than 100 words"
+        question_and_response = self.generate_text(selected_prompt, max_tokens=200)
         return question_and_response.strip()
-
-    def get_random_blog_links(self, num_links=2):
-        blog_keys = list(self.blog_metadata.keys())
-        random_keys = [choice(blog_keys) for _ in range(num_links)]
-        blog_links = [f"https://www.pixelpen.net/blog/{key.replace(' ', '-')}" for key in random_keys]
-        return blog_links
 
     def create_facebook_post(self, content):
         url = f"https://graph.facebook.com/{self.page_id}/feed"
@@ -48,12 +42,9 @@ class FacebookCreator(ContentGenerator):
         # Generate question and response
         question_and_response = self.generate_question_and_response()
 
-        # Generate random blog links
-        random_blog_links = self.get_random_blog_links()
-
         # Construct Facebook post content
         tie_in_text = "At Pixel Pen, we're committed to crafting excellence, one idea at a time. Check out our blog for more insights: "
-        post_content = f"{question_and_response}\n\n{tie_in_text}\n{random_blog_links[0]}\n{random_blog_links[1]}"
+        post_content = f"{question_and_response}\n\n{tie_in_text}\nhttps://www.pixelpen.net/creative-showcase"
 
         # Create the post
         print("Posting to Facebook:")

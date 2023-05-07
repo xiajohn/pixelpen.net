@@ -130,6 +130,6 @@ class ContentGenerator:
 
         return img
     
-cg = ContentGenerator()
-output_path = "generated/output_meme.jpg"
-cg.create_meme(output_path)
+# cg = ContentGenerator()
+# output_path = "generated/output_meme.jpg"
+# cg.create_meme(output_path)
