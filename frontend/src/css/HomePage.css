@@ -1,6 +1,9 @@
 .greeting {
     text-align: center;
     margin-bottom: 1rem;
+    padding: 1rem;
+    margin: 0 auto;
+    max-width: 800px;
   }
   
   .greeting h1 {
