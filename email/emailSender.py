@@ -46,7 +46,7 @@ def send_email(to_email, subject, content):
         print(f"Error sending email: {e}")
 
 
-email_subject = "Exploring Collaboration Opportunities with Pixel Pen"
+email_subject = "Collaboration Opportunities with Pixel Pen"
 email_content = """Hi there,
 
 I hope this message finds you well. My name is John, a software developer with a passion for content creation. I'm reaching out from Pixel Pen, a creative platform I've started. We craft engaging and innovative content with the help of AI assistance.
@@ -62,8 +62,8 @@ Best regards,
 John
 Pixel Pen
 """
-crawler = BlogCrawler("business blog", 30)
-emails = crawler.run() + ["xiajohn@hotmail.com"]
+crawler = BlogCrawler("how to play chess blogs", 30)
+emails = crawler.run()
 print(emails)
 for email in emails:
     send_email(email, email_subject, email_content)

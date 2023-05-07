@@ -20,8 +20,12 @@ class BlogCrawler:
         return email_regex.match(email) and not email.endswith('.gov')
 
     def extract_emails(self, url):
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, "html.parser")
+        try:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, "html.parser")
+        except Exception as e:
+            print(f"Error fetching URL: {e}")
+            return []
 
         contact_links = [url]  # Add the homepage URL to the list
         keywords = ["contact", "contact us"]
@@ -32,8 +36,13 @@ class BlogCrawler:
 
         emails = []
         for link in contact_links:
-            response = requests.get(link)
-            soup = BeautifulSoup(response.text, "html.parser")
+            try:
+                response = requests.get(link)
+                soup = BeautifulSoup(response.text, "html.parser")
+            except Exception as e:
+                print(f"Error fetching contact link: {e}")
+                continue
+
             for mailto_link in soup.select('a[href^="mailto:"]'):
                 email = mailto_link['href'][7:]
                 email = email.split('?')[0]
@@ -41,6 +50,7 @@ class BlogCrawler:
                     emails.append(email)
 
         return emails
+
 
 
     

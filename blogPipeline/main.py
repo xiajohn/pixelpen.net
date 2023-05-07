@@ -3,7 +3,7 @@ from affiliate_link_injector import AffiliateLinkInjector
 from build import build, clean_generated_folder
 from internal_link_injector import InternalLinkInjector
 from utils import TopicType, load_blog_metadata, save_blog_metadata
-
+from content_generator import ContentGenerator
 import os
 import openai
 openai.api_key = os.getenv("OPENAI_API_KEY")
