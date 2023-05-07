@@ -1,0 +1,14 @@
+.greeting {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .greeting h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .greeting p {
+    font-size: 1.2rem;
+  }
+  

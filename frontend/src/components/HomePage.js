@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Body from './Body';
 import FormComponent from './FormComponent';
 import Essay from './Essay';
-
+import '../css/HomePage.css'
 function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,8 +26,14 @@ function HomePage() {
           <div className="loader"></div>
         </div>
       )}
+      <div className="greeting">
+            <h1>Crafting excellence, one idea at a time</h1>
+            <p>Enhance your marketing and advertising with AI-powered content. Fast, high-quality, and tailored to your needs.</p>
+          </div>
       <Body>
+        
         <div className="input-form">
+          
           <FormComponent
             formData={formData}
             setFormData={setFormData}

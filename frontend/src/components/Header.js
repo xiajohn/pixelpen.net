@@ -17,21 +17,23 @@ function Header() {
 
   return (
     <Navbar className={styles.navbar} expand>
-      <Navbar.Brand className={styles.brand} as={Link} to="/">
-        <img
-          src={logo}
-          alt="Logo"
-          className={styles.logo} // Add a new class for logo styling
-        />
-        Pixel Pen
-      </Navbar.Brand>
-      <Nav className={styles.nav}>
-        {renderNavLink('/creative-showcase', 'Creative Showcase')}
-        {renderNavLink('/about', 'About')}
-        {renderNavLink('/contact', 'Contact')}
-      </Nav>
+      <div className={styles.left}></div>
+      <div className={styles.center}>
+        <Navbar.Brand className={styles.brand} as={Link} to="/">
+          Pixel Pen
+        </Navbar.Brand>
+      </div>
+      <div className={styles.right}>
+        <Nav className={styles.nav}>
+          {renderNavLink('/creative-showcase', 'Creative Showcase')}
+          {renderNavLink('/about', 'About')}
+          {renderNavLink('/contact', 'Contact')}
+        </Nav>
+      </div>
     </Navbar>
   );
+  
+  
 }
 
 export default Header;

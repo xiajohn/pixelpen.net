@@ -8,14 +8,29 @@
   padding: 0 2rem;
 }
 
+.left,
+.center,
+.right {
+  flex: 1;
+}
+
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
 .brand {
   font-size: 2rem;
   font-family: 'Lucida Calligraphy', 'Times New Roman', serif;
   font-weight: bold;
   color: #ff7f50;
-  flex: 10;
-  margin-left: 4rem;
-  text-align: center;
 }
 
 .nav {
@@ -23,39 +38,4 @@
   gap: 1rem;
   align-items: flex-end;
   justify-content: flex-end;
-}
-
-.logo {
-  height: 88px;
-  position: absolute;
-  top: -8px;
-  margin-right: 10px;
-  left: -1px;
-}
-
-.nav-link {
-  color: #ffffff !important;
-}
-
-.nav-link:hover {
-  color: #cccccc !important;
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    width: 100%;
-    flex-direction: column;
-    height: auto;
-    padding: 1rem 0;
-  }
-
-  .brand {
-    margin-bottom: 1rem;
-  }
-
-  .nav {
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
 }
