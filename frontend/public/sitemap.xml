@@ -31,6 +31,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Best-bbq-summer-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/Best-products-summer-2023</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -41,7 +46,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Grill-Hacks-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/honey-star</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Is-grilling-healthy-for-you</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -51,7 +66,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/Reliable-trash-bags-2023</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/Summer-Essentials</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Summer-grilling-2023</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -82,6 +107,11 @@
   </url>
   <url>
     <loc>https://pixelpen.net/blog/What-to-do-this-summer</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/What-to-grill</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>

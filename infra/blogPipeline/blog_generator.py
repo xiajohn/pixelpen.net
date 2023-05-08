@@ -2,12 +2,14 @@ import os
 import random
 from dotenv import load_dotenv
 import base64
-from content_generator import ContentGenerator
-load_dotenv()
+from common.content_generator import ContentGenerator
+
+load_dotenv(os.path.join('..', '.env'))
 
 
 class BlogGenerator(ContentGenerator):
     def __init__(self, topic):
+        super().__init__()
         self.topic = topic
         self.blog_folder = self.create_blog_folder(self.topic)
 

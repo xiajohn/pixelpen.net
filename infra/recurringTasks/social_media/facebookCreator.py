@@ -1,10 +1,10 @@
 import requests
 import os
 from random import choice
-from utils import load_blog_metadata
-from content_generator import ContentGenerator
-from dotenv import load_dotenv
-load_dotenv()
+from common.utils import load_json
+from ...common.content_generator import ContentGenerator
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv('../.env'))
 
 
 class FacebookCreator(ContentGenerator):
@@ -12,7 +12,7 @@ class FacebookCreator(ContentGenerator):
         super().__init__()
         self.page_id = "121834987557525"
         self.access_token = os.getenv("FACEBOOK_ACCESS_KEY")
-        self.blog_metadata = load_blog_metadata()
+        self.blog_metadata = load_json("blog_metadata.json")
 
     def generate_question_and_response(self):
         prompts = [

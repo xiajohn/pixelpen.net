@@ -6,8 +6,11 @@ import textwrap
 import base64
 import io
 import random
+from dotenv import load_dotenv, find_dotenv
+
 class ContentGenerator:
     def __init__(self):
+        load_dotenv(find_dotenv('../.env'))
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
     def generate_text(self, prompt, max_tokens=2500, retries=3):

@@ -131,10 +131,6 @@ def build(metadata):
 
     output_folders = [local_testing_folder, s3_upload_folder]
 
-    # Copy files to local testing folder and S3 upload folder
-    for output_folder in output_folders:
-        copy_files(generated_folder, output_folder)
-
     # Generate blogs.json
     blogs = generate_blogs_json(generated_folder, output_folders, metadata)
 
@@ -144,5 +140,9 @@ def build(metadata):
     # Save sitemap.xml to output folders
     save_sitemap_to_folders(
         sitemap_content, [generated_folder, frontend_public_folder])
+    
+     # Copy files to local testing folder and S3 upload folder
+    for output_folder in output_folders:
+        copy_files(generated_folder, output_folder)
 
 

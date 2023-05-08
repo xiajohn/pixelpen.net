@@ -1,6 +1,6 @@
 import os
 import random
-from utils import TopicType
+from common.utils import TopicType
 import re
 class InternalLinkInjector:
     def __init__(self, categories, generated_folder="generated"):
