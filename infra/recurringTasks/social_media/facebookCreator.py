@@ -2,7 +2,7 @@ import requests
 import os
 from random import choice
 from common.utils import load_json
-from ...common.content_generator import ContentGenerator
+from common.content_generator import ContentGenerator
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv('../.env'))
 
@@ -52,6 +52,6 @@ class FacebookCreator(ContentGenerator):
         post_result = self.create_facebook_post(post_content)
         print("Post result:", post_result)
 
-if __name__ == "__main__":
+def createFacebookPost():
     facebook_creator = FacebookCreator()
     facebook_creator.post_twice_daily()

@@ -2,14 +2,13 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, TrackingSettings, ClickTracking
 import os
 from dotenv import load_dotenv, find_dotenv
-from webCrawler import BlogCrawler
 
 load_dotenv(find_dotenv('../.env'))
 sendgrid_api_key = os.getenv("SENDGRID_API_KEY")
 
 
 class EmailSender:
-    def __init__(self, sent_emails_file='sent_emails.txt'):
+    def __init__(self, sent_emails_file='recurringTasks/email/sent_emails.txt'):
         self.email_subject = "Collaboration Opportunities with Pixel Pen"
         self.email_content = """Hi there,
 
@@ -38,7 +37,7 @@ class EmailSender:
         return sent_emails
 
     def save_sent_emails(self, sent_emails):
-        with open(self.sent_emails_file, 'w') as file:
+        with open(self.sent_emails_file, 'a') as file:
             for email in sent_emails:
                 file.write(f"{email}\n")
 
@@ -47,8 +46,8 @@ class EmailSender:
         message = Mail(
             from_email=("pixel.pen3@gmail.com", "Pixel Pen"),
             to_emails=to_email,
-            subject=self.subject,
-            plain_text_content=self.content,
+            subject=self.email_subject,
+            plain_text_content=self.email_content,
         )
 
         tracking_settings = TrackingSettings()
@@ -64,9 +63,9 @@ class EmailSender:
         except Exception as e:
             print(f"Error sending email: {e}")
 
-    def send_emails(self, emails, subject, content):
+    def send_emails(self, emails):
         for email in emails:
-            self.send_email(email, subject, content)
+            self.send_email(email)
         self.save_sent_emails(emails)
 
 

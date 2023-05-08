@@ -35,7 +35,7 @@ def process_categories(categories):
     return blog_metadata
 
 
-def main():
+def writeBlogs():
     categories = load_json("../user_input.json")
     blog_metadata = process_categories(categories)
     all_topics = [topic_data["topic"] for category_data in categories.values()
