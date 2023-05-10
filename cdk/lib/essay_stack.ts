@@ -8,8 +8,11 @@ import * as ses from 'aws-cdk-lib/aws-ses';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as s3_notifications from 'aws-cdk-lib/aws-s3-notifications';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+
 import * as s3_deployment from 'aws-cdk-lib/aws-s3-deployment';
 export interface EssayStackProps extends cdk.StackProps {
 }
@@ -35,7 +38,32 @@ export class EssayStack extends cdk.Stack {
     const api = this.createApiGateway(myLambda);
     this.addApiGatewayResources(myLambda, api);
     this.outputApiUrl(api);
+    this.setupS3EventProcessing(s3Bucket);
   }
+
+  private setupS3EventProcessing(s3Bucket: s3.Bucket): void {
+    const s3EventHandlerLambda = this.createS3EventHandlerLambda();
+    const topicQueue = this.createTopicQueue();
+  
+    s3Bucket.grantRead(s3EventHandlerLambda);
+    topicQueue.grantSendMessages(s3EventHandlerLambda);
+    s3EventHandlerLambda.addEnvironment('SQS_QUEUE_URL', topicQueue.queueUrl);
+  
+    s3Bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3_notifications.LambdaDestination(s3EventHandlerLambda));
+  }
+  
+  private createS3EventHandlerLambda(): lambda.Function {
+    return new lambda.Function(this, 'S3EventHandlerFunction', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 's3_event_handler.lambda_handler',
+      code: lambda.Code.fromAsset('../infra/recurringTasks'),
+    });
+  }
+
+  private createTopicQueue(): sqs.Queue {
+    return new sqs.Queue(this, 'TopicQueue');
+  }
+  
   outputApiUrl(api: apigateway.RestApi) {
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: `https://${api.restApiId}.execute-api.${this.region}.amazonaws.com/`,

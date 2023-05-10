@@ -7,18 +7,19 @@ import base64
 import io
 import random
 from dotenv import load_dotenv, find_dotenv
-
+load_dotenv(find_dotenv('../.env'))
+        
 class ContentGenerator:
     def __init__(self):
-        load_dotenv(find_dotenv('../.env'))
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    def generate_text(self, prompt, max_tokens=2500, retries=3):
+    def generate_text(self, prompt, max_tokens=2500, temperature=0.7, retries=3):
         for _ in range(retries):
             try:
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     max_tokens=max_tokens,
+                    temperature=temperature,
                     messages=[
                         {
                             "role": "system",

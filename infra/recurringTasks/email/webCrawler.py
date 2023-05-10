@@ -3,16 +3,19 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-
-class BlogCrawler:
-    def __init__(self, query, num_results):
-        self.query = query
+import datetime
+from common.content_generator import ContentGenerator
+from common.utils import load_json
+class BlogCrawler():
+    def __init__(self, num_results=50, num_topics=6, topic="pick a random blog topic"):
         self.num_results = num_results
+        self.num_topics = num_topics
+        self.topic = topic
         self.blogs = self.get_blog_links()
 
     def get_blog_links(self):
-        links = [j for j in search(self.query, num_results=self.num_results)]
-        return links
+        all_links = [j for j in search(self.topic, num_results=self.num_results)]
+        return all_links
 
     @staticmethod
     def is_valid_email(email):

@@ -1,7 +1,7 @@
 from recurringTasks.email.webCrawler import BlogCrawler
 from recurringTasks.email.emailSender import EmailSender
 def sendEmails():
-    crawler = BlogCrawler("honey blogs", 10)
+    crawler = BlogCrawler()
     emails = crawler.run()
     print(emails)
 
