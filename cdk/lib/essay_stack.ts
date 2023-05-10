@@ -12,7 +12,8 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3_notifications from 'aws-cdk-lib/aws-s3-notifications';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
-
+import * as events from 'aws-cdk-lib/aws-events';
+import * as eventtargets from 'aws-cdk-lib/aws-events-targets';
 import * as s3_deployment from 'aws-cdk-lib/aws-s3-deployment';
 export interface EssayStackProps extends cdk.StackProps {
 }
@@ -38,27 +39,40 @@ export class EssayStack extends cdk.Stack {
     const api = this.createApiGateway(myLambda);
     this.addApiGatewayResources(myLambda, api);
     this.outputApiUrl(api);
-    this.setupS3EventProcessing(s3Bucket);
+    this.setupEventProcessing(s3Bucket);
   }
 
-  private setupS3EventProcessing(s3Bucket: s3.Bucket): void {
-    const s3EventHandlerLambda = this.createS3EventHandlerLambda();
+  private setupEventProcessing(s3Bucket: s3.Bucket): void {
+    const eventHandlerLambda = this.createEventHandlerLambda();
     const topicQueue = this.createTopicQueue();
   
-    s3Bucket.grantRead(s3EventHandlerLambda);
-    topicQueue.grantSendMessages(s3EventHandlerLambda);
-    s3EventHandlerLambda.addEnvironment('SQS_QUEUE_URL', topicQueue.queueUrl);
+    
+    topicQueue.grantSendMessages(eventHandlerLambda);
+    eventHandlerLambda.addEnvironment('SQS_QUEUE_URL', topicQueue.queueUrl);
   
-    s3Bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3_notifications.LambdaDestination(s3EventHandlerLambda));
+    const dailyRule = new events.Rule(this, 'DailyRule', {
+      schedule: events.Schedule.rate(cdk.Duration.days(1)),
+    });
+    
+    dailyRule.addTarget(new eventtargets.LambdaFunction(eventHandlerLambda));
+    
+    
   }
   
-  private createS3EventHandlerLambda(): lambda.Function {
-    return new lambda.Function(this, 'S3EventHandlerFunction', {
+  private createEventHandlerLambda(): lambda.Function {
+    const eventLambda = new lambda.Function(this, 'S3EventHandlerFunction', {
       runtime: lambda.Runtime.PYTHON_3_9,
-      handler: 's3_event_handler.lambda_handler',
+      handler: 'event_handler.lambda_handler',
       code: lambda.Code.fromAsset('../infra/recurringTasks'),
     });
+  
+    eventLambda.addPermission('AllowEventBridge', {
+      principal: new iam.ServicePrincipal('events.amazonaws.com'),
+    });
+  
+    return eventLambda;
   }
+  
 
   private createTopicQueue(): sqs.Queue {
     return new sqs.Queue(this, 'TopicQueue');

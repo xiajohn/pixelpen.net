@@ -28,7 +28,7 @@ def process_categories(categories):
 
                 affiliate_link_injector = AffiliateLinkInjector(
                     affiliate_links)
-                if type == TopicType.TRANSACTIONAL:
+                if type == "TRANSACTIONAL":
                     affiliate_link_injector.inject_links(blog_folder)
 
     save_json(blog_metadata, os.path.join("../generated/blog_metadata.json"))

@@ -66,6 +66,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/ostapenko-outfit</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/Reliable-trash-bags-2023</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -87,6 +92,16 @@
   </url>
   <url>
     <loc>https://pixelpen.net/blog/Sun-damage-to-skin</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/tennis</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/tennis-shorts</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>

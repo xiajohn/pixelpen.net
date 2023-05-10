@@ -14,8 +14,8 @@ class InternalLinkInjector:
         all_topics = self.categories[category]["topics"]
         other_topics = [t for t in all_topics if t["topic"] != topic]
 
-        if topic_type == TopicType.INFORMATIONAL:
-            transactional_topics = [t for t in other_topics if t["type"] == TopicType.TRANSACTIONAL]
+        if topic_type == "INFORMATIONAL":
+            transactional_topics = [t for t in other_topics if t["type"] == "TRANSACTIONAL"]
             if transactional_topics:
                 random.shuffle(transactional_topics)
                 other_topics = transactional_topics + other_topics

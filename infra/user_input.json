@@ -70,5 +70,17 @@
             {"name": "Grill brush", "url": "https://amzn.to/44gZwef"},
            {"name": "GRILLART Grill Brush and Scraper", "url": "https://amzn.to/3LK2f8D"}
        ]
-    }
+    },
+    "tennis": {
+        "topics": [
+            {"topic": "tennis", "type": "TRANSACTIONAL"},
+             {"topic": "ostapenko outfit", "type": "TRANSACTIONAL"},
+             {"topic": "tennis shorts", "type": "TRANSACTIONAL"}
+        ],
+        "affiliate_links": [
+            {"name": "Tennis Elbow Strap", "url": "https://amzn.to/3ptE6uF"},
+            {"name": "Tennis balls  ", "url": "https://amzn.to/3NWNGAd"},
+             {"name": "Tennis Racket", "url": "https://amzn.to/42mR5Nb"}
+        ]
+     }
 }

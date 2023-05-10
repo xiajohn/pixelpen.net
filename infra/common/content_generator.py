@@ -8,7 +8,7 @@ import io
 import random
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv('../.env'))
-        
+import time 
 class ContentGenerator:
     def __init__(self):
         openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -40,6 +40,12 @@ class ContentGenerator:
                     prompt = f"Write a response on a safer version of the topic {prompt} without giving any options or lists."
                 else:
                     raise e
+                
+            except openai.error.RateLimitError as e:
+                wait_time = 3000
+                print(f"Rate limit exceeded, waiting for {wait_time} seconds before retrying...")
+                time.sleep(wait_time)
+
         raise Exception("Failed to generate text after multiple retries")
 
     def generate_image(self, prompt, retries=3):
@@ -63,6 +69,10 @@ class ContentGenerator:
                 else:
                     # If it's not a safety-related error, raise the exception
                     raise e
+            except openai.error.RateLimitError as e:
+                wait_time = 3000
+                print(f"Rate limit exceeded, waiting for {wait_time} seconds before retrying...")
+                time.sleep(wait_time)
         else:
             raise Exception("Failed to generate image after multiple retries")
 

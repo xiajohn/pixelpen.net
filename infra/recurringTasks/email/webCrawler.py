@@ -6,14 +6,15 @@ from urllib.parse import urljoin
 import datetime
 from common.content_generator import ContentGenerator
 from common.utils import load_json
-class BlogCrawler():
-    def __init__(self, num_results=50, num_topics=6, topic="pick a random blog topic"):
+class BlogCrawler(ContentGenerator):
+    def __init__(self, num_results=30, num_topics=6, topic="generate a random blog category. respond with only the title"):
         self.num_results = num_results
         self.num_topics = num_topics
-        self.topic = topic
+        self.topic = self.generate_text(topic, 250, 1)
         self.blogs = self.get_blog_links()
 
     def get_blog_links(self):
+        print(f'sending emails to {self.topic}')
         all_links = [j for j in search(self.topic, num_results=self.num_results)]
         return all_links
 
