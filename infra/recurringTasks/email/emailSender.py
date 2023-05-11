@@ -42,7 +42,7 @@ class EmailSender:
                 file.write(f"{email}\n")
 
     def send_email(self, to_email):
-        sent_emails = self.load_sent_emails()
+       #sent_emails = self.load_sent_emails()
         message = Mail(
             from_email=("pixel.pen3@gmail.com", "Pixel Pen"),
             to_emails=to_email,
@@ -66,7 +66,7 @@ class EmailSender:
     def send_emails(self, emails):
         for email in emails:
             self.send_email(email)
-        self.save_sent_emails(emails)
+        #self.save_sent_emails(emails)
 
 
 

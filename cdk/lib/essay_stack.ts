@@ -68,6 +68,7 @@ export class EssayStack extends cdk.Stack {
       handler: 'event_handler.lambda_handler',
       environment: {
         OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
+        SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!
       },
       code: lambda.Code.fromAsset('../infra', {
         exclude: ['generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*','user_input.json', 'run.py','.gitignore','.env']
