@@ -15,6 +15,9 @@ import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventtargets from 'aws-cdk-lib/aws-events-targets';
 import * as s3_deployment from 'aws-cdk-lib/aws-s3-deployment';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 export interface EssayStackProps extends cdk.StackProps {
 }
 
@@ -63,7 +66,13 @@ export class EssayStack extends cdk.Stack {
     const eventLambda = new lambda.Function(this, 'S3EventHandlerFunction', {
       runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'event_handler.lambda_handler',
-      code: lambda.Code.fromAsset('../infra/recurringTasks'),
+      environment: {
+        OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
+      },
+      code: lambda.Code.fromAsset('../infra', {
+        exclude: ['generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*','user_input.json', 'run.py','.gitignore','.env']
+      }),
+      timeout: cdk.Duration.seconds(160) // Set the timeout to 60 seconds
     });
   
     eventLambda.addPermission('AllowEventBridge', {

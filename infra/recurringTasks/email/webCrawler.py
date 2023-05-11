@@ -1,16 +1,16 @@
-from googlesearch import search
+
 import requests
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-import datetime
+from googlesearch import search
 from common.content_generator import ContentGenerator
-from common.utils import load_json
-class BlogCrawler(ContentGenerator):
+class BlogCrawler():
     def __init__(self, num_results=30, num_topics=6, topic="generate a random blog category. respond with only the title"):
         self.num_results = num_results
         self.num_topics = num_topics
-        self.topic = self.generate_text(topic, 250, 1)
+        self.contentGenerator = ContentGenerator()
+        self.topic = self.contentGenerator.generate_text(topic, 250, 1)
         self.blogs = self.get_blog_links()
 
     def get_blog_links(self):
