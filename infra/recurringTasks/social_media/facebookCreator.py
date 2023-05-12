@@ -1,7 +1,6 @@
 import requests
 import os
 from random import choice
-from common.utils import load_json
 from common.content_generator import ContentGenerator
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv('../.env'))
@@ -12,17 +11,16 @@ class FacebookCreator(ContentGenerator):
         super().__init__()
         self.page_id = "121834987557525"
         self.access_token = os.getenv("FACEBOOK_ACCESS_KEY")
-        self.blog_metadata = load_json("blog_metadata.json")
 
     def generate_question_and_response(self):
         prompts = [
-            "Share a practical tip for anything",
-            "Tell a funny joke",
-            "Ask an interesting question about any topic"
+            "Share a practical tip for anything. Limit response to only the practical tip. ",
+            "Tell a funny joke Limit response to only the funny joke. ",
+            "Ask an interesting question about any topic. Limit response to only the interesting question. "
         ]
 
         selected_prompt = choice(prompts) + "Limit response to less than 100 words"
-        question_and_response = self.generate_text(selected_prompt, max_tokens=200)
+        question_and_response = self.generate_text(selected_prompt, max_tokens=200, temperature=1)
         return question_and_response.strip()
 
     def create_facebook_post(self, content):
@@ -37,7 +35,7 @@ class FacebookCreator(ContentGenerator):
     
 
 
-    def post_twice_daily(self):
+    def post(self):
         
         # Generate question and response
         question_and_response = self.generate_question_and_response()
@@ -54,4 +52,4 @@ class FacebookCreator(ContentGenerator):
 
 def createFacebookPost():
     facebook_creator = FacebookCreator()
-    facebook_creator.post_twice_daily()
+    facebook_creator.post()

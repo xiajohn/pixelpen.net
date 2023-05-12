@@ -12,7 +12,8 @@ logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     logger.info(f"Received Event: {json.dumps(event)}")
-
+    
+    createFacebookPost()
     sendEmails()
 
     return {
