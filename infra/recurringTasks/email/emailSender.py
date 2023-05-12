@@ -64,6 +64,7 @@ class EmailSender:
             print(f"Error sending email: {e}")
 
     def send_emails(self, emails):
+        emails = list(set(emails))
         for email in emails:
             self.send_email(email)
         #self.save_sent_emails(emails)
