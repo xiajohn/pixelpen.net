@@ -17,7 +17,7 @@ function HomePage() {
     "The legend of Pixel Pen lives on, inspiring countless creators to tap into their imaginative potential, and in doing so, shape the future of human ingenuity.\n\n" +
     "So come, write down your idea with Pixel Pen and witness the magic of your vision coming to life! We believe that AI can be integrated into almost every type of business, unlocking new opportunities for growth and innovation. If you share our vision and passion for harnessing the power of AI, we invite you to join us as partners in our quest to reshape the future. Together, we can unleash the full potential of Pixel Pen, revolutionizing industries and redefining what's possible in the realm of human creativity. Reach out to us and let's embark on this exciting journey of partnership and success!"
   );
-  
+
 
   return (
     <>
@@ -27,13 +27,16 @@ function HomePage() {
         </div>
       )}
       <div className="greeting">
-            <h1>Crafting excellence, one idea at a time</h1>
-            <p>Enhance your marketing and advertising with AI-powered content. Fast, high-quality, and tailored to your needs.</p>
-          </div>
+        <h1>Crafting excellence, one idea at a time</h1>
+        <p>Enhance your marketing and advertising with AI-powered content. Fast, high-quality, and tailored to your needs.</p>
+        <p>Unlock the potential of your brand – <a href="/about">Explore our services</a>.</p>
+      </div>
+
+
       <Body>
-        
+
         <div className="input-form">
-          
+
           <FormComponent
             formData={formData}
             setFormData={setFormData}

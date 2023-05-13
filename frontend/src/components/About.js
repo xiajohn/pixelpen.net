@@ -22,7 +22,7 @@ function About() {
                 </Col>
             </Row>
             
-            {/* New services section */}
+
             <Row>
                 <Col>
                     <h3>Our Services</h3>
@@ -33,6 +33,13 @@ function About() {
                         <li><strong>Email Campaigns:</strong> Targeted email marketing campaigns to nurture leads and increase conversions.</li>
                     </ul>
                     <p>Interested in our services? Get in touch with us to discuss your project requirements and explore how we can work together to bring your ideas to life. We're here to help and can't wait to hear from you!</p>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col>
+                    <h3>Privacy Policy</h3>
+                    <p>We do not collect any data from you</p>
                 </Col>
             </Row>
         </Container>

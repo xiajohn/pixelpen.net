@@ -67,7 +67,6 @@ class EmailSender:
         emails = list(set(emails))
         for email in emails:
             self.send_email(email)
-        self.send_email("xiajohn@hotmail.com")
         #self.save_sent_emails(emails)
 
 

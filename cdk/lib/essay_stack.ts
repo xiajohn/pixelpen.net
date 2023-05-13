@@ -54,10 +54,10 @@ export class EssayStack extends cdk.Stack {
     eventHandlerLambda.addEnvironment('SQS_QUEUE_URL', topicQueue.queueUrl);
   
     const dailyRule = new events.Rule(this, 'DailyRule', {
-      schedule: events.Schedule.rate(cdk.Duration.days(1)),
+      schedule: events.Schedule.rate(cdk.Duration.days(1))
     });
     
-    dailyRule.addTarget(new eventtargets.LambdaFunction(eventHandlerLambda));
+    dailyRule.addTarget(new eventtargets.LambdaFunction(eventHandlerLambda, {retryAttempts: 1}));
     
     
   }

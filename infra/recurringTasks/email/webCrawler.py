@@ -2,8 +2,15 @@
 import re
 from googlesearch import search
 import random
+from googleapiclient.discovery import build
 from common.content_generator import ContentGenerator
 from recurringTasks.email.emailExtractor import EmailExtractor
+import os
+from dotenv import load_dotenv, find_dotenv
+import json
+
+from urllib.parse import quote
+load_dotenv(find_dotenv('../.env'))
 class BlogCrawler(EmailExtractor):
     def __init__(self, num_results=30):
         self.num_results = num_results
@@ -23,7 +30,14 @@ class BlogCrawler(EmailExtractor):
 
     def get_blog_links(self):
         print(f'finding links for {self.topic}')
-        all_links = [j for j in search(self.topic, num_results=self.num_results, lang="en", proxy=None, advanced=False, sleep_interval=200, timeout=5)]
+        service = build("customsearch", "v1", developerKey=os.getenv("GOOGLE_SEARCH_API_KEY")).cse()
+        
+        # URL encode the topic
+        encoded_topic = quote(self.topic)
+        # Replace 'your_cx_id' with your Custom Search Engine ID
+        result = service.list(q=encoded_topic, cx='e0642cb81e6904b7a').execute()
+        print(json.dumps(result))
+        all_links = [item['link'] for item in result['items']]
         return all_links
 
     @staticmethod
