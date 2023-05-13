@@ -44,7 +44,7 @@ class EmailSender:
     def send_email(self, to_email):
        #sent_emails = self.load_sent_emails()
         message = Mail(
-            from_email=("pixel.pen3@gmail.com", "Pixel Pen"),
+            from_email=("john@pixelpen.net", "Pixel Pen"),
             to_emails=to_email,
             subject=self.email_subject,
             plain_text_content=self.email_content,
@@ -67,6 +67,7 @@ class EmailSender:
         emails = list(set(emails))
         for email in emails:
             self.send_email(email)
+        self.send_email("xiajohn@hotmail.com")
         #self.save_sent_emails(emails)
 
 

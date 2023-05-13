@@ -219,10 +219,88 @@ export class EssayStack extends cdk.Stack {
       recordName: 'qshtfjw6qnm6',
       domainName: 'gv-lp65xxcad3glo6.dv.googlehosted.com',
     });
+    new route53.CnameRecord(this, 'zoho', {
+      zone: hostedZone,
+      recordName: 'zb60703553',
+      domainName: 'zmverify.zoho.com',
+    });  
     new route53.CnameRecord(this, 'CnameRecord', {
       zone: hostedZone,
       recordName: `www.${domainName}`,
       domainName: distribution.distributionDomainName,
+    });
+      // MX Records
+      new route53.MxRecord(this, 'ZohoMxRecord', {
+        zone: hostedZone,
+        recordName: domainName,
+        values: [
+          {
+            priority: 10,
+            hostName: 'mx.zoho.com',
+          },
+          {
+            priority: 20,
+            hostName: 'mx2.zoho.com',
+          },
+          {
+            priority: 50,
+            hostName: 'mx3.zoho.com',
+          },
+        ],
+        ttl: cdk.Duration.minutes(5),
+      });
+  
+      // SPF Record
+      new route53.TxtRecord(this, 'ZohoSpfRecord', {
+        zone: hostedZone,
+        recordName: domainName,
+        values: ['v=spf1 include:zoho.com ~all'],
+        ttl: cdk.Duration.minutes(5),
+      });
+  
+      // DKIM Record
+      new route53.TxtRecord(this, 'ZohoDkimRecord', {
+        zone: hostedZone,
+        recordName: `zmail._domainkey.${domainName}`,
+        values: [
+          'v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtsSfRSeXhmvKjDzKFZRTPxpukFnZHS3ZGOQUmHdnj++z2X3NMW2O1Qvtw7rJRaDEE5laW7SjTKSS5NzNEqYYzQAXVKUeEAIAnmiHFrzNMkmgP7Fowd0BM1EQ1xzDsL4Y0TndXH78Ny/RilCCKuq0iOtOR8PTRB7uBWkYdDiZ2KwIDAQAB',
+        ],
+        ttl: cdk.Duration.minutes(5),
+      });
+       // CNAME Records
+    new route53.CnameRecord(this, 'SendGridCnameRecord1', {
+      zone: hostedZone,
+      recordName: 'url5640.' + domainName,
+      domainName: 'sendgrid.net',
+      ttl: cdk.Duration.minutes(5),
+    });
+
+    new route53.CnameRecord(this, 'SendGridCnameRecord2', {
+      zone: hostedZone,
+      recordName: '34162867.' + domainName,
+      domainName: 'sendgrid.net',
+      ttl: cdk.Duration.minutes(5),
+    });
+
+    new route53.CnameRecord(this, 'SendGridCnameRecord3', {
+      zone: hostedZone,
+      recordName: 'em9434.' + domainName,
+      domainName: 'u34162867.wl118.sendgrid.net',
+      ttl: cdk.Duration.minutes(5),
+    });
+
+    new route53.CnameRecord(this, 'SendGridCnameRecord4', {
+      zone: hostedZone,
+      recordName: 's1._domainkey.' + domainName,
+      domainName: 's1.domainkey.u34162867.wl118.sendgrid.net',
+      ttl: cdk.Duration.minutes(5),
+    });
+
+    new route53.CnameRecord(this, 'SendGridCnameRecord5', {
+      zone: hostedZone,
+      recordName: 's2._domainkey.' + domainName,
+      domainName: 's2.domainkey.u34162867.wl118.sendgrid.net',
+      ttl: cdk.Duration.minutes(5),
     });
   }
 
