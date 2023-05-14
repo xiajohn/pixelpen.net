@@ -1,6 +1,5 @@
 
 import re
-from googlesearch import search
 import random
 from googleapiclient.discovery import build
 from common.content_generator import ContentGenerator
@@ -33,7 +32,6 @@ class BlogCrawler(EmailExtractor):
         service = build("customsearch", "v1", developerKey=os.getenv("GOOGLE_SEARCH_API_KEY")).cse()
         query = self.topic.replace('"', '')
         result = service.list(q=query, cx='e0642cb81e6904b7a').execute()
-        print(json.dumps(result))
         all_links = [item['link'] for item in result['items']]
         return all_links
 
