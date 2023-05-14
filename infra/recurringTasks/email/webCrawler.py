@@ -31,11 +31,8 @@ class BlogCrawler(EmailExtractor):
     def get_blog_links(self):
         print(f'finding links for {self.topic}')
         service = build("customsearch", "v1", developerKey=os.getenv("GOOGLE_SEARCH_API_KEY")).cse()
-        
-        # URL encode the topic
-        encoded_topic = quote(self.topic)
-        # Replace 'your_cx_id' with your Custom Search Engine ID
-        result = service.list(q=encoded_topic, cx='e0642cb81e6904b7a').execute()
+        query = self.topic.replace('"', '')
+        result = service.list(q=query, cx='e0642cb81e6904b7a').execute()
         print(json.dumps(result))
         all_links = [item['link'] for item in result['items']]
         return all_links
