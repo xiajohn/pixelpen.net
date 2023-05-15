@@ -50,22 +50,11 @@ def make(description):
             { "id": 16, "name":"when something is really bad"},
         ]
 
-        testing = False
-        if testing:
-            meme_description = documents[9]["name"]
-            names = [doc["name"] for doc in documents]
-            
-            print("meme_description: ", documents[0])
-            print("meme_description: ", meme_description)
-        else:
-            best_result = {"index": -1, "score": 0}
-            # pull out all name values from the documents
-            names = [doc["name"] for doc in documents]
-            semantic_result = semantic_search(names, user_input)
-            meme_description = semantic_result
-
-        nlp_output = meme_description
-        meme = generate_meme(user_input, meme_description)
+        best_result = {"index": -1, "score": 0}
+        # pull out all name values from the documents
+        names = [doc["name"] for doc in documents]
+        semantic_result = semantic_search(names, user_input)
+        meme = generate_meme(user_input, semantic_result)
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -108,36 +97,20 @@ def generate_meme(user_input, meme_description,):
     ]
     for meme in memes:
         if meme_description == meme.description:
-            testing = False
-            if testing:
-                meme = eval(f"{meme.name}()")
-                image_name = meme.create(
-                    {
-                        "depiction": "You want AI making memes. this is a long test a very long tdst"
-                    }
-                )
-            else:
-                meme = eval(f"{meme.name}()")
-                meme.append_example(user_input)
-                print(f"prompt: {meme.instruction}")
+            meme = eval(f"{meme.name}()")
+            meme.append_example(user_input)
+            print(f"prompt: {meme.instruction}")
+            print("________meme_completion_________")
+            response = GPT.completion_request(meme.instruction)["choices"][
+                0
+            ]["text"].strip()
 
-                filter_no = GPT.content_filter(meme.instruction.strip())[
-                    "choices"
-                ][0]["text"]
-                print("filter_no: ", filter_no)
-                if filter_no == "2":
-                    raise Exception("The content has been flagged")
-                print("________meme_completion_________")
-                response = GPT.completion_request(meme.instruction)["choices"][
-                    0
-                ]["text"].strip()
+            print(f"response:{response}")
+            response_split = response.split("\n")[0]
+            cleaned_response = json.loads(response_split)
+            print(f"cleaned_response:{response}")
 
-                print(f"response:{response}")
-                response_split = response.split("\n")[0]
-                cleaned_response = json.loads(response_split)
-                print(f"cleaned_response:{response}")
-
-                image_name = meme.create(cleaned_response)
+            image_name = meme.create(cleaned_response, user_input)
             print("*******")
             print(image_name)
             file_location = f"creations/{image_name}"

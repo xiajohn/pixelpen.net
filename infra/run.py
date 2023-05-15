@@ -3,5 +3,5 @@ from recurringTasks.email.main import sendEmails
 from recurringTasks.social_media.facebookCreator import createFacebookPost
 from common.makememe.make import make
 if __name__ == "__main__":
-    sendEmails()
-    # make("lost something")
+    #sendEmails()
+    make("joker laughing")

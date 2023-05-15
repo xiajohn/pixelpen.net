@@ -26,35 +26,5 @@ Meme:{"opinion":"The best way to get a good grade in school is to study hard. "}
 ###
 """
 
-    def create(self, meme_text):
-
-        with Image.open(f"makememe/static/meme_pics/{self.name.lower()}.jpg").convert(
-            "RGBA"
-        ) as base:
-
-            overlay_image = Image_Manager.add_text(
-                base=base,
-                text=meme_text["opinion"],
-                position=(500, 385),
-                font_size=30,
-                text_color="black",
-                rotate_degrees=20,
-                wrapped_width=22,
-            )
-            watermark = Image_Manager.add_text(
-                base=base,
-                text="makememe.ai",
-                position=(25, 600),
-                font_size=25,
-                text_color="white",
-            )
-
-            base = Image.alpha_composite(base, watermark)
-            out = Image.alpha_composite(base, overlay_image)
-            if out.mode in ("RGBA", "P"):
-                out = out.convert("RGB")
-                date = datetime.datetime.now()
-                image_name = f"{date}.jpg"
-                file_location = f"makememe/static/creations/{image_name}"
-                out.save(file_location)
-                return image_name
+    def create(self, meme_text, user_input):
+        self.make_image(self.name, meme_text=meme_text, user_input=user_input)
