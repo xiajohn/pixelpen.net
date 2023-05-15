@@ -11,7 +11,7 @@ import json
 from urllib.parse import quote
 load_dotenv(find_dotenv('../.env'))
 class BlogCrawler(EmailExtractor):
-    def __init__(self, num_results=30):
+    def __init__(self, num_results=40):
         self.num_results = num_results
         self.contentGenerator = ContentGenerator()
 
@@ -31,14 +31,21 @@ class BlogCrawler(EmailExtractor):
         print(f'finding links for {self.topic}')
         service = build("customsearch", "v1", developerKey=os.getenv("GOOGLE_SEARCH_API_KEY")).cse()
         query = self.topic.replace('"', '')
-        result = service.list(q=query, cx='e0642cb81e6904b7a').execute()
-        all_links = [item['link'] for item in result['items']]
+        
+        all_links = []
+        max_results = self.num_results  # Set the desired maximum number of results here
+        results_per_page = 10  # Google Search API returns 10 results per page by default
+        
+        for page in range(1, max_results, results_per_page):
+            try:
+                result = service.list(q=query, cx='e0642cb81e6904b7a', start=page).execute()
+                all_links.extend([item['link'] for item in result['items']])
+            except Exception as e:
+                print(f"Error fetching results for page {page}: {e}")
+                break
+
         return all_links
 
-    @staticmethod
-    def is_valid_email(email):
-        email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
-        return email_regex.match(email) and not email.endswith('.gov')
 
     def run(self):
         emailList = []

@@ -1,8 +1,8 @@
-from recurringTasks.makememe.generator.prompts.prompt import Prompt
+from common.makememe.generator.prompts.prompt import Prompt
 import datetime
 from PIL import Image
-from recurringTasks.makememe.generator.prompts.helper import Helper
-from recurringTasks.makememe.generator.design.image_manager import Image_Manager
+from common.makememe.generator.prompts.helper import Helper
+from common.makememe.generator.design.image_manager import Image_Manager
 
 
 class Equal(Prompt):

@@ -1,7 +1,7 @@
 import os, sys
 from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageChops
 # from makememe.generator.design.font import font_path
-from recurringTasks.makememe.generator.prompts.helper import Helper
+from common.makememe.generator.prompts.helper import Helper
 
 
 class Image_Manager:

@@ -1,26 +1,26 @@
 import json
-from recurringTasks.makememe.generator.prompts.types.indifferent import Indifferent
-from recurringTasks.makememe.generator.prompts.types.sad import Sad
-from recurringTasks.makememe.generator.prompts.types.poor_fix import Poor_Fix
-from recurringTasks.makememe.generator.prompts.types.they_dont_know import They_Dont_Know
-from recurringTasks.makememe.generator.prompts.types.waiting import Waiting
-from recurringTasks.makememe.generator.prompts.types.pompous import Pompous
-from recurringTasks.makememe.generator.prompts.types.is_better import Is_Better
-from recurringTasks.makememe.generator.prompts.types.no_responsibility import No_Responsibility
-from recurringTasks.makememe.generator.prompts.types.ineffective_solution import Ineffective_Solution
-from recurringTasks.makememe.generator.prompts.types.change_my_mind import Change_My_Mind
-from recurringTasks.makememe.generator.prompts.types.accurate_depiction import Accurate_Depiction
-from recurringTasks.makememe.generator.prompts.types.equal import Equal
-from recurringTasks.makememe.generator.prompts.types.stay_away_from import Stay_Away_From
-from recurringTasks.makememe.generator.prompts.types.ruin import Ruin
-from recurringTasks.makememe.generator.prompts.types.scary import Scary
-from recurringTasks.makememe.generator.prompts.types.when_not_good import When_Not_Good
-from recurringTasks.makememe.generator.nlp.gpt import GPT
+from common.makememe.generator.prompts.types.indifferent import Indifferent
+from common.makememe.generator.prompts.types.sad import Sad
+from common.makememe.generator.prompts.types.poor_fix import Poor_Fix
+from common.makememe.generator.prompts.types.they_dont_know import They_Dont_Know
+from common.makememe.generator.prompts.types.waiting import Waiting
+from common.makememe.generator.prompts.types.pompous import Pompous
+from common.makememe.generator.prompts.types.is_better import Is_Better
+from common.makememe.generator.prompts.types.no_responsibility import No_Responsibility
+from common.makememe.generator.prompts.types.ineffective_solution import Ineffective_Solution
+from common.makememe.generator.prompts.types.change_my_mind import Change_My_Mind
+from common.makememe.generator.prompts.types.accurate_depiction import Accurate_Depiction
+from common.makememe.generator.prompts.types.equal import Equal
+from common.makememe.generator.prompts.types.stay_away_from import Stay_Away_From
+from common.makememe.generator.prompts.types.ruin import Ruin
+from common.makememe.generator.prompts.types.scary import Scary
+from common.makememe.generator.prompts.types.when_not_good import When_Not_Good
+from common.makememe.generator.nlp.gpt import GPT
 from datetime import datetime, timedelta
 from sqlalchemy import Date, cast
 
 import sys, os
-from recurringTasks.makememe.generator.nlp.embedding import semantic_search
+from common.makememe.generator.nlp.embedding import semantic_search
 
 def make(description):
 
