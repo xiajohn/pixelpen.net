@@ -41,7 +41,7 @@ class FacebookCreator(ContentGenerator):
         question_and_response = self.generate_question_and_response()
 
         # Construct Facebook post content
-        tie_in_text = "At Pixel Pen, we're committed to crafting excellence, one idea at a time. Check out our blog for more insights: "
+        tie_in_text = "Check out our blog for more insights: "
         post_content = f"{question_and_response}\n\n{tie_in_text}\nhttps://www.pixelpen.net/creative-showcase"
 
         # Create the post
