@@ -21,31 +21,15 @@ Meme:{"subject":"marathons"}
 ###
 """
 
-    def create(self, meme_text):
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        abs_file_path = os.path.join(current_dir)
-        print(abs_file_path)
-        with Image.open(f"C:/Users/xiajo/dev/my-app/infra/recurringTasks/makememe/static/meme_pics/{self.name.lower()}.jpg").convert(
-            "RGBA"
-        ) as base:
+    def create(self, meme_text, user_input):
+        base = self.make_image(meme_text, user_input)
 
-            overlay_image = Image_Manager.add_text(
-                base=base,
-                text=meme_text["subject"],
-                position=(425, 950),
-                font_size=40,
-                wrapped_width=15,
-            )
-            watermark = Image_Manager.add_text(
-                base=base, text="makememe.ai", position=(10, 10), font_size=20
-            )
-
-            base = Image.alpha_composite(base, watermark)
-            out = Image.alpha_composite(base, overlay_image)
-            if out.mode in ("RGBA", "P"):
-                out = out.convert("RGB")
-                date = datetime.datetime.now()
-                image_name = f"test.jpg"
-                file_location = f"{image_name}"
-                out.save(file_location)
-                return image_name
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["subject"],
+            position=(425, 950),
+            font_size=40,
+            wrapped_width=15,
+        )
+        
+        self.save_image(base, overlay_image, user_input)

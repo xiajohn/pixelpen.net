@@ -32,42 +32,25 @@ Meme:{"subject":"Hodle", "ruiner":"Hodle"}
 ###
 """
 
-    def create(self, meme_text):
-        with Image.open(f"C:/Users/xiajo/dev/my-app/infra/recurringTasks/makememe/static/meme_pics/{self.name.lower()}.jpg").convert(
-            "RGBA"
-        ) as base:
+    def create(self, meme_text, user_input):
+        base = self.make_image(meme_text, user_input)
 
-            overlay_image = Image_Manager.add_text(
-                base=base,
-                text=meme_text["subject"],
-                position=(400, 25),
-                font_size=50,
-                text_color="white",
-                wrapped_width=20,
-            )
-            overlay_image_2 = Image_Manager.add_text(
-                base=base,
-                text=meme_text["ruiner"],
-                position=(120, 915),
-                font_size=50,
-                text_color="white",
-                wrapped_width=12,
-            )
-            watermark = Image_Manager.add_text(
-                base=base,
-                text="makememe.ai",
-                position=(10, 1175),
-                font_size=25,
-                text_color="white",
-            )
-
-            base = Image.alpha_composite(base, watermark)
-            base = Image.alpha_composite(base, overlay_image_2)
-            out = Image.alpha_composite(base, overlay_image)
-            if out.mode in ("RGBA", "P"):
-                out = out.convert("RGB")
-                date = datetime.datetime.now()
-                image_name = f"test.jpg"
-                file_location = f"{image_name}"
-                out.save(file_location)
-                return image_name
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["subject"],
+            position=(400, 25),
+            font_size=50,
+            text_color="white",
+            wrapped_width=20,
+        )
+        overlay_image_2 = Image_Manager.add_text(
+            base=base,
+            text=meme_text["ruiner"],
+            position=(120, 915),
+            font_size=50,
+            text_color="white",
+            wrapped_width=12,
+        )
+        
+        base = Image.alpha_composite(base, overlay_image_2)
+        self.save_image(base, overlay_image, user_input)

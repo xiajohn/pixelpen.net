@@ -16,18 +16,12 @@ from common.makememe.generator.prompts.types.ruin import Ruin
 from common.makememe.generator.prompts.types.scary import Scary
 from common.makememe.generator.prompts.types.when_not_good import When_Not_Good
 from common.makememe.generator.nlp.gpt import GPT
-from datetime import datetime, timedelta
-from sqlalchemy import Date, cast
 
 import sys, os
 from common.makememe.generator.nlp.embedding import semantic_search
 
 def make(description):
-
-    
-
     user_input = description.strip().replace("\r\n", ", ").replace(":", "-")
-    nlp_output = ""
     print(f"user_input: {user_input}")
     print("________start_________")
     try:
@@ -50,27 +44,14 @@ def make(description):
             { "id": 16, "name":"when something is really bad"},
         ]
 
-        best_result = {"index": -1, "score": 0}
-        # pull out all name values from the documents
         names = [doc["name"] for doc in documents]
         semantic_result = semantic_search(names, user_input)
         meme = generate_meme(user_input, semantic_result)
     except Exception as e:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
+        exc_type, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(f"error: {e}")
         print(exc_type, fname, exc_tb.tb_lineno)
-
-        nlp_output = "error"
-        if isinstance(e.args[0], str):
-            flagged = e.args[0].startswith("The content has been flagged")
-            if flagged:
-                nlp_output = "flagged"
-                meme = {"meme": "meme_pics/flagged.png"}
-            else:
-                meme = {"meme": "meme_pics/error.png"}
-        else:
-            meme = {"meme": "meme_pics/error.png"}
 
     return meme
 
@@ -112,7 +93,5 @@ def generate_meme(user_input, meme_description,):
 
             meme.create(cleaned_response, user_input)
             
-    print("Meme type not found")
-    context = {"meme": "meme_pics/error.png"}
-    return context
+    
 
