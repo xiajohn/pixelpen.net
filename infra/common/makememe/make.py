@@ -110,12 +110,8 @@ def generate_meme(user_input, meme_description,):
             cleaned_response = json.loads(response_split)
             print(f"cleaned_response:{response}")
 
-            image_name = meme.create(cleaned_response, user_input)
-            print("*******")
-            print(image_name)
-            file_location = f"creations/{image_name}"
-            context = {"meme": file_location}
-            return context
+            meme.create(cleaned_response, user_input)
+            
     print("Meme type not found")
     context = {"meme": "meme_pics/error.png"}
     return context

@@ -42,4 +42,13 @@ Meme:{"action":"going to the moon"}
 """
 
     def create(self, meme_text, user_input):
-        self.make_image(self.name, meme_text=meme_text, user_input=user_input)
+        base = self.make_image(meme_text, user_input)
+
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["action"],
+            position=(100, 175),
+            font_size=40,
+            wrapped_width=11,
+        )
+        self.save_image(base, overlay_image, user_input)

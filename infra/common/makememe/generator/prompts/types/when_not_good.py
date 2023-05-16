@@ -27,5 +27,14 @@ Meme:{"subject": "When I have to run a full marathon, but I haven't trained for 
 """
 
     def create(self, meme_text, user_input):
-        self.make_image(self.name, meme_text=meme_text, user_input=user_input)
-        
+        base = self.make_image(meme_text, user_input)
+
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["subject"],
+            position=(100, 50),
+            font_size=45,
+            wrapped_width=40,
+        )
+
+        self.save_image(base, overlay_image, user_input)

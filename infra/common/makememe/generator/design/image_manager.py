@@ -25,12 +25,12 @@ class Image_Manager:
             if wrapped_width is not None:
                 text = Helper.wrap(text, wrapped_width)
 
-            # font = ImageFont.truetype(font_path, font_size)
+            font = ImageFont.truetype("impact.ttf", font_size)
             draw = ImageDraw.Draw(overlay_image)
             fill = (0, 0, 0, 255)
             if text_color == "white":
                 fill = (255, 255, 255, 255)
-            draw.text(position, text, fill=fill)
+            draw.text(position, text, font=font, fill=fill)
             if rotate_degrees is not None:
                 overlay_image = overlay_image.rotate(rotate_degrees)
 

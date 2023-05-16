@@ -4,4 +4,4 @@ from recurringTasks.social_media.facebookCreator import createFacebookPost
 from common.makememe.make import make
 if __name__ == "__main__":
     #sendEmails()
-    make("joker laughing")
+    make("When your alarm goes off and you have to go to work because you didn't win the lottery")

@@ -36,4 +36,15 @@ Meme:{"depiction":"You drink too much coffee"}
 """
 
     def create(self, meme_text, user_input):
-        self.make_image(self.name, meme_text=meme_text, user_input=user_input)
+        base = self.make_image(meme_text, user_input)
+        
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["depiction"],
+            position=(275, 760),
+            font_size=30,
+            wrapped_width=25,
+            rotate_degrees=350,
+        )
+        self.save_image(base, overlay_image, user_input)
+        

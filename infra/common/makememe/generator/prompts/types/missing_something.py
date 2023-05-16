@@ -23,4 +23,14 @@ Meme:{"missing": "The smell of a brand new car"}
 """
 
     def create(self, meme_text, user_input):
-        self.make_image(self.name, meme_text=meme_text, user_input=user_input)
+        base = self.make_image(meme_text, user_input)
+
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["missing"],
+            position=(1150, 550),
+            font_size=50,
+            wrapped_width=12,
+        )
+        
+        self.save_image(base, overlay_image, user_input)

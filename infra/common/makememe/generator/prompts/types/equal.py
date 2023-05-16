@@ -33,49 +33,26 @@ Meme:{"first":"alsdjkfa","second":"alsdjkfa"}
 ###
 """
 
-    def create(self, meme_text):
+    def create(self, meme_text, user_input):
 
-        # base=Image.open(f"makememe/static/meme_pics/{self.name.lower()}.jpg")
-        # Image_Manager.add_text(base=base, text="makememe.ai", position=(10, 1150), font_size=20, text_color="black", wrapped_width=None, rotate_degrees=None)
-        # Image_Manager.add_text(base=base, text=meme_text['depiction'], position=(250, 725), font_size=30, text_color="black", text_width_proportion=2, wrapped_width=25, rotate_degrees=348)
+        base = self.make_image(meme_text, user_input)
 
-        with Image.open(f"C:/Users/xiajo/dev/my-app/infra/recurringTasks/makememe/static/meme_pics/{self.name.lower()}.jpg").convert(
-            "RGBA"
-        ) as base:
-
-            overlay_image = Image_Manager.add_text(
-                base=base,
-                text=meme_text["first"],
-                position=(70, 180),
-                font_size=45,
-                wrapped_width=12,
-                rotate_degrees=345,
-            )
-            overlay_image_2 = Image_Manager.add_text(
-                base=base,
-                text=meme_text["second"],
-                position=(575, 100),
-                font_size=45,
-                wrapped_width=12,
-                rotate_degrees=345,
-            )
-            watermark = Image_Manager.add_text(
-                base=base,
-                text="makememe.ai",
-                position=(10, 1150),
-                font_size=20,
-                text_color="black",
-                wrapped_width=None,
-                rotate_degrees=None,
-            )
-
-            base = Image.alpha_composite(base, watermark)
-            base = Image.alpha_composite(base, overlay_image)
-            out = Image.alpha_composite(base, overlay_image_2)
-            if out.mode in ("RGBA", "P"):
-                out = out.convert("RGB")
-                date = datetime.datetime.now()
-                image_name = f"test.jpg"
-                file_location = f"{image_name}"
-                out.save(file_location)
-                return image_name
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["first"],
+            position=(70, 180),
+            font_size=45,
+            wrapped_width=12,
+            rotate_degrees=345,
+        )
+        overlay_image_2 = Image_Manager.add_text(
+            base=base,
+            text=meme_text["second"],
+            position=(575, 100),
+            font_size=45,
+            wrapped_width=12,
+            rotate_degrees=345,
+        )
+        
+        base = Image.alpha_composite(base, overlay_image)
+        self.save_image(base, overlay_image_2, user_input)

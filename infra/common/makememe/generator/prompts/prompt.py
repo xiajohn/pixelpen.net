@@ -10,26 +10,23 @@ class Prompt:
     def append_example(self, example):
         self.instruction = self.instruction + "Message:" + example + "\n" + "Meme:"
 
-    def make_image(self, image_file_name, meme_text, user_input):
+    def save_image(self, base, overlay_image, user_input):
+        out = Image.alpha_composite(base, overlay_image)
+        if out.mode in ("RGBA", "P"):
+            out = out.convert("RGB")
+            image_name = f"{user_input}.jpg"
+            file_location = f"generated/memes/{image_name.replace(' ', '-')}"
+            print(f'saving to {file_location}')
+            out.save(file_location)
+            return image_name
+
+    def make_image(self, image_file_name, meme_text):
         print(f'meme text:{meme_text}')
         with Image.open(f"{self.get_base_image(image_file_name)}").convert(
             "RGBA"
         ) as base:
-            overlay_image = Image_Manager.add_text(
-                base=base,
-                text=next(iter(meme_text.values())),
-                position=(425, 950),
-                font_size=40,
-                wrapped_width=15,
-            )
-            out = Image.alpha_composite(base, overlay_image)
-            if out.mode in ("RGBA", "P"):
-                out = out.convert("RGB")
-                image_name = f"{user_input}.jpg"
-                file_location = f"{image_name}"
-                print(f'saving to {file_location}')
-                out.save(file_location)
-                return image_name
+            return base
+            
 
     def get_base_image(self, image_file_name):
         current_dir = os.path.dirname(os.path.abspath(__file__))

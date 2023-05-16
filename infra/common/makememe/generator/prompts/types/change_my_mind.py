@@ -27,4 +27,16 @@ Meme:{"opinion":"The best way to get a good grade in school is to study hard. "}
 """
 
     def create(self, meme_text, user_input):
-        self.make_image(self.name, meme_text=meme_text, user_input=user_input)
+
+        base = self.make_image(meme_text, user_input)
+
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=meme_text["opinion"],
+            position=(500, 385),
+            font_size=30,
+            text_color="black",
+            rotate_degrees=20,
+            wrapped_width=22,
+        )
+        self.save_image(base, overlay_image, user_input)
