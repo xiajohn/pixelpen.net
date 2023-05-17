@@ -37,4 +37,4 @@ Meme:{"subject": "When I have to run a full marathon, but I haven't trained for 
             wrapped_width=40,
         )
 
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

@@ -51,4 +51,4 @@ Meme:{"action":"going to the moon"}
             font_size=40,
             wrapped_width=11,
         )
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

@@ -46,5 +46,5 @@ Meme:{"depiction":"You drink too much coffee"}
             wrapped_width=25,
             rotate_degrees=350,
         )
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)
         

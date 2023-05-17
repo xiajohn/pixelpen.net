@@ -53,3 +53,4 @@ Meme:{"sad_part": "it doesn't matter if we're happy"}
         )
         
         base = self.make_image(meme_text, overlay_image)
+        return self.save_image(base, overlay_image, user_input)

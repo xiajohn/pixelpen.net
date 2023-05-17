@@ -55,4 +55,4 @@ Meme:{"first":"alsdjkfa","second":"alsdjkfa"}
         )
         
         base = Image.alpha_composite(base, overlay_image)
-        self.save_image(base, overlay_image_2, user_input)
+        return self.save_image(base, overlay_image_2, user_input)

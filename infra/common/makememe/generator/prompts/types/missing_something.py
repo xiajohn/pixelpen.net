@@ -33,4 +33,4 @@ Meme:{"missing": "The smell of a brand new car"}
             wrapped_width=12,
         )
         
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

@@ -10,15 +10,23 @@ class Prompt:
     def append_example(self, example):
         self.instruction = self.instruction + "Message:" + example + "\n" + "Meme:"
 
+    def clean_user_input(self, user_input):
+        cleaned_input = ''.join(char for char in user_input if char.isalnum())
+        return cleaned_input
+
     def save_image(self, base, overlay_image, user_input):
         out = Image.alpha_composite(base, overlay_image)
         if out.mode in ("RGBA", "P"):
             out = out.convert("RGB")
-            image_name = f"{user_input}.jpg"
-            file_location = f"generated/memes/{image_name.replace(' ', '-')}"
-            print(f'saving to {file_location}')
-            out.save(file_location)
-            return image_name
+        cleaned_input = self.clean_user_input(user_input)[:10]  # use the clean_user_input function
+        image_name = f"{cleaned_input}.jpg"
+        file_location = f"generated/memes/{image_name.replace(' ', '-')}"
+        print(f'saving to {file_location}')
+        out.save(file_location)
+        return file_location
+
+
+
 
     def make_image(self, image_file_name, meme_text):
         print(f'meme text:{meme_text}')

@@ -37,4 +37,4 @@ Meme:{"subject": "opensea.com"}
             wrapped_width=20,
         )
         
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

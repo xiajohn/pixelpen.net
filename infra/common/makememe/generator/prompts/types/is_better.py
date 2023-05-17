@@ -72,4 +72,4 @@ Meme:{"worse":"better","better":"better 2.0"}
         )
         
         base = Image.alpha_composite(base, overlay_image_2)
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

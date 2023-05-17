@@ -53,4 +53,4 @@ Meme:{"subject":"Hodle", "ruiner":"Hodle"}
         )
         
         base = Image.alpha_composite(base, overlay_image_2)
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

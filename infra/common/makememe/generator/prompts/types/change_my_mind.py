@@ -39,4 +39,4 @@ Meme:{"opinion":"The best way to get a good grade in school is to study hard. "}
             rotate_degrees=20,
             wrapped_width=22,
         )
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

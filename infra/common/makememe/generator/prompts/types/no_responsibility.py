@@ -56,4 +56,4 @@ Meme:{"party_one":"The code I wrote this week", "party_two":"the code I wrote la
         )
         
         base = Image.alpha_composite(base, overlay_image_2)
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

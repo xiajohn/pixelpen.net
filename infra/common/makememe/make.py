@@ -91,7 +91,9 @@ def generate_meme(user_input, meme_description,):
             cleaned_response = json.loads(response_split)
             print(f"cleaned_response:{response}")
 
-            meme.create(cleaned_response, user_input)
+            return meme.create(cleaned_response, user_input)
+        
+    print("Error making meme")
             
     
 

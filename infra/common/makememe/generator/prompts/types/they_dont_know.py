@@ -48,4 +48,4 @@ Meme:{"details":"They don't know that I can an write an App in ReactJS while als
             wrapped_width=15,
         )
         
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)

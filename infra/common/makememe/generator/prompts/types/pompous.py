@@ -47,4 +47,4 @@ Meme:{"subject":"using a french press"}
         )
 
         
-        self.save_image(base, overlay_image, user_input)
+        return self.save_image(base, overlay_image, user_input)
