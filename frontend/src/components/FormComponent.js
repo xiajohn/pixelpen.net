@@ -46,11 +46,15 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
         console.error('Error generating essay:', error.message);
       }
       setIsLoading(false);
+
+      // Scroll to bottom of page
+      window.scrollTo(0, document.body.scrollHeight);
     } else {
       setIsLoading(false);
       return;
     }
   };
+
 
 
   return (

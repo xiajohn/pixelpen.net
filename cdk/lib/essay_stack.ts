@@ -22,7 +22,6 @@ export interface EssayStackProps extends cdk.StackProps {
 }
 
 export class EssayStack extends cdk.Stack {
-  // Declare the OAI as a class property
   public readonly originAccessIdentity: cloudfront.OriginAccessIdentity;
 
   constructor(scope: Construct, id: string, props: EssayStackProps) {
@@ -449,14 +448,9 @@ export class EssayStack extends cdk.Stack {
     });
   }
 
-
   addApiGatewayOutput(api: apigateway.RestApi) {
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: `https://${api.restApiId}.execute-api.${this.region}.amazonaws.com/`,
     });
   }
-
-  // Call the refactored functions in the constructor
-
-
 }
