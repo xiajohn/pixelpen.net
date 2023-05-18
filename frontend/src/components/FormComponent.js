@@ -4,7 +4,7 @@ import axios from 'axios';
 import '../css/Form.css';
 import { getServerURL } from '../util/utils';
 
-function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
+function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef }) {
   const [showTopicError, setShowTopicError] = useState(false);
 
   const handleChange = (e) => {
@@ -47,8 +47,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading }) {
       }
       setIsLoading(false);
 
-      // Scroll to bottom of page
-      window.scrollTo(0, document.body.scrollHeight);
+      essayRef.current.scrollIntoView({ behavior: 'smooth' });
     } else {
       setIsLoading(false);
       return;

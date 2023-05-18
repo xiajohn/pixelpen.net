@@ -1,11 +1,14 @@
 // components/HomePage.js
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Body from './Body';
 import FormComponent from './FormComponent';
+
 import Essay from './Essay';
 import '../css/HomePage.css'
 function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
+  const essayRef = useRef(null);
+
   const [formData, setFormData] = useState({
     Topic: '',
   });
@@ -42,10 +45,12 @@ function HomePage() {
             setFormData={setFormData}
             setEssay={setEssay}
             setIsLoading={setIsLoading}
+            essayRef={essayRef} 
           />
         </div>
-        <Essay content={essay} />
+        <Essay ref={essayRef} content={essay} />
       </Body>
+      
     </>
   );
 }

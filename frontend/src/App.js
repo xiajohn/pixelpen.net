@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import './css/App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import About from './components/About';
@@ -23,6 +24,7 @@ function App() {
           {/* Add catch-all route here */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

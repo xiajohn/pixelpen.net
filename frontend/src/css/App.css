@@ -27,3 +27,17 @@
   100% { transform: rotate(360deg); }
 }
 
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  margin-top: auto;
+}
+body, html {
+  height: 100%;
+}
+
+

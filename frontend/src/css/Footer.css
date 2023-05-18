@@ -1,0 +1,56 @@
+.footer {
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 80px;
+  align-items: center;
+  padding: 0 2rem;
+  color: #000;  /* to make text visible on dark background */
+}
+
+.footer .left,
+.footer .center,
+.footer .right {
+  flex: 1;
+}
+
+.footer .left {
+  text-align: left;
+}
+
+.footer .center {
+  text-align: center;
+}
+
+.footer .right {
+  text-align: right;
+}
+
+.footer a {
+  color: #000;  /* to make the Facebook icon visible on dark background */
+  font-size: 1.5rem; /* size of the icon */
+}
+
+@media (max-width: 768px) {
+  .footer {
+    width: 100%;
+    flex-direction: column;
+    height: auto;
+    padding: 1rem 0;
+  }
+
+  .footer .left,
+  .footer .center,
+  .footer .right {
+    text-align: center; /* Center alignment on mobile */
+    margin-bottom: 0.5rem;
+  }
+}
+.social-icon {
+  color: #3b5998;  /* Facebook's brand color */
+}
+
+.social-icon:hover {
+  color: #8b9dc3;  /* Lighten color on hover for interaction feedback */
+}
