@@ -18,7 +18,7 @@ class EmailSender:
 
         I came across your blog and was impressed by the content you've been publishing. I'd like to propose a collaboration where we could exchange links to be published on each other's websites. I can create a guest post for you. This would not only diversify your content but also increase exposure and drive traffic for both our blogs. I can add a link to your site from one of my blogs at no extra cost.
 
-        If you're interested in this partnership or would like to explore other collaboration opportunities, please don't hesitate to reach out. I look forward to hearing from you and discussing how we can both grow in this exciting space. Feel free to explore my work at https://pixelpen.net/creative-showcase
+        If you're interested in this partnership or would like to explore other collaboration opportunities, please don't hesitate to reach out. I look forward to hearing from you and discussing how we can both grow in this exciting space. Feel free to explore my work at https://pixelpen.net/creative-showcase and https://www.facebook.com/pixelpenAI
 
         Best regards,
 

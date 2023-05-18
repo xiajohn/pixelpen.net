@@ -48,10 +48,7 @@ def make(description):
         semantic_result = semantic_search(names, user_input)
         meme = generate_meme(user_input, semantic_result)
     except Exception as e:
-        exc_type, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(f"error: {e}")
-        print(exc_type, fname, exc_tb.tb_lineno)
 
     return meme
 

@@ -1,0 +1,7 @@
+
+
+lxml
+urllib3
+python-dotenv
+openai
+unidecode

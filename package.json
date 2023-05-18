@@ -4,6 +4,6 @@
     "react-router-dom": "^6.10.0"
   },
   "scripts": {
-    "deploy": "cd frontend && npm run deploy && cd ../server && npm run build && cd ../cdk && npm run deploy && cd blogPipeline && py main.py"
+    "deploy": "cd frontend && npm run deploy && cd ../server && npm run build && cd ../infra && pip install -r ./requirements.txt --target dependency && pip install -r ./social_media_req.txt --target social_dependency && cd ../cdk && npm run deploy"
   }
 }

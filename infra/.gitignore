@@ -4,3 +4,5 @@ Auto-GPT
 generated
 __pycache__
 dependency
+social_dependency
+tmp

@@ -5,6 +5,7 @@ import os
 import textwrap
 import base64
 import io
+import requests, json
 import random
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv('../.env'))
@@ -50,7 +51,6 @@ class ContentGenerator:
 
     def generate_image(self, prompt, retries=3):
         base64_image_data_list = []
-
         for _ in range(retries):
             try:
                 response = openai.Image.create(
@@ -79,71 +79,17 @@ class ContentGenerator:
         # If you only need the first image data, you can return the first item in the list
         return base64_image_data_list[0]
 
-    # def create_meme(self, output_path):
-    #     meme_topics = [
-    #         "cats",
-    #         "dogs",
-    #         "movies",
-    #         "videogames",
-    #         "sports",
-    #         "celebrities",
-    #         "music",
-    #         "tv shows",
-    #         "travel",
-    #         "food",
-    #         "technology",
-    #         "work",
-    #         "school",
-    #     ]
-    #     meme_topic = random.choice(meme_topics)
-    #     meme_idea = self.generate_text(f"Generate a popular meme idea related to {meme_topic}")
-    #     caption = self.generate_text(
-    #         f"Create a funny caption for a meme about {meme_idea}. Please provide only the caption text without including the word 'caption'."
-    #     )
-    #     image_data = self.generate_image(meme_idea)
-    #     img = self.load_image_from_base64(image_data)
-    #     img_with_caption = self.add_caption_to_image(img, caption)
-    #     img_with_caption.save(output_path)
-
-    # @staticmethod
-    # def load_image_from_base64(image_data):
-    #     image_data = base64.b64decode(image_data)
-    #     img = Image.open(io.BytesIO(image_data))
-    #     return img
-
-    # @staticmethod
-    # def draw_text_with_outline(draw, x, y, text, font, fill, outline_thickness, outline_color):
-    #     for dx in range(-outline_thickness, outline_thickness + 1):
-    #         for dy in range(-outline_thickness, outline_thickness + 1):
-    #             draw.text((x + dx, y + dy), text, font=font, fill=outline_color)
-    #     draw.text((x, y), text, font=font, fill=fill)
-
-    # def add_caption_to_image(self, img, caption):
-    #     draw = ImageDraw.Draw(img)
-    #     img_width, img_height = img.size
-
-    #     font_size = 30
-    #     font = ImageFont.load_default()
-
-    #     margin = 10
-    #     max_width = img_width - 2 * margin
-    #     wrapped_caption = textwrap.fill(caption, width=max_width // font_size)
-
-    #     text_width, text_height = draw.textsize(wrapped_caption, font)
-    #     x = (img_width - text_width) // 2
-    #     y = img_height - text_height - margin
-
-    #     # Split the wrapped caption into lines
-    #     lines = wrapped_caption.split("\n")
-
-    #     # Draw the text on the image
-    #     for line_num, line in enumerate(lines):
-    #         line_x = x
-    #         line_y = y + line_num * text_height
-    #         self.draw_text_with_outline(draw, line_x, line_y, line, font, (255, 255, 255), 2, (0, 0, 0))
-
-    #     return img
     
-# cg = ContentGenerator()
-# output_path = "generated/output_meme.jpg"
-# cg.create_meme(output_path)
+    def get_embedding(self, text, model='text-embedding-ada-002'):
+        url = 'https://api.openai.com/v1/embeddings'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {os.getenv("OPENAI_API_KEY")}'
+        }
+        data = {
+            'input': text,
+            'model': model
+        }
+        response = requests.post(url, headers=headers, data=json.dumps(data))
+        embedding = response.json()['data'][0]['embedding']
+        return embedding

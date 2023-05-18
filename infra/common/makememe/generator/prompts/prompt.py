@@ -1,7 +1,6 @@
 # todo: move memes to the DB and load them all into one prompt class as objects
 # get rid of individual classes for memes
 from PIL import Image
-from common.makememe.generator.design.image_manager import Image_Manager
 import os
 class Prompt:
     def __init__(self, instruction, description):
@@ -20,7 +19,7 @@ class Prompt:
             out = out.convert("RGB")
         cleaned_input = self.clean_user_input(user_input)[:10]  # use the clean_user_input function
         image_name = f"{cleaned_input}.jpg"
-        file_location = f"generated/memes/{image_name.replace(' ', '-')}"
+        file_location = f"/tmp/{image_name.replace(' ', '-')}"
         print(f'saving to {file_location}')
         out.save(file_location)
         return file_location

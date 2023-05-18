@@ -1,31 +1,41 @@
-import os, json
+import os
 import openai
-import pandas as pd
+from typing import List
 import numpy as np
-from openai.embeddings_utils import get_embedding, cosine_similarity
-
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv('../.env'))
-
+from common.content_generator import ContentGenerator
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def test_embedding(): 
-  df_thing = pd.DataFrame({ "stuff": np.array(['some', 'random', 'stuff'])})
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
-  thing1 = get_embedding('something', engine='text-embedding-ada-002')
-  thing2 = get_embedding('lots of things', engine='text-embedding-ada-002')
-  something = cosine_similarity(thing1, thing2)
-  print(something)
+def get_embedding(text: str) -> List[float]:
+    contentGen = ContentGenerator()
+    return contentGen.get_embedding(text)
+
 
 def semantic_search(documents, meme_description, pprint=True):
-  df = pd.DataFrame({ "documents": np.array(documents)})
-  df['document_embeddings'] = df.documents.apply(lambda x: get_embedding(x, engine='text-embedding-ada-002'))
-  meme_embedding = get_embedding(meme_description, engine='text-embedding-ada-002')
-  df['similarities'] = df.document_embeddings.apply(lambda x: cosine_similarity(x, meme_embedding))
-  # get the highest similarity
-  res = df.sort_values(by='similarities', ascending=False).iloc[0].documents
-  print('semantic_search results:', res)
-  
-  return res
+    # Get embeddings for all documents
+    document_embeddings = [get_embedding(x) for x in documents]
+    
+    # Get embedding for meme_description
+    meme_embedding = get_embedding(meme_description)
+    
+    # Calculate similarities for all document embeddings
+    similarities = [cosine_similarity(x, meme_embedding) for x in document_embeddings]
+    
+    # Combine documents, embeddings, and similarities
+    combined = list(zip(documents, document_embeddings, similarities))
+
+    # Sort by similarity
+    sorted_combined = sorted(combined, key=lambda x: x[2], reverse=True)
+
+    # Get the document with highest similarity
+    res = sorted_combined[0][0]
+
+    print('semantic_search results:', res)
+
+    return res
 

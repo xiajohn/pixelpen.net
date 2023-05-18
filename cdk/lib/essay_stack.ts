@@ -46,26 +46,33 @@ export class EssayStack extends cdk.Stack {
   }
 
   private setupEventProcessing(s3Bucket: s3.Bucket): void {
-    const eventHandlerLambda = this.createEventHandlerLambda();
-    const topicQueue = this.createTopicQueue();
-  
-    
-    topicQueue.grantSendMessages(eventHandlerLambda);
-    eventHandlerLambda.addEnvironment('SQS_QUEUE_URL', topicQueue.queueUrl);
-  
+    const lambdas = this.createEventHandlerLambda();
+
+
+    const eventHandlerLambda = lambdas[0];
+    const socialEventHandlerLambda = lambdas[1];
+
+
     const dailyRule = new events.Rule(this, 'DailyRule', {
-      schedule: events.Schedule.rate(cdk.Duration.days(1))
+      schedule: events.Schedule.cron({ minute: '0', hour: '13' }), // This schedules the event at 13:00 (or 1:00 PM) UTC every day
     });
-    
-    dailyRule.addTarget(new eventtargets.LambdaFunction(eventHandlerLambda, {retryAttempts: 1}));
-    
-    
+
+
+    dailyRule.addTarget(new eventtargets.LambdaFunction(eventHandlerLambda, { retryAttempts: 1 }));
+    dailyRule.addTarget(new eventtargets.LambdaFunction(socialEventHandlerLambda, { retryAttempts: 1 }));
+
   }
-  
-  private createEventHandlerLambda(): lambda.Function {
+
+  private createEventHandlerLambda(): lambda.Function[] {
+    const pillowLayer = lambda.LayerVersion.fromLayerVersionArn(this, 'pillowLayer', 'arn:aws:lambda:us-west-1:770693421928:layer:Klayers-p39-pillow:1');
+    const requestLayer = lambda.LayerVersion.fromLayerVersionArn(this, 'requestLayer', 'arn:aws:lambda:us-west-1:770693421928:layer:Klayers-p39-requests:13');
+    const numpyLayer = lambda.LayerVersion.fromLayerVersionArn(this, 'numpyLayer', 'arn:aws:lambda:us-west-1:770693421928:layer:Klayers-p39-numpy:12');
+    const pandas = lambda.LayerVersion.fromLayerVersionArn(this, 'pandas', 'arn:aws:lambda:us-west-1:770693421928:layer:Klayers-p39-pandas:14');
+    const matplotlib = lambda.LayerVersion.fromLayerVersionArn(this, 'matplotlib', 'arn:aws:lambda:us-west-1:770693421928:layer:Klayers-p39-matplotlib:1');
+
     const eventLambda = new lambda.Function(this, 'S3EventHandlerFunction', {
       runtime: lambda.Runtime.PYTHON_3_9,
-      handler: 'event_handler.lambda_handler',
+      handler: 'email_handler.lambda_handler',
       environment: {
         OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
         SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!,
@@ -73,23 +80,48 @@ export class EssayStack extends cdk.Stack {
         GOOGLE_SEARCH_API_KEY: process.env.GOOGLE_SEARCH_API_KEY!
       },
       code: lambda.Code.fromAsset('../infra', {
-        exclude: ['common/makememe/*', 'common/makememe','generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*','user_input.json', 'run.py','.gitignore','.env']
+        exclude: ['social_dependency', 'social_dependency/*', 'common/makememe', 'common/makememe/*', 'generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*', 'user_input.json', 'run.py', '.gitignore', '.env']
       }),
-      timeout: cdk.Duration.seconds(260) // Set the timeout to 60 seconds
+      timeout: cdk.Duration.seconds(760),
+      memorySize: 1024 // Set the memory to 1024MB
     });
-  
+
+    const socialEventLambda = new lambda.Function(this, 'socialHandlerFunction', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'social_media_handler.lambda_handler',
+      environment: {
+        OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
+        FACEBOOK_ACCESS_KEY: process.env.FACEBOOK_ACCESS_KEY!
+      },
+      code: lambda.Code.fromAsset('../infra', {
+        exclude: ['dependency', 'dependency/*', 'generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*', 'user_input.json', 'run.py', '.gitignore', '.env']
+      }),
+      timeout: cdk.Duration.seconds(560) // Set the timeout to 60 seconds
+    });
+
+
+    eventLambda.addLayers(requestLayer);
     eventLambda.addPermission('AllowEventBridge', {
       principal: new iam.ServicePrincipal('events.amazonaws.com'),
     });
-  
-    return eventLambda;
+
+    socialEventLambda.addLayers(pillowLayer);
+    socialEventLambda.addLayers(numpyLayer);
+    socialEventLambda.addLayers(requestLayer);
+    //socialEventLambda.addLayers(pandas);
+    // socialEventLambda.addLayers(matplotlib);
+    socialEventLambda.addPermission('AllowEventBridge', {
+      principal: new iam.ServicePrincipal('events.amazonaws.com'),
+    });
+
+    return [eventLambda, socialEventLambda];
   }
-  
+
 
   private createTopicQueue(): sqs.Queue {
     return new sqs.Queue(this, 'TopicQueue');
   }
-  
+
   outputApiUrl(api: apigateway.RestApi) {
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: `https://${api.restApiId}.execute-api.${this.region}.amazonaws.com/`,
@@ -110,7 +142,7 @@ export class EssayStack extends cdk.Stack {
       allowedOrigins: ['*'],
       allowedHeaders: ['*'],
     });
-    
+
     new s3_deployment.BucketDeployment(this, 'DeployAssets', {
       sources: [s3_deployment.Source.asset('../frontend/build'), s3_deployment.Source.asset('../content')],
       destinationBucket: bucket
@@ -224,51 +256,51 @@ export class EssayStack extends cdk.Stack {
       zone: hostedZone,
       recordName: 'zb60703553',
       domainName: 'zmverify.zoho.com',
-    });  
+    });
     new route53.CnameRecord(this, 'CnameRecord', {
       zone: hostedZone,
       recordName: `www.${domainName}`,
       domainName: distribution.distributionDomainName,
     });
-      // MX Records
-      new route53.MxRecord(this, 'ZohoMxRecord', {
-        zone: hostedZone,
-        recordName: domainName,
-        values: [
-          {
-            priority: 10,
-            hostName: 'mx.zoho.com',
-          },
-          {
-            priority: 20,
-            hostName: 'mx2.zoho.com',
-          },
-          {
-            priority: 50,
-            hostName: 'mx3.zoho.com',
-          },
-        ],
-        ttl: cdk.Duration.minutes(5),
-      });
-  
-      // SPF Record
-      new route53.TxtRecord(this, 'ZohoSpfRecord', {
-        zone: hostedZone,
-        recordName: domainName,
-        values: ['v=spf1 include:zoho.com ~all'],
-        ttl: cdk.Duration.minutes(5),
-      });
-  
-      // DKIM Record
-      new route53.TxtRecord(this, 'ZohoDkimRecord', {
-        zone: hostedZone,
-        recordName: `zmail._domainkey.${domainName}`,
-        values: [
-          'v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtsSfRSeXhmvKjDzKFZRTPxpukFnZHS3ZGOQUmHdnj++z2X3NMW2O1Qvtw7rJRaDEE5laW7SjTKSS5NzNEqYYzQAXVKUeEAIAnmiHFrzNMkmgP7Fowd0BM1EQ1xzDsL4Y0TndXH78Ny/RilCCKuq0iOtOR8PTRB7uBWkYdDiZ2KwIDAQAB',
-        ],
-        ttl: cdk.Duration.minutes(5),
-      });
-       // CNAME Records
+    // MX Records
+    new route53.MxRecord(this, 'ZohoMxRecord', {
+      zone: hostedZone,
+      recordName: domainName,
+      values: [
+        {
+          priority: 10,
+          hostName: 'mx.zoho.com',
+        },
+        {
+          priority: 20,
+          hostName: 'mx2.zoho.com',
+        },
+        {
+          priority: 50,
+          hostName: 'mx3.zoho.com',
+        },
+      ],
+      ttl: cdk.Duration.minutes(5),
+    });
+
+    // SPF Record
+    new route53.TxtRecord(this, 'ZohoSpfRecord', {
+      zone: hostedZone,
+      recordName: domainName,
+      values: ['v=spf1 include:zoho.com ~all'],
+      ttl: cdk.Duration.minutes(5),
+    });
+
+    // DKIM Record
+    new route53.TxtRecord(this, 'ZohoDkimRecord', {
+      zone: hostedZone,
+      recordName: `zmail._domainkey.${domainName}`,
+      values: [
+        'v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtsSfRSeXhmvKjDzKFZRTPxpukFnZHS3ZGOQUmHdnj++z2X3NMW2O1Qvtw7rJRaDEE5laW7SjTKSS5NzNEqYYzQAXVKUeEAIAnmiHFrzNMkmgP7Fowd0BM1EQ1xzDsL4Y0TndXH78Ny/RilCCKuq0iOtOR8PTRB7uBWkYdDiZ2KwIDAQAB',
+      ],
+      ttl: cdk.Duration.minutes(5),
+    });
+    // CNAME Records
     new route53.CnameRecord(this, 'SendGridCnameRecord1', {
       zone: hostedZone,
       recordName: 'url5640.' + domainName,

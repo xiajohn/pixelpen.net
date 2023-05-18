@@ -1,9 +1,8 @@
-from common.makememe.generator.prompts.prompt import Prompt
-import datetime
+
 from PIL import Image
 from common.makememe.generator.design.image_manager import Image_Manager
 
-
+from common.makememe.generator.prompts.prompt import Prompt
 class Stay_Away_From(Prompt):
     id = 13
     name = "Stay_Away_From"

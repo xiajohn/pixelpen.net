@@ -11,7 +11,7 @@ import json
 from urllib.parse import quote
 load_dotenv(find_dotenv('../.env'))
 class BlogCrawler(EmailExtractor):
-    def __init__(self, num_results=80):
+    def __init__(self, num_results=60):
         self.num_results = num_results
         self.contentGenerator = ContentGenerator()
 
