@@ -41,18 +41,21 @@ const Contact = () => {
       setResponseMessage('Error sending email, please try again later.');
     }
   };
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
-    <div className="container">
+    <div className="container contact-page"> {/* Additional class here */}
       <h2>Contact Us</h2>
       <p>Please use the form below to send us a message.</p>
 
       {responseMessage && <p>{responseMessage}</p>}
 
-      <Form onSubmit={handleSubmit} className="form">
+      <Form onSubmit={handleSubmit} className="contact-form">
         {Object.keys(emailData).map((key) => (
           <FormGroup key={key}>
-            <Form.Label>{key}</Form.Label>
+            <Form.Label>{capitalizeFirstLetter(key)}</Form.Label>
             <FormControl
               as={key === 'message' ? 'textarea' : 'input'}
               type={key === 'email' ? 'email' : 'text'}

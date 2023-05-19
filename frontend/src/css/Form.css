@@ -8,10 +8,15 @@
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 2rem;
+  flex: 0.25;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 0.5rem; /* Add this property to reduce the bottom margin */
+  box-sizing: border-box;
+
 }
 
+.form-btn{
+  width: 100%;
+}
 
 .form-group {
   margin-bottom: 1.5rem;
