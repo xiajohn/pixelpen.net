@@ -1,12 +1,12 @@
 .footer {
-  background-color: snow;
+  
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   height: 80px;
   align-items: center;
   padding: 0 2rem;
-  color: #000;  /* to make text visible on dark background */
+  color: #fff;  /* to make text visible on dark background */
 }
 
 .footer .left,

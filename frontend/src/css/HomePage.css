@@ -1,26 +1,28 @@
 .greeting {
-  background-color: #ffffff;
+ 
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  padding: 0rem 1rem 1rem 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 1rem 2rem 1rem 1rem;
   text-align: center;
-  flex: 1;
+  flex: 0.5;
   text-align: left;
 }
 
 .greeting h1 {
   font-size: 2.8em;
   font-weight: bold;
+  color:white;
   line-height: 1.2;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .greeting p {
+  color:white;
   font-size: 1.7em;
   line-height: 1;
-  color: #333;
+
 }
 
 .greeting a {

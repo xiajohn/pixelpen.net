@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Footer from './components/Footer';
 import './css/App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import About from './components/About';
@@ -14,6 +14,7 @@ import FormComponent from './components/FormComponent';
 function App() {
  
   return (
+    <div className="App">
     <Router>
       <Header className="header" />
 <Routes className="body">
@@ -26,9 +27,9 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
         </Routes>
-      
+        <Footer />
     </Router>
-
+    </div>
   );
 }
 

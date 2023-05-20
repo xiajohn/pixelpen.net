@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #2b6122;
+  background-color: transparent;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -31,7 +31,7 @@
   font-family: 'Lucida Calligraphy', 'Times New Roman', serif;
  font-weight: 700; /* Bold */
  text-decoration: none;  /* remove underline */
-  color: #fa3333; /* Maintain existing color */
+  color: white; /* Maintain existing color */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow for depth */
   letter-spacing: 0.05em; /* Slightly spaced out letters */
 }

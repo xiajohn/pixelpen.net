@@ -32,7 +32,7 @@ function HomePage() {
 
   return (
     
-    <div className="App">
+    <div >
       {isLoading && (
         <div className="loading-mask">
           <div className="loader"></div>
@@ -43,7 +43,6 @@ function HomePage() {
           <div className="hero-container">
             <div className="greeting">
               <h1>Create content with Pixel Pen</h1>
-              <p>Enhance your marketing and advertising with AI-powered content. Fast, high-quality, and tailored to your needs.</p>
               <p>Unlock the potential of your brand.</p>
                <FormComponent
               formData={formData}
@@ -60,7 +59,7 @@ function HomePage() {
         <Body>
           <Essay ref={essayRef} content={essay} />
         </Body>
-        <Footer />
+      
       </div>
   );
 }

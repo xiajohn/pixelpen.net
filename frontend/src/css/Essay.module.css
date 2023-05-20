@@ -1,20 +1,17 @@
 .essay {
-  padding: 2rem;
+  padding: 0rem 1rem 1rem 1rem;
   flex: 1.75;
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 1rem 1rem 0rem 1rem;
+  color: #87db63;
+
+  margin: 0rem 1rem 0rem 1rem;
   
 }
-.essay-content {
-  font-size: 1.5em; /* Adjust as needed */
-}
+
 
 
 
 .essay p {
+  font-size: 1.1em;
   margin-bottom: 1rem;
 }
 
