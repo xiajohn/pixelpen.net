@@ -21,3 +21,11 @@
 .form-group {
   margin-bottom: 1.5rem;
 }
+.input-group {
+  display: flex;
+}
+
+.form-field {
+  flex-grow: 1;
+  margin-right: 0.5rem;
+}

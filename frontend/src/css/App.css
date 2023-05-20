@@ -11,6 +11,9 @@
   justify-content: center;
   align-items: center;
 }
+.landing-image{
+  mix-blend-mode: multiply;
+}
 
 .loading-mask .loader {
   display: inline-block;
@@ -42,3 +45,38 @@ body, html {
 }
 
 
+
+.hero {
+  flex: 0 0 40%;  /* This will make your hero section take up 40% of the remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.body {
+  flex: 1 0 auto;  /* This will make your body section take up the rest of the space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.explore-services-button {
+  background-color: #007BFF;  /* Adjust color as needed */
+  color: #ffffff;  /* Adjust color as needed */
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2em;  /* Adjust size as needed */
+}
+
+.explore-services-button:hover {
+  background-color: #0069d9;  /* Adjust color as needed */
+}

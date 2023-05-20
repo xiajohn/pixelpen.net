@@ -1,5 +1,5 @@
 .aboutContainer {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
-  
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}

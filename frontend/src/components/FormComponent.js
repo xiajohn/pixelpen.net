@@ -13,10 +13,8 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
   };
 
   function validateFormData(formData) {
-    // Initialize validation flags
     let valid = true;
 
-    // Check if the topic field is empty
     if (!formData.Topic) {
       setShowTopicError(true);
       valid = false;
@@ -26,7 +24,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
 
     return valid;
   }
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -46,7 +43,6 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
         console.error('Error generating essay:', error.message);
       }
       setIsLoading(false);
-
       essayRef.current.scrollIntoView({ behavior: 'smooth' });
     } else {
       setIsLoading(false);
@@ -54,32 +50,26 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
     }
   };
 
-
-
   return (
-    <Form onSubmit={handleSubmit} className="form">
-      <h1>Bring Your Idea to Life</h1>
-      {Object.keys(formData).map((key) => (
-        <Form.Group key={key} className="form-group">
-          <Form.Label className="form-label">Whats on your mind?</Form.Label>
-          <Form.Control
-            className="form-field"
-            type="text"
-            name={key}
-            value={formData[key]}
-            onChange={handleChange}
-          />
-        </Form.Group>
-      ))}
+    <Form onSubmit={handleSubmit} >
+      <div className="input-group">
+        <Form.Control
+          className="form-field"
+          type="text"
+          name="Topic"
+          placeholder="Bring your idea to life"
+          value={formData.Topic}
+          onChange={handleChange}
+        />
+        <Button variant="primary" type="submit" className="form-btn">
+          See Preview
+        </Button>
+      </div>
       {showTopicError && (
         <div className="form-error" style={{ color: 'red' }}>
           Please enter a topic
         </div>
       )}
-
-      <Button variant="primary" type="submit" className="form-btn">
-        Submit
-      </Button>
     </Form>
   );
 }

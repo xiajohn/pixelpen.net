@@ -12,26 +12,22 @@
   font-size: 1.5em; /* Adjust as needed */
 }
 
-@media (max-width: 768px) {
-  .essay-content {
-    font-size: 1em; /* Adjust as needed for mobile devices */
-  }
-}
 
 
 .essay p {
   margin-bottom: 1rem;
 }
 
-@media (min-width: 768px) {
-  .input-form,
+@media (max-width: 768px) {
   .essay {
-    width: 100%;
-    margin-top: 0.5rem; /* Change this from 0 to 0.5rem */
+    padding: 2rem;
+    flex: 1.75;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    
   }
 
-  .essay {
-    width: 100%;
-    margin-top: 0;
-  }
 }
