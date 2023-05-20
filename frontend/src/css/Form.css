@@ -16,9 +16,17 @@
 .form-input::placeholder {
   color: #B5B5B5; /* Light grey color for placeholder text. Adjust as necessary. */
 }
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus,
+.form-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px rgb(9, 2, 2) inset;
+    -webkit-text-fill-color: white;
+}
 
 .form-input:focus {
   outline: none;
+  background-color: transparent;
 }
 
 .form-input {

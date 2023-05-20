@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { getServerURL } from '../util/utils';
 import '../css/Contact.css';
-
+import { Container } from 'react-bootstrap';
 const Contact = () => {
   const [emailData, setEmailData] = useState({
     name: '',
@@ -46,7 +46,7 @@ const Contact = () => {
   }
 
   return (
-    <div className="contact-container contact-page"> {/* Additional class here */}
+    <Container className="contact-container"> {/* Additional class here */}
       <h2>Contact Us</h2>
       <p>Please use the form below to send us a message.</p>
 
@@ -69,7 +69,7 @@ const Contact = () => {
         ))}
         <Button type="submit" className="button">Send Message</Button>
       </Form>
-    </div>
+    </Container>
   );
 };
 
