@@ -46,7 +46,7 @@ const Contact = () => {
   }
 
   return (
-    <div className="container contact-page"> {/* Additional class here */}
+    <div className="contact-container contact-page"> {/* Additional class here */}
       <h2>Contact Us</h2>
       <p>Please use the form below to send us a message.</p>
 

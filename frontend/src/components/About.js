@@ -4,6 +4,7 @@ import styles from '../css/About.module.css';
 
 function About() {
     return (
+        <div className='about-main'>
         <Container className={styles.aboutContainer}>
             <Row>
                 <Col>
@@ -43,6 +44,7 @@ function About() {
                 </Col>
             </Row>
         </Container>
+        </div>
     );
 }
 

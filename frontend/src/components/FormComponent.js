@@ -57,7 +57,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
           className="form-input"
           type="text"
           name="Topic"
-          placeholder="Bring your idea to life"
+          placeholder="Your idea"
           value={formData.Topic}
           onChange={handleChange}
         />

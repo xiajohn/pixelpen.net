@@ -33,9 +33,17 @@
 @media (max-width: 768px) {
   .greeting h1 {
     font-size: 2em; /* Adjust as needed */
+    text-align: center;
   }
 
   .greeting p {
     font-size: 1.2em; /* Adjust as needed */
+    text-align: center;
   }
+
+  .greeting {
+    flex: 1;
+
+  }
+  
 }
