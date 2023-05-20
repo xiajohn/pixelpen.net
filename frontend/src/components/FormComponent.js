@@ -51,17 +51,17 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
   };
 
   return (
-    <Form onSubmit={handleSubmit} >
+    <Form onSubmit={handleSubmit} className="form-container">
       <div className="input-group">
         <Form.Control
-          className="form-field"
+          className="form-input"
           type="text"
           name="Topic"
           placeholder="Bring your idea to life"
           value={formData.Topic}
           onChange={handleChange}
         />
-        <Button variant="primary" type="submit" className="form-btn">
+        <Button variant="primary" type="submit" className="form-button">
           See Preview
         </Button>
       </div>
@@ -72,6 +72,7 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
       )}
     </Form>
   );
+  
 }
 
 export default FormComponent;
