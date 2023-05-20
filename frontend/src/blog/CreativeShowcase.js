@@ -8,6 +8,13 @@ import '../css/CreativeShowcase.css'; // Import the CSS file
 const CreativeShowcase = () => {
   const [blogs, setBlogs] = useState({});
 
+  function removeEdgeQuotes(str) {
+    if (str.startsWith('"') && str.endsWith('"')) {
+      return str.substring(1, str.length - 1);
+    }
+    return str;
+  }
+  
   useEffect(() => {
     const fetchBlogs = async () => {
       const blogData = await fetchMetadata();
@@ -30,11 +37,12 @@ const CreativeShowcase = () => {
       </p>
       {Object.keys(blogs).map((key) => (
         <Link key={key} to={`/blog/${key}`} className="blog-link">
-          <h2>{blogs[key].title}</h2>
+          <h2>{removeEdgeQuotes(blogs[key].title)}</h2>
         </Link>
       ))}
     </div>
   );
 };
+
 
 export default CreativeShowcase;

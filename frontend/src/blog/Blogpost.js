@@ -76,8 +76,10 @@ const BlogPost = () => {
   const finalContent = replaceImagePlaceholders(blogContent);
 
   return (
+    <div className='blog-cont'>
     <div className="blog">
       <ReactMarkdown>{finalContent}</ReactMarkdown>
+    </div>
     </div>
   );
 };

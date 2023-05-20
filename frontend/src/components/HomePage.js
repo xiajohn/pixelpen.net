@@ -1,16 +1,8 @@
-// components/HomePage.js
 import React, { useState, useRef } from 'react';
-
-
 import FormComponent from './FormComponent';
-
 import Essay from './Essay';
-
-import Body from './Body';
-
-import Footer from './Footer';
-
 import '../css/HomePage.css'
+
 function HomePage() {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +31,7 @@ function HomePage() {
       <section className="hero">
         <div className="hero-container">
           <div className="greeting">
-            <h1>AI Marketting Solutions</h1>
+            <h1>AI Marketing Solutions</h1>
             <p>Unlock the potential of your brand.</p>
             <FormComponent
               formData={formData}
