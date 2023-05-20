@@ -11,9 +11,7 @@
   justify-content: center;
   align-items: center;
 }
-.landing-image{
-  mix-blend-mode: multiply;
-}
+
 
 .loading-mask .loader {
   display: inline-block;
@@ -68,7 +66,8 @@ body, html {
 
 
 .hero {
-  flex: 0 0 30%;  /* This will make your hero section take up 40% of the remaining space */
+  flex: 1;  
+  margin-bottom: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,7 +81,7 @@ body, html {
 }
 
 .body {
-  flex: 1 0 auto;  /* This will make your body section take up the rest of the space */
+  flex: 0.5;  /* This will make your body section take up the rest of the space */
   display: flex;
   justify-content: center;
   align-items: center;

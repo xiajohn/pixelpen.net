@@ -1,10 +1,10 @@
 .essay {
-  padding: 0rem 1rem 1rem 1rem;
+  padding: 1rem 2rem 0.5rem 2rem;
   flex: 1.75;
-  color: #d6dbe4;
-
-  margin: 0rem 1rem 0rem 1rem;
-  
+  color: #01060f;
+  background-color: #dfe4f3db;
+  margin: 0rem 0rem 0rem 0rem;
+  border-radius: 30px 30px 0px 0px;
 }
 
 
@@ -12,14 +12,12 @@
 
 .essay p {
   font-size: 1.1em;
-  margin-bottom: 1rem;
+
 }
 
 @media (max-width: 768px) {
   .essay {
     padding: 2rem;
-    flex: 1.75;
-    background-color: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

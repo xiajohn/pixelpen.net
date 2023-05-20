@@ -3,10 +3,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 80px;
+  height: 70px;
   align-items: center;
   padding: 0 2rem;
-  color: #fff;  /* to make text visible on dark background */
+  color: #01060f;
+  background-color: #dfe4f3db;
 }
 
 .footer .left,
