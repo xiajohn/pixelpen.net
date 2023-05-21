@@ -33,7 +33,6 @@ function About() {
                     <p>I cherish the one-on-one relationships I build with my clients, treating them not just as customers but as individuals with unique ideas and goals. To me, business isn't just about transactions, it's about understanding, respect, and shared objectives.</p>
                     <p>Whether it's designing a custom website, crafting an engaging blog post, or creating a targeted email campaign, I use every tool at my disposal - including state-of-the-art AI technology when it fits - to deliver top-notch services and help your business grow.</p>
                     <p>If you're ready to transform your ideas into reality, I'm here to help. Let's discuss your projects, your vision, and how we can collaborate to create something exceptional. I can't wait to start this journey with you!</p>
-                    <p>Best, John</p>
                 </Col>
             </Row>
             <Row>
