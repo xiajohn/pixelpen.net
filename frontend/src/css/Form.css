@@ -59,7 +59,9 @@
   margin-top: 10px;
 }
 @media (max-width: 768px) {
-
+  .input-group {
+    width: 100%;
+  }
   .form-input {
     font-size: 1.4em;
   }
