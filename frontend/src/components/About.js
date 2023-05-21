@@ -21,7 +21,6 @@ function About() {
                         <li><strong>Web Development:</strong> Custom website design and development to showcase your brand and products.</li>
                         <li><strong>Blog Posts:</strong> Engaging and informative articles to attract visitors and boost your online presence.</li>
                         <li><strong>Email Campaigns:</strong> Targeted email marketing campaigns to nurture leads and increase conversions.</li>
-                        <li><strong>Courses:</strong> Comprehensive courses designed to enhance your customer's knowledge and skills.</li>
                     </ul>
                     <p>Interested in our services? Get in touch with us to discuss your project requirements and explore how we can work together to bring your ideas to life. We're here to help and can't wait to hear from you!</p>
                 </Col>
