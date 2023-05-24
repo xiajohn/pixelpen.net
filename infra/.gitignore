@@ -6,3 +6,5 @@ __pycache__
 dependency
 social_dependency
 tmp
+*.wav
+*.mp4

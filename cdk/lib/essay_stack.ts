@@ -23,7 +23,7 @@ export interface EssayStackProps extends cdk.StackProps {
 
 export class EssayStack extends cdk.Stack {
   public readonly originAccessIdentity: cloudfront.OriginAccessIdentity;
-
+  private commonExcludeDirectories: string[] = ['common/video', 'common/video/*', 'generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*', 'user_input.json', 'run.py', '.gitignore', '.env'];
   constructor(scope: Construct, id: string, props: EssayStackProps) {
     super(scope, id, props);
     this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI');
@@ -47,19 +47,12 @@ export class EssayStack extends cdk.Stack {
   private setupEventProcessing(s3Bucket: s3.Bucket): void {
     const lambdas = this.createEventHandlerLambda();
 
-
-    const eventHandlerLambda = lambdas[0];
-    const socialEventHandlerLambda = lambdas[1];
-
-
     const dailyRule = new events.Rule(this, 'DailyRule', {
       schedule: events.Schedule.cron({ minute: '0', hour: '13' }), // This schedules the event at 13:00 (or 1:00 PM) UTC every day
     });
 
-
-    dailyRule.addTarget(new eventtargets.LambdaFunction(eventHandlerLambda, { retryAttempts: 1 }));
-    dailyRule.addTarget(new eventtargets.LambdaFunction(socialEventHandlerLambda, { retryAttempts: 1 }));
-
+    dailyRule.addTarget(new eventtargets.LambdaFunction(lambdas[0], { retryAttempts: 1 }));
+    dailyRule.addTarget(new eventtargets.LambdaFunction(lambdas[1], { retryAttempts: 1 }));
   }
 
   private createEventHandlerLambda(): lambda.Function[] {
@@ -69,56 +62,37 @@ export class EssayStack extends cdk.Stack {
     const pandas = lambda.LayerVersion.fromLayerVersionArn(this, 'pandas', 'arn:aws:lambda:us-west-1:770693421928:layer:Klayers-p39-pandas:14');
     const matplotlib = lambda.LayerVersion.fromLayerVersionArn(this, 'matplotlib', 'arn:aws:lambda:us-west-1:770693421928:layer:Klayers-p39-matplotlib:1');
 
-    const eventLambda = new lambda.Function(this, 'S3EventHandlerFunction', {
-      runtime: lambda.Runtime.PYTHON_3_9,
-      handler: 'email_handler.lambda_handler',
-      environment: {
-        OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
-        SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!,
-        FACEBOOK_ACCESS_KEY: process.env.FACEBOOK_ACCESS_KEY!,
-        GOOGLE_SEARCH_API_KEY: process.env.GOOGLE_SEARCH_API_KEY!
-      },
-      code: lambda.Code.fromAsset('../infra', {
-        exclude: ['social_dependency', 'social_dependency/*', 'common/makememe', 'common/makememe/*', 'generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*', 'user_input.json', 'run.py', '.gitignore', '.env']
-      }),
-      timeout: cdk.Duration.seconds(760),
-      memorySize: 1024 // Set the memory to 1024MB
-    });
+    const eventLambdaExcludeDirectories = this.commonExcludeDirectories.concat(['social_dependency', 'social_dependency/*', 'common/makememe', 'common/makememe/*']);
+    const eventLambda = this.createLambda('S3EventHandlerFunction', 'email_handler.lambda_handler', eventLambdaExcludeDirectories, [requestLayer]);
 
-    const socialEventLambda = new lambda.Function(this, 'socialHandlerFunction', {
-      runtime: lambda.Runtime.PYTHON_3_9,
-      handler: 'social_media_handler.lambda_handler',
-      environment: {
-        OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
-        FACEBOOK_ACCESS_KEY: process.env.FACEBOOK_ACCESS_KEY!
-      },
-      code: lambda.Code.fromAsset('../infra', {
-        exclude: ['dependency', 'dependency/*', 'generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*', 'user_input.json', 'run.py', '.gitignore', '.env']
-      }),
-      timeout: cdk.Duration.seconds(560) // Set the timeout to 60 seconds
-    });
-
-
-    eventLambda.addLayers(requestLayer);
-    eventLambda.addPermission('AllowEventBridge', {
-      principal: new iam.ServicePrincipal('events.amazonaws.com'),
-    });
-
-    socialEventLambda.addLayers(pillowLayer);
-    socialEventLambda.addLayers(numpyLayer);
-    socialEventLambda.addLayers(requestLayer);
-    //socialEventLambda.addLayers(pandas);
-    // socialEventLambda.addLayers(matplotlib);
-    socialEventLambda.addPermission('AllowEventBridge', {
-      principal: new iam.ServicePrincipal('events.amazonaws.com'),
-    });
+    const socialEventLambdaExcludeDirectories = this.commonExcludeDirectories.concat(['dependency', 'dependency/*']);
+    const socialEventLambda = this.createLambda('socialHandlerFunction', 'social_media_handler.lambda_handler', socialEventLambdaExcludeDirectories, [pillowLayer, numpyLayer, requestLayer]);
 
     return [eventLambda, socialEventLambda];
   }
 
+  private createLambda(id: string, handler: string, excludeDirectories: string[], layerList: lambda.ILayerVersion[]): lambda.Function {
+    const lambdaFunction = new lambda.Function(this, id, {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: handler,
+      environment: {
+        OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
+        FACEBOOK_ACCESS_KEY: process.env.FACEBOOK_ACCESS_KEY!,
+        ...(id === 'S3EventHandlerFunction' && {SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!, GOOGLE_SEARCH_API_KEY: process.env.GOOGLE_SEARCH_API_KEY!})
+      },
+      code: lambda.Code.fromAsset('../infra', {
+        exclude: excludeDirectories
+      }),
+      timeout: cdk.Duration.seconds(id === 'S3EventHandlerFunction' ? 760 : 560),
+      memorySize: 1024
+    });
 
-  private createTopicQueue(): sqs.Queue {
-    return new sqs.Queue(this, 'TopicQueue');
+    lambdaFunction.addLayers(...layerList);
+    lambdaFunction.addPermission('AllowEventBridge', {
+      principal: new iam.ServicePrincipal('events.amazonaws.com'),
+    });
+
+    return lambdaFunction;
   }
 
   outputApiUrl(api: apigateway.RestApi) {
