@@ -1,27 +1,4 @@
 {
-    "trash bags": {
-       "topics": [
-           {"topic": "Reliable trash bags 2023", "type": "TRANSACTIONAL"}
-       ],
-       "affiliate_links": [
-           {"name": "Glad Tall Kitchen Trash Bags", "url": "https://amzn.to/41SksGN"},
-           {"name": "GREENER WALKER 100% Compostable Trash Bags", "url": "https://amzn.to/41RlRxc"},
-           {"name": "Top Knot Bags 45 Gallon Garbage Trash Bag 40X46", "url": "https://amzn.to/3HqMJvS"}
-       ]
-    },
-    "honey": {
-        "topics": [
-            {"topic": "amber honey", "type": "TRANSACTIONAL"},
-            {"topic": "wingstop hot honey", "type": "TRANSACTIONAL"},
-            {"topic": "honey star", "type": "INFORMATIONAL"},
-            {"topic": "world honey bee day", "type": "INFORMATIONAL"}
-        ],
-        "affiliate_links": [
-            {"name": "Nature Nate's 100% Pure Organic", "url": "https://amzn.to/3LEZ6aj"},
-            {"name": "Wedderspoon Raw Organic Manuka Honey", "url": "https://amzn.to/40Tyh6q"},
-            {"name": "Florida Raw Apiaries", "url": "https://amzn.to/3VgRv4Y"}
-        ]
-    },
     "soil": {
         "topics": [
             {"topic": "types of soil", "type": "TRANSACTIONAL"},
@@ -37,15 +14,16 @@
     },
     "summer": {
         "topics": [
-            {"topic": "Best products summer 2023",
-                "type": "TRANSACTIONAL"},
-            {"topic": "Beach Essentials 2023", "type": "TRANSACTIONAL"},
-            {"topic": "Summer trends 2023", "type": "TRANSACTIONAL"},
-            {"topic": "What to do this summer", "type": "INFORMATIONAL"},
-            {"topic": "Summer Essentials", "type": "TRANSACTIONAL"},
-            {"topic": "Sun damage to skin", "type": "INFORMATIONAL"},
-            {"topic": "What Sunburn does to your skin",
-                "type": "INFORMATIONAL"}
+            {"topic": "seattle summer", "type": "TRANSACTIONAL"},
+            {"topic": "seattle parks and recreation summer camps", "type": "TRANSACTIONAL"},
+            {"topic": "camp seattle", "type": "INFORMATIONAL"},
+            {"topic": "seattle", "type": "INFORMATIONAL"},
+            {"topic": "pike place market", "type": "INFORMATIONAL"},
+            {"topic": "seattle to portland", "type": "INFORMATIONAL"},
+            {"topic": "pink door seattle", "type": "INFORMATIONAL"},
+            {"topic": "capitol hill seattle", "type": "TRANSACTIONAL"},
+            {"topic": "warwick seattle", "type": "INFORMATIONAL"},
+            {"topic": "alki beach", "type": "INFORMATIONAL"}
         ],
         "affiliate_links": [
             {"name": "FURTALK Sun Visor Hats", "url": "https://amzn.to/3Lp8Bce"},

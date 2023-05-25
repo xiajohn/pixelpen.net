@@ -21,12 +21,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://pixelpen.net/blog/amber-honey</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pixelpen.net/blog/Beach-Essentials-2023</loc>
+    <loc>https://pixelpen.net/blog/alki-beach</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -36,22 +31,22 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pixelpen.net/blog/Best-products-summer-2023</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://pixelpen.net/blog/caliche</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pixelpen.net/blog/Grill-Hacks-2023</loc>
+    <loc>https://pixelpen.net/blog/camp-seattle</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pixelpen.net/blog/honey-star</loc>
+    <loc>https://pixelpen.net/blog/capitol-hill-seattle</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/Grill-Hacks-2023</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -71,27 +66,37 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pixelpen.net/blog/Reliable-trash-bags-2023</loc>
+    <loc>https://pixelpen.net/blog/pike-place-market</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pixelpen.net/blog/Summer-Essentials</loc>
+    <loc>https://pixelpen.net/blog/pink-door-seattle</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/seattle</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/seattle-parks-and-recreation-summer-camps</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/seattle-summer</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pixelpen.net/blog/seattle-to-portland</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://pixelpen.net/blog/Summer-grilling-2023</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pixelpen.net/blog/Summer-trends-2023</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pixelpen.net/blog/Sun-damage-to-skin</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -111,32 +116,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pixelpen.net/blog/warwick-seattle</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pixelpen.net/blog/websoilsurvey</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pixelpen.net/blog/What-Sunburn-does-to-your-skin</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pixelpen.net/blog/What-to-do-this-summer</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://pixelpen.net/blog/What-to-grill</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pixelpen.net/blog/wingstop-hot-honey</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pixelpen.net/blog/world-honey-bee-day</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
