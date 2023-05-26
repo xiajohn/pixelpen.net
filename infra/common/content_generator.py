@@ -43,7 +43,7 @@ class ContentGenerator:
                     raise e
                 
             except openai.error.RateLimitError as e:
-                wait_time = 3000
+                wait_time = 3
                 print(f"Rate limit exceeded, waiting for {wait_time} seconds before retrying...")
                 time.sleep(wait_time)
 
@@ -70,7 +70,7 @@ class ContentGenerator:
                     # If it's not a safety-related error, raise the exception
                     raise e
             except openai.error.RateLimitError as e:
-                wait_time = 3000
+                wait_time = 3
                 print(f"Rate limit exceeded, waiting for {wait_time} seconds before retrying...")
                 time.sleep(wait_time)
         else:

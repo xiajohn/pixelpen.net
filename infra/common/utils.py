@@ -1,6 +1,7 @@
 from enum import Enum
 import json
 import os
+import requests
 class TopicType(Enum):
     TRANSACTIONAL = "TRANSACTIONAL"
     INFORMATIONAL = "INFORMATIONAL"
@@ -22,3 +23,9 @@ def save_json(metadata, file_path):
 
     with open(abs_file_path, "w") as file:
         json.dump(metadata, file, indent=2, ensure_ascii=False)
+
+def download_file(url, filename):
+    response = requests.get(url)
+    with open(filename, 'wb') as f:
+        f.write(response.content)
+    return filename
