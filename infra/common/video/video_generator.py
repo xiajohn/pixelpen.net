@@ -38,29 +38,23 @@ class VideoGenerator(AudioGenerator):
         # Return the path to the final video clip
         return f'{query}_without_audio.mp4'
     
-    def addImage(self, video_path, image_path, start_time, end_time):
-    # Load the video
-        video = VideoFileClip(video_path)
-            
-        # Load the image
-        image = ImageClip(image_path)
+    def addImage(self, video_path, image_path, start_time, duration):
+        video = (VideoFileClip(video_path).set_duration(25))  # Extend video duration to 120 seconds
+        image = (ImageClip(image_path)
+                .set_duration(duration)
+                .resize(width=620)
+                .set_position(('center', 'center'))
+                .set_start(start_time))
+        print(video)
+        print(image)
+        final_clip = CompositeVideoClip([video, image])
 
-        # Resize and center the image
-        image = image.resize(width=620)  # Resize width keeping aspect ratio
-
-        # Define the time when image should start sliding out
-        slide_out_start_time = end_time - start_time - 2  # 2 seconds before the end_time
-
-        # Set image position to be centered initially, then slide out and fade after slide_out_start_time
-        image = image.set_position(('center', 'center')).set_start(start_time).set_duration(end_time - start_time)
-        
-        # Add the image to the video
-        final_clip = CompositeVideoClip([video, image.set_duration(video.duration)])
-
-        # Write the result to a file
         final_clip.write_videofile(f'{video_path[:-4]}_with_image.mp4', codec='libx264')
 
         return f'{video_path[:-4]}_with_image.mp4'
+
+
+
 
 
     def addAudio(self, video_path, audio_path):
@@ -88,10 +82,10 @@ def makeVideo():
     # prompt = vg.build_prompt("meditation")
     # script = vg.generate_text(prompt)
     # audio_path = vg.getAudio(script)
-    # video_path = vg.getVideo(30, "space")
+    #video_path = vg.getVideo(30, "space")
     # vg.addAudio(video_path, audio_path)
 
     image_path = 'generated/alki-beach/image_data_1.jpg'  # replace with your image path
     start_time = 1  # replace with when you want the image to appear
     end_time = 10  # replace with when you want the image to disappear
-    video_with_image_path = vg.addImage("generated/space_without_audio_with_audio.mp4", image_path, start_time, end_time)
+    video_with_image_path = vg.addImage("space0.mp4", image_path, start_time,13)
