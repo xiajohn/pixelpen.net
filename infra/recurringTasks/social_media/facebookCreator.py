@@ -4,6 +4,7 @@ from random import choice
 from common.content_generator import ContentGenerator
 from dotenv import load_dotenv, find_dotenv
 from common.makememe.make import make
+import random
 load_dotenv(find_dotenv('../.env'))
 import json
 class FacebookCreator(ContentGenerator):
@@ -29,10 +30,24 @@ class FacebookCreator(ContentGenerator):
         return self.hashtag_dict[category]
 
     def generate_text_content(self):
+        categories = [
+            "Technology",
+            "Travel",
+            "Food",
+            "Movies",
+            "TV shows",
+            "Investing",
+            "Seattle",
+            "Business",
+            "Video Games",
+            "Lifestyle",
+            "Health"
+        ]
+        category = random.choice(categories)
         category_prompts = {
-            "practical tip": "Share a practical tip for anything. Limit response to only the practical tip. ",
-            "funny joke": "Tell a funny joke. Limit response to only the funny joke. ",
-            "interesting question": "Ask an interesting question about any topic. Limit response to only the interesting question. "
+            "practical tip": f'Share a practical tip for {category}. Limit response to only the practical tip. ',
+            "funny joke": f'Tell a funny joke about {category}. Limit response to only the funny joke. ',
+            "interesting question": f'Ask an interesting question about {category}. Limit response to only the interesting question. '
         }
 
         category = choice(list(category_prompts.keys()))

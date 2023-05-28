@@ -19,6 +19,12 @@ class BlogCrawler(EmailExtractor):
             "Technology",
             "Travel",
             "Food",
+            "Movies",
+            "TV shows",
+            "Investing",
+            "Seattle",
+            "Business",
+            "Video Games",
             "Lifestyle",
             "Health"
         ]
