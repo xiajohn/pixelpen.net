@@ -33,10 +33,6 @@ class VideoGenerator(AudioGenerator):
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
 
-        # Delete the downloaded videos
-        # for i in range(3):
-        #     os.remove(f'space{i}.mp4')
-
         return path
     
     def addImage(self, video_path, image_path, start_time, duration):
@@ -54,7 +50,7 @@ class VideoGenerator(AudioGenerator):
 
         return f'{video_path}'
 
-    def addAudio(self, video_path, audio_path, music_path):
+    def addAudio(self, video_path, audio_path, music_path, name):
         # Load the video
         final_clip = VideoFileClip(video_path)
 
@@ -64,12 +60,13 @@ class VideoGenerator(AudioGenerator):
 
         # Make sure the music track is not louder than the audio track
         music = music.volumex(0.1)
-
+        audio = audio.volumex(0.6)
         # If the music is longer than the main audio, cut it
         if music.duration > audio.duration:
             music = music.subclip(0, audio.duration)
-
-
+        print("music duration")
+        print(music.duration)
+        final_clip = VideoFileClip(video_path).set_duration(music.duration + 5)
 
         # Combine the audio tracks
         final_audio = CompositeAudioClip([audio, music])
@@ -79,7 +76,7 @@ class VideoGenerator(AudioGenerator):
 
         # Write the final video file
         final_clip.write_videofile(f'{video_path}', codec='libx264')
-
+        
         return video_path
 
     def build_prompt(self, user_input):
@@ -106,9 +103,9 @@ def makeVideo():
     # Set up logging
     logging.basicConfig(level=logging.INFO)
     vg = VideoGenerator()
-
+    topic ="first year of artificial intelligence"
     logging.info("Generating script...")
-    prompt = vg.build_prompt("first year of artificial intelligence")
+    prompt = vg.build_prompt(topic)
     script = vg.generate_text(prompt)
     audio_path = vg.getAudio(script)
     music_path = f'{Constants.audio_file_path}relaxed-vlog-night-street-131746.mp3'
