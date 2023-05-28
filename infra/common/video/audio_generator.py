@@ -3,11 +3,13 @@ import requests
 import json
 from common.content_generator import ContentGenerator
 from common.utils import download_file
+from common.video.constants import Constants
 class AudioGenerator(ContentGenerator):
     def __init__(self):
         pass
 
     def getAudio(self, text, voice="larry", filename="audio.mp3"):
+        audio_path = f'{Constants.audio_file_path}test.mp3'
         url = "https://play.ht/api/v2/tts"
         payload = {
             "quality": "high",
@@ -25,7 +27,8 @@ class AudioGenerator(ContentGenerator):
         }
 
         response = requests.post(url, json=payload, headers=headers)
-        return download_file(self.parse_sse_events(response.text), "generated/audio/test.mp3")
+        download_file(self.parse_sse_events(response.text), audio_path)
+        return audio_path
 
 
     def parse_sse_events(self, text):
