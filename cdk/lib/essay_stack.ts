@@ -118,7 +118,8 @@ export class EssayStack extends cdk.Stack {
 
     new s3_deployment.BucketDeployment(this, 'DeployAssets', {
       sources: [s3_deployment.Source.asset('../frontend/build'), s3_deployment.Source.asset('../content')],
-      destinationBucket: bucket
+      destinationBucket: bucket,
+      memoryLimit: 256
     });
     return bucket;
   }

@@ -1,6 +1,5 @@
 class Constants:
-    audio_file_path = "generated/audio/"
-    video_file_path = "generated/video/"
+    video_file_path = "video/"
     audio = "audio"
     video = "video"
     background_music = "background_music"

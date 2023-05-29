@@ -8,7 +8,7 @@ from moviepy.video.fx.all import fadeout
 from moviepy.video.compositing.transitions import slide_in, slide_out
 import logging
 from common.video.audio_generator import AudioGenerator
-from common.utils import download_file
+from common.utils import download_file, sanitize_folder_name, load_json
 from moviepy.video.io.ffmpeg_reader import FFMPEG_VideoReader
 import json
 from dotenv import find_dotenv, load_dotenv
@@ -20,8 +20,11 @@ class VideoGenerator(AudioGenerator):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
         self.metadata_manager = MetadataManager()
 
-    def getVideo(self, length, query):
-        self.metadata_manager.check_metadata(Constants.video,  )
+    def getVideo(self, length, query, folder_name):
+        if self.metadata_manager.check_metadata(Constants.video, sanitize_folder_name(folder_name)):
+            logging.info("video exists")
+            return
+        
         videos = self.px.queryVideo(query)
         path = f'{Constants.video_file_path}{query}.mp4'
         if len(videos) == 0:
@@ -34,7 +37,7 @@ class VideoGenerator(AudioGenerator):
 
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
-
+        self.metadata_manager.update_metadata(folder_name, Constants.video)
         return path
     
     def addImage(self, video_path, image_path, start_time, duration):
@@ -52,7 +55,10 @@ class VideoGenerator(AudioGenerator):
 
         return f'{video_path}'
 
-    def addAudio(self, video_path, audio_path, music_path, name):
+    def addAudio(self, video_path, audio_path, music_path, query):
+        if self.metadata_manager.check_metadata(Constants.audio, sanitize_folder_name(query)):
+            logging.info("video exists")
+            return
         # Load the video
         final_clip = VideoFileClip(video_path)
 
@@ -78,7 +84,7 @@ class VideoGenerator(AudioGenerator):
 
         # Write the final video file
         final_clip.write_videofile(f'{video_path}', codec='libx264')
-        
+        self.metadata_manager.update_metadata(folder_name, Constants.video)
         return video_path
 
     def build_prompt(self, user_input):
@@ -101,30 +107,46 @@ class VideoGenerator(AudioGenerator):
         # Return the path to the music file
         return f'{query}_music.mp3'
 
+    def makeVideos(self, video_data):
+        logging.basicConfig(level=logging.INFO)
+
+        for category, category_data in video_data.items():
+            for video in category_data['video']:
+                audio_prompt = video.get('audio')
+                video_type = video.get('video')
+                music_path = f'{Constants.video_file_path}relaxed-vlog-night-street-131746.mp3'
+                image_path = 'generated/alki-beach/image_data_1.jpg'
+                folder_name = f'{sanitize_folder_name(audio_prompt)}/'
+                logging.info(f"Generating script for {audio_prompt}...")
+                prompt = self.build_prompt(audio_prompt)
+                script = self.generate_text(prompt)
+                logging.info("Generating audio...")
+                audio_path = self.getAudio(script, folder_name)
+
+                logging.info(f"Generating {video_type} video...")
+                video_path = self.getVideo(30, video_type, folder_name)
+
+                logging.info("Adding audio to video...")
+                self.addAudio(video_path, audio_path, music_path)
+                self.addImage(video_path, image_path, start_time=1, duration=13)
+                # Note: Adding image and music to the video are commented out for now
+                # Add these back in when you're ready
+
+                #music_path = video.get('music')
+                # if music_path:
+                #     logging.info("Adding music to video...")
+                #     music_path = vg.downloadMusic(music_path)
+                #     vg.addAudio(video_path, music_path)
+
+                # image_path = video.get('image')
+                # if image_path:
+                #     logging.info("Adding image to video...")
+                #     vg.addImage(video_path, image_path, start_time=1, duration=13)
+
+                logging.info("Video creation complete!")
+
 def makeVideo():
     # Set up logging
     logging.basicConfig(level=logging.INFO)
     vg = VideoGenerator()
-    topic ="first year of artificial intelligence"
-    logging.info("Generating script...")
-    prompt = vg.build_prompt(topic)
-    script = vg.generate_text(prompt)
-    audio_path = vg.getAudio(script)
-    music_path = f'{Constants.audio_file_path}relaxed-vlog-night-street-131746.mp3'
-    logging.info("Generating video...")
-    video_path = vg.getVideo(30, "psychedelic")
-    
-    logging.info("Adding audio to video...")
-    vg.addAudio(video_path, audio_path, music_path)
-
-    logging.info("Downloading music...")
-   # music_path = vg.downloadMusic("relaxing")
-
-    image_path = 'generated/alki-beach/image_data_1.jpg'  # replace with your image path
-    start_time = 1  # replace with when you want the image to appear
-    duration = 13
-
-    logging.info("Adding image to video...")
-    vg.addImage(video_path, image_path, start_time, duration)
-
-    logging.info("Video creation complete!")
+    vg.makeVideos(load_json("video/video_input.json"))

@@ -10,7 +10,6 @@ class TopicType(Enum):
 def load_json(file_path):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     abs_file_path = os.path.join(current_dir, file_path)
-
     if not os.path.exists(abs_file_path):
         return {}  # Return an empty dictionary if the file doesn't exist
     else:
@@ -25,6 +24,7 @@ def save_json(metadata, file_path):
         json.dump(metadata, file, indent=2, ensure_ascii=False)
 
 def download_file(url, filename):
+    print(f'url: {url}')
     response = requests.get(url)
     with open(filename, 'wb') as f:
         f.write(response.content)
