@@ -29,7 +29,7 @@ class BlogCrawler(EmailExtractor):
             "Health"
         ]
         category = random.choice(categories)
-        self.topic = self.contentGenerator.generate_text(f"Generate a random title for {category}", 250, 1)
+        self.topic = self.contentGenerator.generate_text(f"Generate a random blog title for {category}", 250, 1)
 
         self.blogs = self.get_blog_links()
 

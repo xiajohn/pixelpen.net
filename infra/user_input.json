@@ -4,7 +4,8 @@
             {"topic": "types of soil", "type": "TRANSACTIONAL"},
             {"topic": "most fertile soil in the world", "type": "TRANSACTIONAL"},
             {"topic": "websoilsurvey", "type": "TRANSACTIONAL"},
-            {"topic": "caliche", "type": "TRANSACTIONAL"}
+            {"topic": "caliche", "type": "TRANSACTIONAL"},
+            {"topic": "cbr test", "type": "TRANSACTIONAL"}
         ],
         "affiliate_links": [
             {"name": "Soil Testing", "url": "https://salemsoilsolutions.com"},
