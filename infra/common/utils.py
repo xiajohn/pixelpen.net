@@ -29,3 +29,10 @@ def download_file(url, filename):
     with open(filename, 'wb') as f:
         f.write(response.content)
     return filename
+
+def sanitize_folder_name(name):
+    name = name.replace(':', '').replace(' ', '-')
+    invalid_chars = '\/:*?"<>|'
+    sanitized_name = ''.join(
+        c if c not in invalid_chars else '_' for c in name)
+    return sanitized_name

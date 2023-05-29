@@ -1,5 +1,5 @@
 from moviepy.editor import concatenate_videoclips, VideoFileClip, AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip
-
+from common.metadata_manager import MetadataManager
 import pixabay
 import os
 from common.video.constants import Constants
@@ -18,8 +18,10 @@ warnings.filterwarnings("ignore", category=UserWarning, module=FFMPEG_VideoReade
 class VideoGenerator(AudioGenerator):
     def __init__(self):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
+        self.metadata_manager = MetadataManager()
 
     def getVideo(self, length, query):
+        self.metadata_manager.check_metadata(Constants.video,  )
         videos = self.px.queryVideo(query)
         path = f'{Constants.video_file_path}{query}.mp4'
         if len(videos) == 0:

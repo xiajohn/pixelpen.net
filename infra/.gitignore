@@ -7,4 +7,6 @@ dependency
 social_dependency
 tmp
 *.wav
+video
+*.mp3
 *.mp4

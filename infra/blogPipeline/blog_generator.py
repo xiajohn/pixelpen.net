@@ -3,7 +3,7 @@ import random
 from dotenv import load_dotenv
 import base64
 from common.content_generator import ContentGenerator
-
+from common.utils import sanitize_folder_name
 load_dotenv(os.path.join('..', '.env'))
 
 
@@ -12,12 +12,6 @@ class BlogGenerator(ContentGenerator):
         super().__init__()
         self.topic = topic
         self.blog_folder = self.create_blog_folder(self.topic)
-
-    def sanitize_folder_name(self, name):
-        invalid_chars = '\/:*?"<>|'
-        sanitized_name = ''.join(
-            c if c not in invalid_chars else '_' for c in name)
-        return sanitized_name
 
     def generate_metadata(self, topic):
         title_prompt = f"Write a short, concise, and SEO-friendly title for a blog post about {topic}. Response will be used in HTML for SEO purposes."
@@ -28,7 +22,6 @@ class BlogGenerator(ContentGenerator):
 
         keywords_prompt = f"Generate 3 concise SEO-friendly keywords for a blog post about {topic}. Response will be used in HTML for SEO purposes."
         keywords = self.generate_text(keywords_prompt).strip()
-        url = self.sanitize_folder_name(title)
 
         return {
             "title": title,
@@ -37,8 +30,7 @@ class BlogGenerator(ContentGenerator):
         }
 
     def create_blog_folder(self, blog_name):
-        sanitized_blog_name = self.sanitize_folder_name(blog_name)
-        folder_name = sanitized_blog_name.replace(" ", "-")
+        folder_name = sanitize_folder_name(blog_name)
         folder_path = os.path.join("generated", folder_name)
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
