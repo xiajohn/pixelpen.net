@@ -10,3 +10,4 @@ tmp
 video
 *.mp3
 *.mp4
+video/*

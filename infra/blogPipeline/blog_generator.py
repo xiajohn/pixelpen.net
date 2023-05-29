@@ -3,7 +3,7 @@ import random
 from dotenv import load_dotenv
 import base64
 from common.content_generator import ContentGenerator
-from common.utils import sanitize_folder_name
+from utils import Utils
 load_dotenv(os.path.join('..', '.env'))
 
 
@@ -30,7 +30,7 @@ class BlogGenerator(ContentGenerator):
         }
 
     def create_blog_folder(self, blog_name):
-        folder_name = sanitize_folder_name(blog_name)
+        folder_name = Utils.sanitize_folder_name(blog_name)
         folder_path = os.path.join("generated", folder_name)
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)

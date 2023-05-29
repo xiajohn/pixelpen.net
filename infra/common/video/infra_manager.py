@@ -5,7 +5,7 @@ import pixabay
 import os
 import requests
 from dotenv import find_dotenv, load_dotenv
-from common.utils import download_file
+from utils import Utils
 load_dotenv(find_dotenv('../../.env'))
 class LongVideoGenerator:
     def __init__(self):
@@ -34,7 +34,7 @@ class LongVideoGenerator:
         videos = data["hits"]
         i = 0
         while i < length:
-            download_file(videos[i]["videos"]["medium"]["url"], f'{query}{i}.mp4')
+            Utils.download_file(videos[i]["videos"]["medium"]["url"], f'{query}{i}.mp4')
 
             clip = VideoFileClip(f'{query}{i}.mp4')
             clips.append(clip)
