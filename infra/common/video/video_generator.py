@@ -19,30 +19,36 @@ class VideoGenerator(AudioGenerator):
     def __init__(self):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
         self.metadata_manager = MetadataManager()
+        self.video_exists = True
 
     def getVideo(self, length, query, folder_name):
         path = f'{folder_name}/video.mp4'
         if self.metadata_manager.check_metadata(Constants.video, folder_name):
-            logging.info("video exists")
             return path
-        videos = self.px.queryVideo(query)
-        
-        if len(videos) == 0:
-            raise Exception("No videos found")
-        clips = []
-        print("{} hits".format(len(videos)))
-        for i in range(3):
-            videos[i].download(f'space{i}.mp4', "large")
-            clips.append(VideoFileClip(f'space{i}.mp4'))
+        self.video_exists = False
 
+        url = f'https://pixabay.com/api/videos/?key={os.getenv("PIXABAY_KEY")}&q={query}'
+        response = requests.get(url)
+        data = {}
+        if response.status_code == 200:
+            data = response.json()  # parse the response as JSON
+        else:
+            print(f"Request failed with status code {response.status_code}")
+
+        clips = []
+
+        videos = data["hits"]
+        i = 0
+        while i < length:
+            Utils.download_file(videos[i]["videos"]["medium"]["url"], f'{query}{i}.mp4')
+
+            clip = VideoFileClip(f'{query}{i}.mp4')
+            clip = clip.resize(height=1920, width=1080)
+            clips.append(clip)
+            i += 1
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
         self.metadata_manager.update_metadata(folder_name, Constants.video, Utils.sanitize_folder_name(path))
-
-        for i in range(3):
-            video_file_name = f'space{i}.mp4'
-            if os.path.exists(video_file_name):
-                os.remove(video_file_name)
         return path
     
     def addImage(self, video_path, image_path, start_time, duration):
@@ -65,22 +71,23 @@ class VideoGenerator(AudioGenerator):
         script_prompt = f"{intro}We want to start the video with a captivating hook. For instance, you could start with something like 'Imagine a world where {user_input} is at the forefront of every conversation.' But remember, that's just an example. We want you to come up with an original and engaging hook that fits the topic of {user_input}. After the hook, proceed directly into the informative content."
         return script_prompt
 
-    def downloadMusic(self, query):
-        music_files = self.px.queryAudio(query)
-        if len(music_files) == 0:
-            raise Exception("No music files found")
-        
-        print("{} hits".format(len(music_files)))
-        music_files[0].download(f'{query}_music.mp3', "large")
-        return f'{query}_music.mp3'
+    def searchMusic(query):
+        api_key = 'your_pixabay_api_key'
+        url = f'https://pixabay.com/api/?key={api_key}&q={query}&media=music'
+        response = requests.get(url).json()
+        print(response)
+        if 'hits' in response:
+            for hit in response['hits']:
+                print(hit['pageURL'])
+
     
     def getScript(self, prompt, folder_path):
         script_path = os.path.join(folder_path, 'script.txt')
         if self.metadata_manager.check_metadata(Constants.script, folder_path):
-            logging.info("script exists")
             with open(script_path, 'r') as f:
                 text = f.read()
             return text
+        self.video_exists = False
         text = self.generate_text(prompt)
         # Create directories if they don't exist
         os.makedirs(folder_path, exist_ok=True)
@@ -105,28 +112,18 @@ class VideoGenerator(AudioGenerator):
                 prompt = self.build_prompt(audio_prompt)
                 script = self.getScript(prompt, folder_name)
                 logging.info("Generating audio...")
-                audio_path = self.getBadAudio(script, folder_name)
 
+                if not self.metadata_manager.check_metadata(Constants.audio, folder_name):
+                    self.video_exists = False
+                    
+                audio_path = self.getBadAudio(script, folder_name)
                 logging.info(f"Generating {video_type} video...")
-                video_path = self.getVideo(30, video_type, folder_name)
+                video_path = self.getVideo(3, video_type, folder_name)
 
                 logging.info("Adding audio to video...")
-                self.addAudio(video_path, audio_path, music_path, folder_name)
-                self.addImage(video_path, image_path, start_time=1, duration=13)
-                # Note: Adding image and music to the video are commented out for now
-                # Add these back in when you're ready
-
-                #music_path = video.get('music')
-                # if music_path:
-                #     logging.info("Adding music to video...")
-                #     music_path = vg.downloadMusic(music_path)
-                #     vg.addAudio(video_path, music_path)
-
-                # image_path = video.get('image')
-                # if image_path:
-                #     logging.info("Adding image to video...")
-                #     vg.addImage(video_path, image_path, start_time=1, duration=13)
-
+                if self.video_exists:
+                    self.addAudio(video_path, audio_path, music_path, folder_name)
+                    self.addImage(video_path, image_path, start_time=1, duration=13)
                 logging.info("Video creation complete!")
 
 def makeVideo():
@@ -134,3 +131,7 @@ def makeVideo():
     logging.basicConfig(level=logging.INFO)
     vg = VideoGenerator()
     vg.makeVideos(Utils.load_json("common/video/video_input.json"))
+    for i in range(3):
+        video_file_name = f'space{i}.mp4'
+        if os.path.exists(video_file_name):
+            os.remove(video_file_name)
