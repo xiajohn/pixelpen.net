@@ -34,11 +34,11 @@ class AudioGenerator(ContentGenerator):
         Utils.download_file(self.parse_sse_events(response.text), audio_path)
         return audio_path
     
-    def addAudio(self, video_path, audio_path, music_path, query):
-        folder_name = Utils.sanitize_folder_name(query)
-        if self.metadata_manager.check_metadata(Constants.audio, folder_name):
-            logging.info("video exists")
-            return
+    def addAudio(self, video_path, audio_path, music_path, folder_name):
+        original = video_path[0:-4]
+        final_location = original + "Audio" + ".mp4"
+        if self.metadata_manager.check_metadata(Constants.video_with_audio, folder_name):
+            return final_location
 
         # Load the audio files
         audio = AudioFileClip(audio_path).fx(afx.volumex, 0.5)
@@ -49,11 +49,9 @@ class AudioGenerator(ContentGenerator):
         final_clip = VideoFileClip(video_path).subclip(0, audio.duration)
         final_audio = CompositeAudioClip([audio, music])
         final_clip = final_clip.set_audio(final_audio)
-        original = video_path[0:-4]
-        final_location = original + "Audio" + ".mp4"
         final_clip.write_videofile(f'{final_location}', codec='libx264')
 
-        return video_path
+        return final_location
 
 
     

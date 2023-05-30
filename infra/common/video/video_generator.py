@@ -52,6 +52,10 @@ class VideoGenerator(AudioGenerator):
         return path
     
     def addImage(self, video_path, image_path, start_time, duration):
+        original = video_path[0:-4]
+        final_location = original + "Final" + ".mp4"
+        if self.metadata_manager.check_metadata(Constants.final_video, video_path):
+            return final_location
         video = VideoFileClip(video_path)
         image = (ImageClip(image_path)
                 .set_duration(duration)
@@ -61,10 +65,10 @@ class VideoGenerator(AudioGenerator):
         print(video)
         print(image)
         final_clip = CompositeVideoClip([video, image])
+        
+        final_clip.write_videofile(f'{final_location}', codec='libx264')
 
-        final_clip.write_videofile(f'{video_path}', codec='libx264')
-
-        return f'{video_path}'
+        return f'{final_location}'
 
     def build_prompt(self, user_input):
         intro = f"In this video, we're going to dive right into the exciting world of {user_input}.\n\n"
@@ -113,17 +117,16 @@ class VideoGenerator(AudioGenerator):
                 script = self.getScript(prompt, folder_name)
                 logging.info("Generating audio...")
 
-                if not self.metadata_manager.check_metadata(Constants.audio, folder_name):
-                    self.video_exists = False
                     
                 audio_path = self.getBadAudio(script, folder_name)
                 logging.info(f"Generating {video_type} video...")
                 video_path = self.getVideo(3, video_type, folder_name)
 
                 logging.info("Adding audio to video...")
-                self.addAudio(video_path, audio_path, music_path, folder_name)
+
+                video_path = self.addAudio(video_path, audio_path, music_path, folder_name)
                 #if not self.video_exists:
-                    
+                print(video_path)    
                 self.addImage(video_path, image_path, start_time=1, duration=13)
                 logging.info("Video creation complete!")
 

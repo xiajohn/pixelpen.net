@@ -4,4 +4,6 @@ class Constants:
     video = "video"
     background_music = "background_music"
     script = "script"
+    video_with_audio = "video_with_audio",
+    final_video = "final_video"
     
