@@ -5,7 +5,7 @@ import json
 import logging
 from common.content_generator import ContentGenerator
 from utils import Utils
-from moviepy.editor import concatenate_videoclips, VideoFileClip, AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip
+from moviepy.editor import concatenate_videoclips, VideoFileClip, AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip, afx
 from common.video.constants import Constants
 class AudioGenerator(ContentGenerator):
     def __init__(self):
@@ -39,38 +39,27 @@ class AudioGenerator(ContentGenerator):
         if self.metadata_manager.check_metadata(Constants.audio, folder_name):
             logging.info("video exists")
             return
-        # Load the video
-        final_clip = VideoFileClip(video_path)
 
         # Load the audio files
-        audio = AudioFileClip(audio_path)
-        music = AudioFileClip(music_path)
-
-        # Make sure the music track is not louder than the audio track
-        music = music.volumex(0.1)
-        audio = audio.volumex(0.6)
-        # If the music is longer than the main audio, cut it
+        audio = AudioFileClip(audio_path).fx(afx.volumex, 0.5)
+        music = AudioFileClip(music_path).fx(afx.volumex, 0.1)
         if music.duration > audio.duration:
             music = music.subclip(0, audio.duration)
-        print("music duration")
-        print(music.duration)
-        final_clip = VideoFileClip(video_path).set_duration(music.duration + 5)
 
-        # Combine the audio tracks
+        final_clip = VideoFileClip(video_path).subclip(0, audio.duration)
         final_audio = CompositeAudioClip([audio, music])
-
-        # Set the final audio track to the video
         final_clip = final_clip.set_audio(final_audio)
+        original = video_path[0:-4]
+        final_location = original + "Audio" + ".mp4"
+        final_clip.write_videofile(f'{final_location}', codec='libx264')
 
-        # Write the final video file
-        final_clip.write_videofile(f'{video_path}', codec='libx264')
-       # self.metadata_manager.update_metadata(folder_name, Constants.audio)
         return video_path
+
+
     
     def getBadAudio(self, text, folder_name, voice="en-US-JennyNeural", filename="audio.mp3"):
         audio_path = f'{folder_name}/{filename}'
         if self.metadata_manager.check_metadata(Constants.audio, folder_name):
-            logging.info("audio exists")
             return audio_path
         
         url = "https://play.ht/api/v1/convert"

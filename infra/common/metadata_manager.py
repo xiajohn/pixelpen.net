@@ -29,9 +29,10 @@ class MetadataManager():
 
     def check_metadata(self, resource_type, folder_path):
         file_path = os.path.join(folder_path, self.resources[resource_type])
-        # check if the file or directory exists
-        print(f'{resource_type} exists')
-        return os.path.exists(file_path)
+        exists = os.path.exists(file_path)
+        if exists:
+            print(f'{resource_type} exists')
+        return exists
 
     def update_metadata(self, resource_type, query, resource_path):
         if query not in self.metadata:

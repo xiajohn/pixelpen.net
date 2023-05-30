@@ -14,7 +14,7 @@ import json
 from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv('../../.env'))
 import warnings
-warnings.filterwarnings("ignore", category=UserWarning, module=FFMPEG_VideoReader.__module__)
+
 class VideoGenerator(AudioGenerator):
     def __init__(self):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
@@ -121,9 +121,10 @@ class VideoGenerator(AudioGenerator):
                 video_path = self.getVideo(3, video_type, folder_name)
 
                 logging.info("Adding audio to video...")
-                if self.video_exists:
-                    self.addAudio(video_path, audio_path, music_path, folder_name)
-                    self.addImage(video_path, image_path, start_time=1, duration=13)
+                self.addAudio(video_path, audio_path, music_path, folder_name)
+                #if not self.video_exists:
+                    
+                self.addImage(video_path, image_path, start_time=1, duration=13)
                 logging.info("Video creation complete!")
 
 def makeVideo():
