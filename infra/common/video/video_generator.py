@@ -19,13 +19,12 @@ class VideoGenerator(AudioGenerator):
     def __init__(self):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
         self.metadata_manager = MetadataManager()
-        self.video_exists = True
+        self.folder_name = ""
 
-    def getVideo(self, length, query, folder_name):
-        path = f'{folder_name}/video.mp4'
-        if self.metadata_manager.check_metadata(Constants.video, folder_name):
+    def getVideo(self, length, query):
+        path = f'{self.folder_name}/video.mp4'
+        if self.metadata_manager.check_metadata(Constants.video, self.folder_name):
             return path
-        self.video_exists = False
 
         url = f'https://pixabay.com/api/videos/?key={os.getenv("PIXABAY_KEY")}&q={query}'
         response = requests.get(url)
@@ -48,13 +47,13 @@ class VideoGenerator(AudioGenerator):
             i += 1
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
-        self.metadata_manager.update_metadata(folder_name, Constants.video, Utils.sanitize_folder_name(path))
+        self.metadata_manager.update_metadata(self.folder_name, Constants.video, Utils.sanitize_folder_name(path))
         return path
     
     def addImage(self, video_path, image_path, start_time, duration):
         original = video_path[0:-4]
         final_location = original + "Final" + ".mp4"
-        if self.metadata_manager.check_metadata(Constants.final_video, video_path):
+        if self.metadata_manager.check_metadata(Constants.final_video, self.folder_name):
             return final_location
         video = VideoFileClip(video_path)
         image = (ImageClip(image_path)
@@ -71,13 +70,15 @@ class VideoGenerator(AudioGenerator):
         return f'{final_location}'
 
     def build_prompt(self, user_input):
-        intro = f"In this video, we're going to dive right into the exciting world of {user_input}.\n\n"
-        script_prompt = f"{intro}We want to start the video with a captivating hook. For instance, you could start with something like 'Imagine a world where {user_input} is at the forefront of every conversation.' But remember, that's just an example. We want you to come up with an original and engaging hook that fits the topic of {user_input}. After the hook, proceed directly into the informative content."
+        intro = f"In this audio, we're going to dive right into the exciting world of {user_input}.\n\n"
+        script_prompt = f"{intro}We want to start the audio with a captivating hook. For instance, you could start with something like 'Imagine a world where {user_input} is at the forefront of every conversation.' But remember, that's just an example. We want you to come up with an original and engaging hook that fits the topic of {user_input}. After the hook, proceed directly into the informative content for a 1-minute audio script."
         return script_prompt
 
-    def searchMusic(query):
+
+    def searchMusic(self, query):
         api_key = 'your_pixabay_api_key'
-        url = f'https://pixabay.com/api/?key={api_key}&q={query}&media=music'
+        url = f'https://pixabay.com/api/?key={os.getenv("PIXABAY_KEY")}&q={query}&media=music'
+        print(url)
         response = requests.get(url).json()
         print(response)
         if 'hits' in response:
@@ -85,19 +86,18 @@ class VideoGenerator(AudioGenerator):
                 print(hit['pageURL'])
 
     
-    def getScript(self, prompt, folder_path):
-        script_path = os.path.join(folder_path, 'script.txt')
-        if self.metadata_manager.check_metadata(Constants.script, folder_path):
+    def getScript(self, prompt):
+        script_path = os.path.join(self.folder_name, 'script.txt')
+        if self.metadata_manager.check_metadata(Constants.script, self.folder_name):
             with open(script_path, 'r') as f:
                 text = f.read()
             return text
-        self.video_exists = False
         text = self.generate_text(prompt)
         # Create directories if they don't exist
-        os.makedirs(folder_path, exist_ok=True)
+        os.makedirs(self.folder_name, exist_ok=True)
         
         # Save the text to a file in the given directory
-        with open(os.path.join(folder_path, 'script.txt'), 'w') as f:
+        with open(os.path.join(self.folder_name, 'script.txt'), 'w') as f:
             f.write(text)
         return text
 
@@ -107,25 +107,26 @@ class VideoGenerator(AudioGenerator):
         for category, category_data in video_data.items():
             for video in category_data['video']:
                 audio_prompt = video.get('audio')
+                music_prompt = video.get('music')
                 video_type = video.get('video')
-                
+                length = video.get('length')
                 image_path = 'generated/alki-beach/image_data_1.jpg'
-                folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
-                music_path = f'{folder_name}/relaxed-vlog-night-street-131746.mp3'
+                self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
+                music_path = self.searchMusic(music_prompt)
+                print(f'music:{music_path}')
                 logging.info(f"Generating script for {audio_prompt}...")
                 prompt = self.build_prompt(audio_prompt)
-                script = self.getScript(prompt, folder_name)
+                script = self.getScript(prompt)
                 logging.info("Generating audio...")
 
                     
-                audio_path = self.getBadAudio(script, folder_name)
+                audio_path = self.getBadAudio(script, self.folder_name)
                 logging.info(f"Generating {video_type} video...")
-                video_path = self.getVideo(3, video_type, folder_name)
+                video_path = self.getVideo(length, video_type)
 
                 logging.info("Adding audio to video...")
 
-                video_path = self.addAudio(video_path, audio_path, music_path, folder_name)
-                #if not self.video_exists:
+                video_path = self.addAudio(video_path, audio_path, music_path, self.folder_name)
                 print(video_path)    
                 self.addImage(video_path, image_path, start_time=1, duration=13)
                 logging.info("Video creation complete!")
