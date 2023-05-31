@@ -12,14 +12,16 @@ from utils import Utils
 from moviepy.video.io.ffmpeg_reader import FFMPEG_VideoReader
 import json
 from dotenv import find_dotenv, load_dotenv
+from common.video.story_manager import StoryManager
 load_dotenv(find_dotenv('../../.env'))
 import warnings
 import random
 class VideoGenerator(AudioGenerator):
-    def __init__(self):
+    def __init__(self, folder_name):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
         self.metadata_manager = MetadataManager()
-        self.folder_name = ""
+        self.folder_name = folder_name
+        self.story_manager = StoryManager(folder_name)
 
     def getVideo(self, length, query):
         path = f'{self.folder_name}/video.mp4'
@@ -35,18 +37,24 @@ class VideoGenerator(AudioGenerator):
             print(f"Request failed with status code {response.status_code}")
 
         clips = []
+        temp_files = [] # List to store temp video file paths
 
         videos = data["hits"]
         i = 0
         while i < length:
-            Utils.download_file(videos[i]["videos"]["medium"]["url"], f'{query}{i}.mp4')
-            clip = VideoFileClip(f'{query}{i}.mp4')
+            temp_video_path = f'{query}{i}.mp4'
+            Utils.download_file(videos[i]["videos"]["medium"]["url"], temp_video_path)
+            clip = VideoFileClip(temp_video_path)
             clip = clip.resize(height=1920, width=1080)
             clips.append(clip)
+            temp_files.append(temp_video_path) # Save temp file path
             i += 1
+
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
-        self.metadata_manager.update_metadata(self.folder_name, Constants.video, Utils.sanitize_folder_name(path))
+        for file in temp_files:
+            if os.path.exists(file):
+                os.remove(file)
         return path
     
     def addImage(self, video_path, image_path, start_time, duration):
@@ -97,42 +105,36 @@ class VideoGenerator(AudioGenerator):
             f.write(text)
         return text
 
-    def makeVideos(self, video_data):
-        logging.basicConfig(level=logging.INFO)
+    def makeVideo(self, video):
+        audio_prompt = video.get('audio')
+        video_type = video.get('video')
+        length = video.get('length')
+        image_path = 'generated/alki-beach/image_data_1.jpg'
+        self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
+        music_path = self.get_random_music_file()
 
-        for category, category_data in video_data.items():
-            for video in category_data['video']:
-                audio_prompt = video.get('audio')
-                music_prompt = video.get('music')
-                video_type = video.get('video')
-                length = video.get('length')
-                image_path = 'generated/alki-beach/image_data_1.jpg'
-                self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
-                music_path = self.get_random_music_file()
-                print(f'music:{music_path}')
-                logging.info(f"Generating script for {audio_prompt}...")
-                prompt = self.build_prompt(audio_prompt)
-                script = self.getScript(prompt)
-                logging.info("Generating audio...")
+        logging.info(f"Generating script for {audio_prompt}...")
+        prompt = self.build_prompt(audio_prompt)
+        script = self.getScript(prompt)
 
-                    
-                audio_path = self.getBadAudio(script, self.folder_name)
-                logging.info(f"Generating {video_type} video...")
-                video_path = self.getVideo(length, video_type)
+        logging.info("Generating audio...")
+        audio_path = self.getBadAudio(script, self.folder_name)
 
-                logging.info("Adding audio to video...")
+        logging.info(f"Generating {video_type} video...")
+        video_path = self.getVideo(length, video_type)
 
-                video_path = self.addAudio(video_path, audio_path, music_path, self.folder_name)
-                print(video_path)    
-                self.addImage(video_path, image_path, start_time=1, duration=13)
-                logging.info("Video creation complete!")
+        logging.info("Adding audio to video...")
+        video_path = self.addAudio(video_path, audio_path, music_path, self.folder_name)
+        print(f'video{video_path}')
+        self.story_manager.addImageToVideo(video_path, image_path)
+        logging.info("Video creation complete!")
 
 def makeVideo():
     # Set up logging
     logging.basicConfig(level=logging.INFO)
-    vg = VideoGenerator()
-    vg.makeVideos(Utils.load_json("common/video/video_input.json"))
-    for i in range(3):
-        video_file_name = f'space{i}.mp4'
-        if os.path.exists(video_file_name):
-            os.remove(video_file_name)
+    video_data = Utils.load_json("common/video/video_input.json")
+    for category, category_data in video_data.items():
+        for video in category_data['video']:
+            audio_prompt = video.get('audio')
+            vg = VideoGenerator(Utils.sanitize_folder_name(audio_prompt))
+            vg.makeVideo(video)

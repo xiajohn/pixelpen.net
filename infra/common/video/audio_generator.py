@@ -41,7 +41,7 @@ class AudioGenerator(ContentGenerator):
             return final_location
 
         # Load the audio files
-        audio = AudioFileClip(audio_path).fx(afx.volumex, 0.5)
+        audio = AudioFileClip(audio_path).fx(afx.volumex, 0.7)
         music = AudioFileClip(music_path).fx(afx.volumex, 0.1)
         if music.duration > audio.duration:
             music = music.subclip(0, audio.duration)
@@ -82,7 +82,7 @@ class AudioGenerator(ContentGenerator):
         return audio_path
 
     def getBadAudioURL(self, id):
-        time.sleep(2)
+        time.sleep(5)
         url = f'https://play.ht/api/v1/articleStatus?transcriptionId={id}'
         headers = {
             "accept": "application/json",
