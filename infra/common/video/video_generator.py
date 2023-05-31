@@ -14,7 +14,7 @@ import json
 from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv('../../.env'))
 import warnings
-
+import random
 class VideoGenerator(AudioGenerator):
     def __init__(self):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
@@ -40,7 +40,6 @@ class VideoGenerator(AudioGenerator):
         i = 0
         while i < length:
             Utils.download_file(videos[i]["videos"]["medium"]["url"], f'{query}{i}.mp4')
-
             clip = VideoFileClip(f'{query}{i}.mp4')
             clip = clip.resize(height=1920, width=1080)
             clips.append(clip)
@@ -75,15 +74,12 @@ class VideoGenerator(AudioGenerator):
         return script_prompt
 
 
-    def searchMusic(self, query):
-        api_key = 'your_pixabay_api_key'
-        url = f'https://pixabay.com/api/?key={os.getenv("PIXABAY_KEY")}&q={query}&media=music'
-        print(url)
-        response = requests.get(url).json()
-        print(response)
-        if 'hits' in response:
-            for hit in response['hits']:
-                print(hit['pageURL'])
+    def get_random_music_file(self, folder="music"):
+        music_files = os.listdir(folder)  # Lists all files in the directory
+        music_files = [f for f in music_files if f.endswith(".mp3")]  # Filter out non-music files
+        if not music_files:
+            raise Exception("No music files found in directory")
+        return os.path.join(folder, random.choice(music_files))  # Picks a random file and returns the path
 
     
     def getScript(self, prompt):
@@ -112,7 +108,7 @@ class VideoGenerator(AudioGenerator):
                 length = video.get('length')
                 image_path = 'generated/alki-beach/image_data_1.jpg'
                 self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
-                music_path = self.searchMusic(music_prompt)
+                music_path = self.get_random_music_file()
                 print(f'music:{music_path}')
                 logging.info(f"Generating script for {audio_prompt}...")
                 prompt = self.build_prompt(audio_prompt)
