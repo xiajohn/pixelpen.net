@@ -17,6 +17,7 @@ from common.video.story_manager import StoryManager
 load_dotenv(find_dotenv('../../.env'))
 import warnings
 import random
+
 class VideoGenerator(AudioGenerator):
     def __init__(self, folder_name):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
@@ -90,9 +91,14 @@ class VideoGenerator(AudioGenerator):
             raise Exception("No music files found in directory")
         return os.path.join(folder, random.choice(music_files))  # Picks a random file and returns the path
     
-    def build_thumbnail_prompt(self, user_input):
-        thumbnail_prompt = f"We need a clickbait-style phrase of maximum 5 words based on the topic '{user_input}'. The phrase should be catchy, compelling and encourage people to click on the thumbnail and watch the video."
-        return thumbnail_prompt
+    def build_thumbnail_prompt(self, audio_prompt):
+        purpose = "informative"
+        keywords = ["how to", "why", "guide", "tutorial", "strategy", "tips", "methods"]
+        
+        prompt = f'Create a catchy and SEO-friendly thumbnail text for a {purpose} YouTube video titled "{audio_prompt}". The text should be short (5 words or less) and could include some of the following keywords: {", ".join(keywords)}.'
+        
+        return prompt
+
 
         
     def saveText(self, prompt, resource_type):
@@ -120,9 +126,8 @@ class VideoGenerator(AudioGenerator):
 
         logging.info("Creating thumbnail...")
         thumbnail_prompt = self.build_thumbnail_prompt(audio_prompt)
-        thumbnail_text = self.saveText(thumbnail_prompt, Constants.thumbnail)
-        Image_Manager.create_thumbnail_with_text(video_type, thumbnail_text, f'{self.folder_name}/{Constants.thumbnail}') # Use the same 'audio_prompt' as both query and text
-
+        thumbnail_text = self.saveText(thumbnail_prompt, Constants.thumbnail).replace('"', '')
+        Image_Manager.create_thumbnail_with_text(video_type, thumbnail_text, f'{self.folder_name}')
         logging.info(f"Generating script for {audio_prompt}...")
         prompt = self.build_prompt(audio_prompt)
         script = self.saveText(prompt, Constants.script)
