@@ -10,6 +10,7 @@ import logging
 from common.video.audio_generator import AudioGenerator
 from utils import Utils
 from moviepy.video.io.ffmpeg_reader import FFMPEG_VideoReader
+from common.makememe.generator.design.image_manager import Image_Manager
 import json
 from dotenv import find_dotenv, load_dotenv
 from common.video.story_manager import StoryManager
@@ -88,11 +89,15 @@ class VideoGenerator(AudioGenerator):
         if not music_files:
             raise Exception("No music files found in directory")
         return os.path.join(folder, random.choice(music_files))  # Picks a random file and returns the path
-
     
-    def getScript(self, prompt):
-        script_path = os.path.join(self.folder_name, 'script.txt')
-        if self.metadata_manager.check_metadata(Constants.script, self.folder_name):
+    def build_thumbnail_prompt(self, user_input):
+        thumbnail_prompt = f"We need a clickbait-style phrase of maximum 5 words based on the topic '{user_input}'. The phrase should be catchy, compelling and encourage people to click on the thumbnail and watch the video."
+        return thumbnail_prompt
+
+        
+    def saveText(self, prompt, resource_type):
+        script_path = os.path.join(self.folder_name, f'{resource_type}.txt')
+        if self.metadata_manager.check_metadata(resource_type, self.folder_name):
             with open(script_path, 'r') as f:
                 text = f.read()
             return text
@@ -101,7 +106,7 @@ class VideoGenerator(AudioGenerator):
         os.makedirs(self.folder_name, exist_ok=True)
         
         # Save the text to a file in the given directory
-        with open(os.path.join(self.folder_name, 'script.txt'), 'w') as f:
+        with open(os.path.join(self.folder_name, f'{resource_type}.txt'), 'w') as f:
             f.write(text)
         return text
 
@@ -113,9 +118,14 @@ class VideoGenerator(AudioGenerator):
         self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
         music_path = self.get_random_music_file()
 
+        logging.info("Creating thumbnail...")
+        thumbnail_prompt = self.build_thumbnail_prompt(audio_prompt)
+        thumbnail_text = self.saveText(thumbnail_prompt, Constants.thumbnail)
+        Image_Manager.create_thumbnail_with_text(video_type, thumbnail_text, f'{self.folder_name}/{Constants.thumbnail}') # Use the same 'audio_prompt' as both query and text
+
         logging.info(f"Generating script for {audio_prompt}...")
         prompt = self.build_prompt(audio_prompt)
-        script = self.getScript(prompt)
+        script = self.saveText(prompt, Constants.script)
 
         logging.info("Generating audio...")
         audio_path = self.getBadAudio(script, self.folder_name)
@@ -126,8 +136,12 @@ class VideoGenerator(AudioGenerator):
         logging.info("Adding audio to video...")
         video_path = self.addAudio(video_path, audio_path, music_path, self.folder_name)
         print(f'video{video_path}')
+
+        
+
         self.story_manager.addImageToVideo(video_path, image_path)
         logging.info("Video creation complete!")
+
 
 def makeVideo():
     # Set up logging

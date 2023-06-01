@@ -23,7 +23,7 @@ export interface EssayStackProps extends cdk.StackProps {
 
 export class EssayStack extends cdk.Stack {
   public readonly originAccessIdentity: cloudfront.OriginAccessIdentity;
-  private commonExcludeDirectories: string[] = ['tmp', 'tmp/*', 'video', 'video/*', 'common/video', 'common/video/*', 'generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*', 'user_input.json', 'run.py', '.gitignore', '.env'];
+  private commonExcludeDirectories: string[] = ['tmp', 'tmp/*', 'video', 'video/*', 'music', 'music/*', 'common/video', 'common/video/*', 'generated', 'generated/*', 'blogPipeline', 'blogPipeline/*', '__pycache__', '__pycache__/*', 'test', 'test/*', 'user_input.json', 'run.py', '.gitignore', '.env'];
   constructor(scope: Construct, id: string, props: EssayStackProps) {
     super(scope, id, props);
     this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI');

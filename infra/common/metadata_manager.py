@@ -15,7 +15,8 @@ class MetadataManager():
             Constants.video: "video.mp4",
             Constants.script: "script.txt",
             Constants.video_with_audio: "videoAudio.mp4",
-            Constants.final_video: "videoAudioFinal.mp4"
+            Constants.final_video: "videoAudioFinal.mp4",
+            Constants.thumbnail: "thumbnail.txt"
         }
     
     def load_metadata(self):
@@ -31,7 +32,7 @@ class MetadataManager():
 
     def check_metadata(self, resource_type, folder_path):
         file_path = os.path.join(folder_path, self.resources[resource_type])
-        print(file_path)
+        print(f'checking if {file_path} exists')
         exists = os.path.exists(file_path)
         if exists:
             print(f'{resource_type} exists')
