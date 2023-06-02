@@ -110,7 +110,7 @@ class Image_Manager:
 
     @staticmethod
     def create_thumbnail_with_text(query, text, folder_path):
-        if MetadataManager().check_metadata(Constants.thumbnail, folder_path):
+        if MetadataManager().check_metadata(Constants.thumbnail_image, folder_path):
             return
         try:
             img = Image_Manager.download_image(query)
@@ -118,7 +118,7 @@ class Image_Manager:
             # Resize the image to YouTube's recommended size
             img = img.resize((1280, 720), Image.ANTIALIAS)
 
-            font_size = 85
+            font_size = 105
 
             # Fixed positions for the text
             positions = [ (360, 285), (360, 50), (60, 50)]

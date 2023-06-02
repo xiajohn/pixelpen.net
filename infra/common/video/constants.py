@@ -7,4 +7,5 @@ class Constants:
     video_with_audio = "video_with_audio"
     final_video = "final_video"
     thumbnail = "thumbnail"
+    thumbnail_image = "thumbnail_image"
     

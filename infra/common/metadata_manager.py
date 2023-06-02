@@ -16,7 +16,8 @@ class MetadataManager():
             Constants.script: "script.txt",
             Constants.video_with_audio: "videoAudio.mp4",
             Constants.final_video: "videoAudioFinal.mp4",
-            Constants.thumbnail: "thumbnail.txt"
+            Constants.thumbnail: "thumbnail.txt",
+            Constants.thumbnail_image: "thumbnail.jpg"
         }
     
     def load_metadata(self):
