@@ -59,7 +59,6 @@ def generate_meme(user_input, meme_description,):
         They_Dont_Know,
         Indifferent,
         Poor_Fix,
-        Sad,
         Waiting,
         Is_Better,
         Pompous,
