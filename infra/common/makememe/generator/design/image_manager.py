@@ -8,7 +8,7 @@ import requests
 from io import BytesIO
 import random
 from common.metadata_manager import MetadataManager
-from common.video.constants import Constants
+from common.constants import Constants
 class Image_Manager:
     def __init__(self):
         print("Image manager create")

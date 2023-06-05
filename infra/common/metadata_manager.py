@@ -1,6 +1,6 @@
 
 import os
-from common.video.constants import Constants
+from common.constants import Constants
 from utils import Utils
 import json
 from dotenv import find_dotenv, load_dotenv
