@@ -6,7 +6,7 @@ import logging
 from common.content_generator import ContentGenerator
 from utils import Utils
 from moviepy.editor import concatenate_videoclips, VideoFileClip, AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip, afx
-from common.video.constants import Constants
+from common.constants import Constants
 class AudioGenerator(ContentGenerator):
     def __init__(self):
         pass

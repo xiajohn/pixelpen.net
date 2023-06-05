@@ -2,7 +2,7 @@ from moviepy.editor import concatenate_videoclips, VideoFileClip, AudioFileClip,
 from common.metadata_manager import MetadataManager
 import pixabay
 import os
-from common.video.constants import Constants
+from common.constants import Constants
 import requests
 from moviepy.video.fx.all import fadeout
 from moviepy.video.compositing.transitions import slide_in, slide_out

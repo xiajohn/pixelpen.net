@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import FormComponent from './FormComponent';
 import Essay from './Essay';
 import '../css/HomePage.css'
-
+import {Helmet} from "react-helmet";
 function HomePage() {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +22,9 @@ function HomePage() {
 
   return (
     <>
+    <Helmet>
+                <link rel="canonical" href="https://pixelpen.net" />
+            </Helmet>
       {isLoading && (
               <div className="loading-mask">
                 <div className="loader"></div>

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import styles from '../css/About.module.css';
-
+import {Helmet} from "react-helmet";
 function About() {
     return (
         <Container className={styles.aboutContainer}>
+            <Helmet>
+                <link rel="canonical" href="https://pixelpen.net/about" />
+            </Helmet>
             <Row>
                 <Col>
                     <h2>About Pixel Pen</h2>

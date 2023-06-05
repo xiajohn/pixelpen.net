@@ -3,6 +3,7 @@ import { Form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { getServerURL } from '../util/utils';
 import '../css/Contact.css';
 import { Container } from 'react-bootstrap';
+import {Helmet} from "react-helmet";
 const Contact = () => {
   const [emailData, setEmailData] = useState({
     name: '',
@@ -47,6 +48,9 @@ const Contact = () => {
 
   return (
     <Container className="contact-container"> {/* Additional class here */}
+    <Helmet>
+                <link rel="canonical" href="https://pixelpen.net/contact" />
+            </Helmet>
       <h2>Contact Us</h2>
       <p>Please use the form below to send us a message.</p>
 

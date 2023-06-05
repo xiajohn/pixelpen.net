@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchMetadata } from '../util/utils.js';
 import '../css/CreativeShowcase.css'; // Import the CSS file
-
+import {Helmet} from "react-helmet";
 const CreativeShowcase = () => {
   const [blogs, setBlogs] = useState({});
 
@@ -27,6 +27,9 @@ const CreativeShowcase = () => {
   }, []);
   return (
     <div className="CreativeShowcase">
+      <Helmet>
+                <link rel="canonical" href="https://pixelpen.net/creative-showcase" />
+            </Helmet>
       <h1>Pixel Pen Creative Showcase</h1>
       <p>
         Welcome to the Pixel Pen Creative Showcase, where we promote our

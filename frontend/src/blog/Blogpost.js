@@ -4,7 +4,7 @@ import '../css/Blog.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { fetchMetadata } from '../util/utils.js';
-
+import {Helmet} from "react-helmet";
 const BlogPost = () => {
   const { blog_name } = useParams();
   const [blogContent, setBlogContent] = useState('');
@@ -49,15 +49,7 @@ const BlogPost = () => {
     const keywordsTag = document.querySelector('meta[name="keywords"]');
     keywordsTag.setAttribute('content', meta.keywords);
 
-    const canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (canonicalTag) {
-      canonicalTag.setAttribute('href', `https://www.pixelpen.net/blog/${folderName}`);
-    } else {
-      const link = document.createElement('link');
-      link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', `https://www.pixelpen.net/blog/${folderName}`);
-      document.head.appendChild(link);
-    }
+    
   }
 
   const replaceImagePlaceholders = (content) => {
@@ -77,6 +69,9 @@ const BlogPost = () => {
 
   return (
     <div className='blog-cont'>
+      <Helmet>
+                <link rel="canonical" href={`https://www.pixelpen.net/blog/${folderName}`} />
+            </Helmet>
     <div className="blog">
       <ReactMarkdown>{finalContent}</ReactMarkdown>
     </div>
