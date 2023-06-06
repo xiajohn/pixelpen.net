@@ -42,15 +42,18 @@ class VideoGenerator(AudioGenerator):
         temp_files = [] # List to store temp video file paths
 
         videos = data["hits"]
-        i = 0
-        while i < length:
+        indices = list(range(len(videos)))  # Create a list of indices
+
+        for i in range(length):
+            index = random.choice(indices)  # Choose a random index
+            indices.remove(index)  # Remove the chosen index so it isn't selected again
+
             temp_video_path = f'{query}{i}.mp4'
-            Utils.download_file(videos[i]["videos"]["medium"]["url"], temp_video_path)
+            Utils.download_file(videos[index]["videos"]["medium"]["url"], temp_video_path)
             clip = VideoFileClip(temp_video_path)
             clip = clip.resize(height=1920, width=1080)
             clips.append(clip)
             temp_files.append(temp_video_path) # Save temp file path
-            i += 1
 
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
@@ -120,7 +123,7 @@ class VideoGenerator(AudioGenerator):
         audio_prompt = video.get('audio')
         video_type = video.get('video')
         length = video.get('length')
-        image_path = 'generated/alki-beach/image_data_1.jpg'
+        image_path = f'{Constants.video_file_path}{self.folder_name}/images'
         self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
         music_path = self.get_random_music_file()
 
