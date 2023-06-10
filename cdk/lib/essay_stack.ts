@@ -51,7 +51,7 @@ export class EssayStack extends cdk.Stack {
       schedule: events.Schedule.cron({ minute: '0', hour: '13' }), // This schedules the event at 13:00 (or 1:00 PM) UTC every day
     });
 
-    dailyRule.addTarget(new eventtargets.LambdaFunction(lambdas[0], { retryAttempts: 1 }));
+   // dailyRule.addTarget(new eventtargets.LambdaFunction(lambdas[0], { retryAttempts: 1 }));
     dailyRule.addTarget(new eventtargets.LambdaFunction(lambdas[1], { retryAttempts: 1 }));
   }
 
