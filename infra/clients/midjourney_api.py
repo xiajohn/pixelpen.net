@@ -20,7 +20,7 @@ class MidjourneyApi():
         self.message_id = ""
         self.custom_id = ""
         self.image_path_str = ""
-        print(self.authorization)
+
         self.send_message()
         self.get_message()
         self.choose_images()
@@ -129,7 +129,6 @@ class MidjourneyApi():
             try:
                 response = requests.get(f'https://discord.com/api/v9/channels/{self.channel_id}/messages', headers=headers)
                 messages = response.json()
-                print(f'messages:{messages}')
                 most_recent_message_id = messages[0]['id']
                 self.message_id = most_recent_message_id
                 image_url = messages[0]['attachments'][0]['url'] 

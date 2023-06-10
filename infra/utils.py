@@ -33,6 +33,7 @@ class Utils:
         response = requests.get(url)
         with open(abs_file_path, 'wb') as f:
             f.write(response.content)
+        print(f'download and saving file to {file_path}')
         return file_path
     @staticmethod
     def sanitize_folder_name(name):

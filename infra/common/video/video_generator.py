@@ -17,6 +17,10 @@ from common.video.story_manager import StoryManager
 load_dotenv(find_dotenv('../../.env'))
 import warnings
 import random
+import re
+from collections import deque
+from clients.midjourney_api import MidjourneyApi
+
 
 class VideoGenerator(AudioGenerator):
     def __init__(self, folder_name):
@@ -24,6 +28,21 @@ class VideoGenerator(AudioGenerator):
         self.metadata_manager = MetadataManager()
         self.folder_name = folder_name
         self.story_manager = StoryManager(folder_name)
+
+    def script_to_list(self, script):
+        sentences = [sentence.strip() for sentence in re.split('[.!?]', script) if sentence.strip()]
+        return sentences
+
+
+    def generate_and_download_images(self, sentence_list, num_images=3):
+        for i in range(num_images):
+            if sentence_list:
+                prompt = sentence_list.pop(0)
+                midjourney_api = MidjourneyApi(prompt, f"{self.folder_name}/images/image{i}.png")
+                midjourney_api.download_image()
+            else:
+                break
+
 
     def getVideo(self, length, query):
         path = f'{self.folder_name}/video.mp4'
@@ -73,8 +92,7 @@ class VideoGenerator(AudioGenerator):
                 .resize(width=620)
                 .set_position(('center', 'center'))
                 .set_start(start_time))
-        print(video)
-        print(image)
+
         final_clip = CompositeVideoClip([video, image])
         
         final_clip.write_videofile(f'{final_location}', codec='libx264')
@@ -143,13 +161,12 @@ class VideoGenerator(AudioGenerator):
 
         logging.info("Adding audio to video...")
         video_path = self.addAudio(video_path, audio_path, music_path, self.folder_name)
-        print(f'video{video_path}')
 
-        
+        sentence_queue = self.script_to_list(script)
+       # self.generate_and_download_images(sentence_queue)
 
-        self.story_manager.addImageToVideo(video_path, image_path)
+        self.story_manager.addImageToVideo(video_path, image_path, sentence_queue)
         logging.info("Video creation complete!")
-
 
 def makeVideo():
     # Set up logging
@@ -160,3 +177,4 @@ def makeVideo():
             audio_prompt = video.get('audio')
             vg = VideoGenerator(Utils.sanitize_folder_name(audio_prompt))
             vg.makeVideo(video)
+
