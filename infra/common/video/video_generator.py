@@ -35,6 +35,9 @@ class VideoGenerator(AudioGenerator):
 
 
     def generate_and_download_images(self, sentence_list, num_images=3):
+        if os.path.exists(f'{self.folder_name}/images'):
+            print(f'images exist at {self.folder_name}/images')
+            return
         for i in range(num_images):
             if sentence_list:
                 prompt = sentence_list.pop(0)
@@ -162,10 +165,12 @@ class VideoGenerator(AudioGenerator):
         logging.info("Adding audio to video...")
         video_path = self.addAudio(video_path, audio_path, music_path, self.folder_name)
 
-        sentence_queue = self.script_to_list(script)
-       # self.generate_and_download_images(sentence_queue)
+        sentences = self.script_to_list(script)
 
-        self.story_manager.addImageToVideo(video_path, image_path, sentence_queue)
+        logging.info("Generating images...")
+        self.generate_and_download_images(sentences)
+
+        self.story_manager.addImageToVideo(video_path, image_path, sentences)
         logging.info("Video creation complete!")
 
 def makeVideo():

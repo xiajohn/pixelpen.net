@@ -5,8 +5,12 @@
             {
                 "audio": "how to market your product", 
                 "video": "relaxing",
-                "music": "acoustic guitar",
                 "length": 4
+            },
+            {
+                "audio": "danish gambit kf1 variation", 
+                "video": "chess",
+                "length": 3
             }
         ]
     }
