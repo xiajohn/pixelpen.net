@@ -5,7 +5,12 @@
             {"topic": "most fertile soil in the world", "type": "TRANSACTIONAL"},
             {"topic": "websoilsurvey", "type": "TRANSACTIONAL"},
             {"topic": "caliche", "type": "TRANSACTIONAL"},
-            {"topic": "cbr test", "type": "TRANSACTIONAL"}
+            {"topic": "cbr test", "type": "TRANSACTIONAL"},
+            {"topic": "best soil for mushrooms", "type": "TRANSACTIONAL"},
+            {"topic": "key nurtrients in soil", "type": "TRANSACTIONAL"},
+            {"topic": "finding the best soil", "type": "TRANSACTIONAL"},
+            {"topic": "brown vs black soil", "type": "TRANSACTIONAL"},
+            {"topic": "how to find worms", "type": "TRANSACTIONAL"}
         ],
         "affiliate_links": [
             {"name": "Soil Testing", "url": "https://salemsoilsolutions.com"},
