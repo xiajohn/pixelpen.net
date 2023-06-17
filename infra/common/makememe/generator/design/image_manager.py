@@ -15,6 +15,13 @@ class Image_Manager:
         self.metadata_manager = MetadataManager()
 
     @staticmethod
+    def getFont(font_size):
+        current_path = os.path.dirname(os.path.abspath(__file__))
+        font_path = os.path.join(current_path, "impact.ttf")
+        font = ImageFont.truetype(font_path, font_size)
+        return font
+
+    @staticmethod
     def add_text(
         base,
         text,

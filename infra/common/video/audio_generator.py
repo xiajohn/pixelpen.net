@@ -3,13 +3,14 @@ import time
 import requests
 import json
 import logging
+from common.metadata_manager import MetadataManager
 from common.content_generator import ContentGenerator
 from utils import Utils
 from moviepy.editor import concatenate_videoclips, VideoFileClip, AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip, afx
 from common.constants import Constants
 class AudioGenerator(ContentGenerator):
     def __init__(self):
-        pass
+        self.metadata_manager = MetadataManager()
 
     def getAudio(self, text, folder_name, voice="larry", filename="audio"):
         audio_path = f'{Constants.video_file_path}{folder_name}{filename}.mp3'
@@ -43,6 +44,7 @@ class AudioGenerator(ContentGenerator):
         # Load the audio files
         audio = AudioFileClip(audio_path).fx(afx.volumex, 0.7)
         music = AudioFileClip(music_path).fx(afx.volumex, 0.1)
+
         if music.duration > audio.duration:
             music = music.subclip(0, audio.duration)
 

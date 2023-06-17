@@ -22,18 +22,27 @@ from collections import deque
 from clients.midjourney_api import MidjourneyApi
 
 
-class VideoGenerator(AudioGenerator):
+class VideoGenerator:
     def __init__(self, folder_name):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
         self.metadata_manager = MetadataManager()
         self.folder_name = folder_name
         self.story_manager = StoryManager(folder_name)
+        self.audio_duration = None
+        self.audio_generator = AudioGenerator()
 
     def script_to_list(self, script):
         sentences = [sentence.strip() for sentence in re.split('[.!?]', script) if sentence.strip()]
         return sentences
 
+    def generate_word_timestamps(self, script, video_duration):
+        words = script.split()
+        avg_word_duration = video_duration / (len(words) + 10)
+        word_timestamps = [(' '.join(words[i:i+3]), i*avg_word_duration, (i+3)*avg_word_duration) for i in range(0, len(words), 3)]
+        
+        return word_timestamps
 
+    
     def generate_and_download_images(self, sentence_list, num_images=3):
         if os.path.exists(f'{self.folder_name}/images'):
             print(f'images exist at {self.folder_name}/images')
@@ -46,37 +55,30 @@ class VideoGenerator(AudioGenerator):
             else:
                 break
 
-
     def getVideo(self, length, query):
         path = f'{self.folder_name}/video.mp4'
         if self.metadata_manager.check_metadata(Constants.video, self.folder_name):
             return path
-
         url = f'https://pixabay.com/api/videos/?key={os.getenv("PIXABAY_KEY")}&q={query}'
         response = requests.get(url)
         data = {}
         if response.status_code == 200:
-            data = response.json()  # parse the response as JSON
+            data = response.json() 
         else:
             print(f"Request failed with status code {response.status_code}")
-
         clips = []
-        temp_files = [] # List to store temp video file paths
-
+        temp_files = [] 
         videos = data["hits"]
         indices = list(range(len(videos)))  # Create a list of indices
-
         for i in range(length):
             index = random.choice(indices)  # Choose a random index
             indices.remove(index)  # Remove the chosen index so it isn't selected again
-
             temp_video_path = f'{query}{i}.mp4'
             Utils.download_file(videos[index]["videos"]["medium"]["url"], temp_video_path)
             clip = VideoFileClip(temp_video_path)
             clip = clip.resize(height=1920, width=1080)
             clips.append(clip)
             temp_files.append(temp_video_path) # Save temp file path
-
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
         for file in temp_files:
@@ -95,11 +97,8 @@ class VideoGenerator(AudioGenerator):
                 .resize(width=620)
                 .set_position(('center', 'center'))
                 .set_start(start_time))
-
         final_clip = CompositeVideoClip([video, image])
-        
         final_clip.write_videofile(f'{final_location}', codec='libx264')
-
         return f'{final_location}'
 
     def build_prompt(self, user_input):
@@ -118,13 +117,9 @@ class VideoGenerator(AudioGenerator):
     def build_thumbnail_prompt(self, audio_prompt):
         purpose = "informative"
         keywords = ["how to", "why", "guide", "tutorial", "strategy", "tips", "methods"]
-        
         prompt = f'Create a catchy and SEO-friendly thumbnail text for a {purpose} YouTube video titled "{audio_prompt}". The text should be short (5 words or less) and could include some of the following keywords: {", ".join(keywords)}.'
-        
         return prompt
 
-
-        
     def saveText(self, prompt, resource_type):
         script_path = os.path.join(self.folder_name, f'{resource_type}.txt')
         if self.metadata_manager.check_metadata(resource_type, self.folder_name):
@@ -134,7 +129,6 @@ class VideoGenerator(AudioGenerator):
         text = self.generate_text(prompt)
         # Create directories if they don't exist
         os.makedirs(self.folder_name, exist_ok=True)
-        
         # Save the text to a file in the given directory
         with open(os.path.join(self.folder_name, f'{resource_type}.txt'), 'w') as f:
             f.write(text)
@@ -147,7 +141,6 @@ class VideoGenerator(AudioGenerator):
         image_path = f'{Constants.video_file_path}{self.folder_name}/images'
         self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
         music_path = self.get_random_music_file()
-
         logging.info("Creating thumbnail...")
         thumbnail_prompt = self.build_thumbnail_prompt(audio_prompt)
         thumbnail_text = self.saveText(thumbnail_prompt, Constants.thumbnail).replace('"', '')
@@ -155,22 +148,27 @@ class VideoGenerator(AudioGenerator):
         logging.info(f"Generating script for {audio_prompt}...")
         prompt = self.build_prompt(audio_prompt)
         script = self.saveText(prompt, Constants.script)
+  
 
         logging.info("Generating audio...")
-        audio_path = self.getBadAudio(script, self.folder_name)
+        audio_path = self.audio_generator.getBadAudio(script, self.folder_name)
 
         logging.info(f"Generating {video_type} video...")
         video_path = self.getVideo(length, video_type)
 
         logging.info("Adding audio to video...")
-        video_path = self.addAudio(video_path, audio_path, music_path, self.folder_name)
+        video_path = self.audio_generator.addAudio(video_path, audio_path, music_path, self.folder_name)
 
         sentences = self.script_to_list(script)
 
+        duration = VideoFileClip(video_path).duration
+        print(duration)
         logging.info("Generating images...")
-        self.generate_and_download_images(sentences)
+        # self.generate_and_download_images(sentences)
+        word_timestamps = self.generate_word_timestamps(script, duration)
+        
+        self.story_manager.addSpeedReadingToVideo(video_path, word_timestamps)
 
-        self.story_manager.addImageToVideo(video_path, image_path, sentences)
         logging.info("Video creation complete!")
 
 def makeVideo():
