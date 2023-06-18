@@ -15,10 +15,8 @@ class StoryManager:
     def create_text_image(self, text, font_size, outline_color, text_color):
         font = ImageFont.truetype("arial", font_size)
         text_width, text_height = font.getsize(text)
-
         image = Image.new('RGBA', (text_width, text_height), (0, 0, 0, 0))
         draw = ImageDraw.Draw(image)
-
         # draw outline
         draw.text((0, 0), text, fill=outline_color, font=font, stroke_width=2, stroke_fill=outline_color)
         # draw text
@@ -60,7 +58,8 @@ class StoryManager:
         return np_img
 
     def addSpeedReadingToVideo(self, video_path, word_timestamps):
-    # Load video
+        if self.metadata_manager.check_metadata(Constants.final_video, f'{Constants.video_file_path}{self.folder_name}'):
+            return "done"
         video = VideoFileClip(video_path)
         print(word_timestamps)
         # Generate text clips for each word group
@@ -115,18 +114,12 @@ class StoryManager:
                 .set_position('bottom')
                 .set_duration(duration)
                 .set_start(start_time))
-            
             duration += 7
             if start_time + duration > video.duration - 2:
                 break
-
             image_clip = self.getSlideInAndFadeOutImageClip(image_file, start_time, duration, video.size)
             clips.append(image_clip)
             clips.append(text_clip)
-
-        
         final_clip = CompositeVideoClip(clips)
-
         final_clip.write_videofile(f'{final_location}', codec='libx264')
-
         return final_location

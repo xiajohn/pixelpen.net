@@ -2,10 +2,11 @@
    
     "pixelpen": {
         "video": [
+      
             {
-                "audio": "how to market your product", 
-                "video": "relaxing",
-                "length": 4
+                "audio": "how to play triads on guitar", 
+                "video": "guitar",
+                "length": 5
             }
         ]
     }

@@ -19,10 +19,11 @@ import warnings
 import random
 import re
 from collections import deque
+from common.content_generator import ContentGenerator
 from clients.midjourney_api import MidjourneyApi
 
 
-class VideoGenerator:
+class VideoGenerator(ContentGenerator):
     def __init__(self, folder_name):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
         self.metadata_manager = MetadataManager()
@@ -35,12 +36,19 @@ class VideoGenerator:
         sentences = [sentence.strip() for sentence in re.split('[.!?]', script) if sentence.strip()]
         return sentences
 
-    def generate_word_timestamps(self, script, video_duration):
-        words = script.split()
-        avg_word_duration = video_duration / (len(words) + 10)
-        word_timestamps = [(' '.join(words[i:i+3]), i*avg_word_duration, (i+3)*avg_word_duration) for i in range(0, len(words), 3)]
-        
-        return word_timestamps
+    def generate_sentence_timestamps(self, script, video_duration):
+        sentences = self.script_to_list(script)
+        total_words = len(script.split())
+        avg_word_duration = video_duration / total_words
+        sentence_timestamps = []
+        current_time = 0.0
+        for sentence in sentences:
+            num_words_in_sentence = len(sentence.split())
+            sentence_duration = num_words_in_sentence * avg_word_duration
+            sentence_timestamps.append((sentence, current_time, current_time + sentence_duration))
+            current_time += sentence_duration
+
+        return sentence_timestamps
 
     
     def generate_and_download_images(self, sentence_list, num_images=3):
@@ -55,10 +63,27 @@ class VideoGenerator:
             else:
                 break
 
-    def getVideo(self, length, query):
+    def getVideo(self, target_length, query):
         path = f'{self.folder_name}/video.mp4'
         if self.metadata_manager.check_metadata(Constants.video, self.folder_name):
             return path
+
+        data = self.get_video_data(query)
+        clips, temp_files = self.generate_clips(data, target_length, query)
+
+        final_clip = concatenate_videoclips(clips)
+        final_clip.write_videofile(path, codec='libx264')
+
+        for clip in clips:
+            clip.close()
+
+        for file in temp_files:
+            if os.path.exists(file):
+                os.remove(file)
+
+        return path
+
+    def get_video_data(self, query):
         url = f'https://pixabay.com/api/videos/?key={os.getenv("PIXABAY_KEY")}&q={query}'
         response = requests.get(url)
         data = {}
@@ -66,40 +91,46 @@ class VideoGenerator:
             data = response.json() 
         else:
             print(f"Request failed with status code {response.status_code}")
+        return data
+
+    def generate_clips(self, data, target_length, query):
         clips = []
         temp_files = [] 
         videos = data["hits"]
-        indices = list(range(len(videos)))  # Create a list of indices
-        for i in range(length):
-            index = random.choice(indices)  # Choose a random index
-            indices.remove(index)  # Remove the chosen index so it isn't selected again
+
+        current_length = 0
+        for i, video in enumerate(videos):
+            if current_length >= target_length:
+                break
             temp_video_path = f'{query}{i}.mp4'
-            Utils.download_file(videos[index]["videos"]["medium"]["url"], temp_video_path)
-            clip = VideoFileClip(temp_video_path)
-            clip = clip.resize(height=1920, width=1080)
+            Utils.download_file(video["videos"]["medium"]["url"], temp_video_path)
+            clip, segment_length = self.get_clip_segment(temp_video_path, target_length, current_length)
             clips.append(clip)
-            temp_files.append(temp_video_path) # Save temp file path
-        final_clip = concatenate_videoclips(clips)
-        final_clip.write_videofile(path, codec='libx264')
-        for file in temp_files:
-            if os.path.exists(file):
-                os.remove(file)
-        return path
-    
-    def addImage(self, video_path, image_path, start_time, duration):
-        original = video_path[0:-4]
-        final_location = original + "Final" + ".mp4"
-        if self.metadata_manager.check_metadata(Constants.final_video, self.folder_name):
-            return final_location
-        video = VideoFileClip(video_path)
-        image = (ImageClip(image_path)
-                .set_duration(duration)
-                .resize(width=620)
-                .set_position(('center', 'center'))
-                .set_start(start_time))
-        final_clip = CompositeVideoClip([video, image])
-        final_clip.write_videofile(f'{final_location}', codec='libx264')
-        return f'{final_location}'
+            current_length += segment_length
+            temp_files.append(temp_video_path)  # Save temp file path
+        return clips, temp_files
+
+
+    def get_clip_segment(self, temp_video_path, target_length, current_length):
+        full_clip = VideoFileClip(temp_video_path)
+
+        # Calculate start time and end time for segment to extract
+        video_length = full_clip.duration
+        max_length = min(7, video_length)  # Get either 7 or the video's length, whichever is smaller
+        min_length = min(5, max_length)  # Get either 5 or the max_length, whichever is smaller
+        segment_length = random.uniform(min_length, max_length)  # Randomly choose a duration between 5-7 seconds
+
+        # Make sure the segment won't make the final video exceed the target length
+        segment_length = min(segment_length, target_length - current_length)
+
+        start_time = random.uniform(0, video_length - segment_length)  # Randomly choose a start time for the segment
+        end_time = start_time + segment_length
+
+        # Extract segment and resize it
+        clip = full_clip.subclip(start_time, end_time)
+        clip = clip.resize(height=1920, width=1080)
+        
+        return clip, segment_length
 
     def build_prompt(self, user_input):
         intro = f"In this audio, we're going to dive right into the exciting world of {user_input}.\n\n"
@@ -159,14 +190,12 @@ class VideoGenerator:
         logging.info("Adding audio to video...")
         video_path = self.audio_generator.addAudio(video_path, audio_path, music_path, self.folder_name)
 
-        sentences = self.script_to_list(script)
-
         duration = VideoFileClip(video_path).duration
         print(duration)
         logging.info("Generating images...")
         # self.generate_and_download_images(sentences)
-        word_timestamps = self.generate_word_timestamps(script, duration)
-        
+        word_timestamps = self.generate_sentence_timestamps(script, duration)
+        print(word_timestamps)
         self.story_manager.addSpeedReadingToVideo(video_path, word_timestamps)
 
         logging.info("Video creation complete!")
