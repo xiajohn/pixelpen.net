@@ -29,7 +29,6 @@ class AudioGenerator(ContentGenerator):
             "AUTHORIZATION": f'Bearer {os.getenv("TEXT_TO_SPEECH_API_KEY")}',
             "X-USER-ID": "6cSsgiLC0zOxKZ5qTjlauADGYju2"
         }
-
         response = requests.post(url, json=payload, headers=headers)
         print(response)
         Utils.download_file(self.parse_sse_events(response.text), audio_path)
@@ -40,28 +39,20 @@ class AudioGenerator(ContentGenerator):
         final_location = original + "Audio" + ".mp4"
         if self.metadata_manager.check_metadata(Constants.video_with_audio, folder_name):
             return final_location
-
-        # Load the audio files
         audio = AudioFileClip(audio_path).fx(afx.volumex, 0.7)
         music = AudioFileClip(music_path).fx(afx.volumex, 0.1)
-
         if music.duration > audio.duration:
             music = music.subclip(0, audio.duration)
-
         final_clip = VideoFileClip(video_path).subclip(0, audio.duration)
         final_audio = CompositeAudioClip([audio, music])
         final_clip = final_clip.set_audio(final_audio)
         final_clip.write_videofile(f'{final_location}', codec='libx264')
-
         return final_location
-
-
     
     def getBadAudio(self, text, folder_name, voice="en-US-JennyNeural", filename="audio.mp3"):
         audio_path = f'{folder_name}/{filename}'
         if self.metadata_manager.check_metadata(Constants.audio, folder_name):
             return audio_path
-        
         url = "https://play.ht/api/v1/convert"
         payload = {
             "content": [text],
@@ -73,7 +64,6 @@ class AudioGenerator(ContentGenerator):
             "AUTHORIZATION": f'Bearer {os.getenv("TEXT_TO_SPEECH_API_KEY")}',
             "X-USER-ID": "6cSsgiLC0zOxKZ5qTjlauADGYju2"
         }
-
         response = requests.post(url, json=payload, headers=headers)
         id = self.parse_bad_audio_sse_events(response.text)["transcriptionId"]
         print(id)
@@ -91,9 +81,7 @@ class AudioGenerator(ContentGenerator):
             "AUTHORIZATION": f'Bearer {os.getenv("TEXT_TO_SPEECH_API_KEY")}',
             "X-USER-ID": "6cSsgiLC0zOxKZ5qTjlauADGYju2"
         }
-
         response = requests.get(url, headers=headers)
-        
         return self.parse_bad_audio_sse_events(response.text)['audioUrl']
 
     def parse_sse_events(self, text):
