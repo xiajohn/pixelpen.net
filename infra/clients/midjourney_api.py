@@ -13,7 +13,7 @@ class MidjourneyApi():
         self.application_id = "936929561302675456"
         self.guild_id = "1033931319446601759"
         self.channel_id = "1033931320209973319"
-        self.version = "1077969938624553050"
+        self.version = "1118961510123847772"
         self.id = "938956540159881230"
         self.authorization = os.getenv("MIDJOURNEY_KEY")
         self.prompt = prompt
@@ -75,7 +75,7 @@ class MidjourneyApi():
             'Content-Type': 'application/json',
         }
         response = requests.post(url, headers=headers, json=data)
-
+        print(f"Midjourney Status code: {response.status_code} {response.reason}")
 
     def get_message(self):
         headers = {

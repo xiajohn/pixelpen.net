@@ -26,9 +26,9 @@ class StoryManager:
         draw = ImageDraw.Draw(img)
         font = Image_Manager.getFont(fontsize)
         text_size = draw.textsize(text, font=font)
-        img = Image.new('RGBA', (text_size[0] + 4, text_size[1] + 4))
+        img = Image.new('RGBA', (text_size[0] + 4, text_size[1] + 5))
         draw = ImageDraw.Draw(img)
-        draw.rectangle(((0, 0), (text_size[0] + 4, text_size[1] + 4)), fill=(0, 0, 0, 128))
+        draw.rectangle(((0, 0), (text_size[0] + 4, text_size[1] + 5)), fill=(0, 0, 0, 128))
         outline_range = range(3)
         for x in outline_range:
             for y in outline_range:
@@ -38,8 +38,10 @@ class StoryManager:
         return np_img
 
     def getTextClip(self, text, start_time, end_time):
-        text_clip_img = self.add_text_with_outline(text, fontsize=150, color='white')
+        wrapped_text = self.wrap_text(text, 5)  # wrap text if more than 5 words
+        text_clip_img = self.add_text_with_outline(wrapped_text, fontsize=150, color='white')
         text_clip = ImageClip(np.array(text_clip_img), duration=(end_time - start_time)).set_start(start_time).set_position('center')
+
         return text_clip
 
 
@@ -57,6 +59,15 @@ class StoryManager:
 
     def getSortedImageFiles(self, images_folder):
         return sorted([os.path.join(images_folder, f) for f in os.listdir(images_folder) if f.endswith(('.png', '.jpg'))])
+    
+    def wrap_text(self, text, limit):
+        words = text.split()
+        if len(words) <= limit:
+            return text
+        else:
+            lines = [' '.join(words[i:i+limit]) for i in range(0, len(words), limit)]
+            return '\n'.join(lines)
+
 
     def get_random_clips(self, sentences, images_folder, durations):
         image_files = self.getSortedImageFiles(images_folder)
@@ -81,15 +92,28 @@ class StoryManager:
         original_video = VideoFileClip(video_path)
         final_clips = [original_video]
 
+        # Keep track of the cumulative duration of added clips
+        cumulative_duration = 0
+
         for clip in clips:
             if clip['type'] == 'sentence':
+                clip_duration = clip['end_time'] - clip['start_time']
+                # Check if adding this clip would exceed the original video duration
+                if cumulative_duration + clip_duration > original_video.duration:
+                    break
                 text_clip = self.getTextClip(clip['content'], clip['start_time'], clip['end_time'])
                 final_clips.append(text_clip)
+                cumulative_duration += clip_duration
 
             elif clip['type'] == 'image':
                 start_time, end_time = clip['start_time'], clip['end_time']
+                clip_duration = end_time - start_time
+                # Check if adding this clip would exceed the original video duration
+                if cumulative_duration + clip_duration > original_video.duration:
+                    break
                 image_clip = self.getSlideInAndFadeOutImageClip(clip['content'], start_time, end_time, original_video.size)
                 final_clips.append(image_clip)
+                cumulative_duration += clip_duration
 
             elif clip['type'] == 'nothing':
                 continue

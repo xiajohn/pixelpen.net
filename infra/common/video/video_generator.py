@@ -144,34 +144,49 @@ class VideoGenerator(ContentGenerator):
             f.write(text)
         return text
 
-    def makeVideo(self, video):
-        audio_prompt = video.get('audio')
-        video_type = video.get('video')
-        length = video.get('length')
-        images_folder = f'{Constants.video_file_path}{self.folder_name}/images'
+    def create_folder(self, audio_prompt):
         self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
-        music_path = self.get_random_music_file()
+
+    def generate_thumbnail(self, video_type, audio_prompt):
         logging.info("Creating thumbnail...")
         thumbnail_prompt = self.build_thumbnail_prompt(audio_prompt)
         thumbnail_text = self.saveText(thumbnail_prompt, Constants.thumbnail).replace('"', '')
         Image_Manager.create_thumbnail_with_text(video_type, thumbnail_text, f'{self.folder_name}')
+
+    def generate_script_and_audio(self, audio_prompt):
         logging.info(f"Generating script for {audio_prompt}...")
         prompt = self.build_prompt(audio_prompt)
         script = self.saveText(prompt, Constants.script)
         logging.info("Generating audio...")
         audio_path = self.audio_generator.getBadAudio(script, self.folder_name)
+        return script, audio_path
+
+    def prepare_video(self, video, audio_path):
+        video_type = video.get('video')
+        length = video.get('length')
+        music_path = self.get_random_music_file()
         logging.info(f"Generating {video_type} video...")
-        video_path = self.getVideo(length, video_type)
+        video_path = self.getVideo(AudioFileClip(audio_path).duration, video_type)
         logging.info("Adding audio to video...")
         video_path = self.audio_generator.addAudio(video_path, audio_path, music_path, self.folder_name)
+        return video_path
+
+    def makeVideo(self, video):
+        audio_prompt = video.get('audio')
+        self.create_folder(audio_prompt)
+        self.generate_thumbnail(video.get('video'), audio_prompt)
+        script, audio_path = self.generate_script_and_audio(audio_prompt)
+        video_path = self.prepare_video(video, audio_path)
         sentences = self.script_to_list(script)
         self.generate_and_download_images(sentences)
         video_duration = VideoFileClip(video_path).duration
         durations = self.generate_sentence_timestamps(script, video_duration)
-        clips = self.story_manager.get_random_clips(sentences, images_folder, durations)
+        clips = self.story_manager.get_random_clips(sentences, f'{self.folder_name}/images', durations)
         print(clips)
         final_location = self.story_manager.add_clips_to_video(video_path, clips)
         logging.info("Video creation complete!")
+        return final_location
+
 
 def makeVideo():
     # Set up logging
