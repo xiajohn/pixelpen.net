@@ -38,7 +38,7 @@ class AudioGenerator(ContentGenerator):
         original = video_path[0:-4]
         final_location = original + "Audio" + ".mp4"
         if self.metadata_manager.check_metadata(Constants.video_with_audio, folder_name):
-            return final_location
+            return AudioFileClip(final_location)
         audio = AudioFileClip(audio_path).fx(afx.volumex, 0.7)
         music = AudioFileClip(music_path).fx(afx.volumex, 0.1)
         if music.duration > audio.duration:
@@ -52,7 +52,7 @@ class AudioGenerator(ContentGenerator):
     def getBadAudio(self, text, folder_name, voice="en-US-JennyNeural", filename="audio.mp3"):
         audio_path = f'{folder_name}/{filename}'
         if self.metadata_manager.check_metadata(Constants.audio, folder_name):
-            return audio_path
+            return AudioFileClip(audio_path)
         url = "https://play.ht/api/v1/convert"
         payload = {
             "content": [text],
@@ -71,7 +71,7 @@ class AudioGenerator(ContentGenerator):
             self.getBadAudioURL(id),
             audio_path
         )
-        return audio_path
+        return AudioFileClip(audio_path)
 
     def getBadAudioURL(self, id):
         time.sleep(5)

@@ -31,8 +31,10 @@ class VideoGenerator(ContentGenerator):
         self.audio_generator = AudioGenerator()
 
     def script_to_list(self, script):
-        sentences = [sentence.strip() for sentence in re.split('[.!?]', script) if sentence.strip()]
-        return sentences
+        sentences = [sentence.strip() for sentence in re.split('([.!?])', script) if sentence.strip()]
+        formatted_sentences = ["".join(sentences[i:i+2]) for i in range(0, len(sentences), 2)]
+        return formatted_sentences
+
 
     def generate_sentence_timestamps(self, script, video_duration):
         sentences = self.script_to_list(script)
@@ -62,7 +64,7 @@ class VideoGenerator(ContentGenerator):
     def getVideo(self, target_length, query):
         path = f'{self.folder_name}/video.mp4'
         if self.metadata_manager.check_metadata(Constants.video, self.folder_name):
-            return path
+            return VideoFileClip(path)
         data = self.get_video_data(query)
         clips, temp_files = self.generate_clips(data, target_length, query)
         final_clip = concatenate_videoclips(clips)
@@ -72,7 +74,7 @@ class VideoGenerator(ContentGenerator):
         for file in temp_files:
             if os.path.exists(file):
                 os.remove(file)
-        return path
+        return final_clip
 
     def get_video_data(self, query):
         url = f'https://pixabay.com/api/videos/?key={os.getenv("PIXABAY_KEY")}&q={query}'
@@ -111,8 +113,11 @@ class VideoGenerator(ContentGenerator):
         start_time = random.uniform(0, video_length - segment_length)  
         end_time = start_time + segment_length
         clip = full_clip.subclip(start_time, end_time)
-        clip = clip.resize(height=1920, width=1080)
+        clip = clip.resize(height=1920)  # Resize the height first
+        w, h = clip.size
+        clip = clip.crop(x_center=w/2, y_center=h/2, width=9*h/16, height=h)  # Crop to 9:16 ratio
         return clip, segment_length
+
 
     def build_prompt(self, user_input):
         intro = f"In this audio, we're going to dive right into the exciting world of {user_input}.\n\n"
@@ -161,31 +166,37 @@ class VideoGenerator(ContentGenerator):
         audio_path = self.audio_generator.getBadAudio(script, self.folder_name)
         return script, audio_path
 
-    def prepare_video(self, video, audio_path):
-        video_type = video.get('video')
-        length = video.get('length')
+    def get_music(self):
         music_path = self.get_random_music_file()
-        logging.info(f"Generating {video_type} video...")
-        video_path = self.getVideo(AudioFileClip(audio_path).duration, video_type)
-        logging.info("Adding audio to video...")
-        video_path = self.audio_generator.addAudio(video_path, audio_path, music_path, self.folder_name)
-        return video_path
+        music = AudioFileClip(music_path)
+        return music
 
     def makeVideo(self, video):
         audio_prompt = video.get('audio')
         self.create_folder(audio_prompt)
         self.generate_thumbnail(video.get('video'), audio_prompt)
-        script, audio_path = self.generate_script_and_audio(audio_prompt)
-        video_path = self.prepare_video(video, audio_path)
+        script = video.get('script')
+        if script is None:
+            logging.info(f"Generating script for {audio_prompt}...")
+            prompt = self.build_prompt(audio_prompt)
+            script = self.saveText(prompt, Constants.script)
+        else:
+            logging.info(f"Using provided script for {audio_prompt}...")
+        audio_clip = self.audio_generator.getBadAudio(script, self.folder_name)
+        video_clip = self.getVideo(audio_clip.duration, video.get('video'))
+        music_clip = self.get_music().subclip(0, video_clip.duration)
         sentences = self.script_to_list(script)
-        self.generate_and_download_images(sentences)
-        video_duration = VideoFileClip(video_path).duration
+        self.generate_and_download_images(sentences, video.get('images'))
+        video_duration = video_clip.duration
         durations = self.generate_sentence_timestamps(script, video_duration)
         clips = self.story_manager.get_random_clips(sentences, f'{self.folder_name}/images', durations)
         print(clips)
-        final_location = self.story_manager.add_clips_to_video(video_path, clips)
+        video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
+        final_video = self.story_manager.add_clips_to_video([video_clip], clips)
+        final_video.write_videofile(f'{self.folder_name}/videoFinal.mp4', codec='libx264')
         logging.info("Video creation complete!")
-        return final_location
+
+
 
 
 def makeVideo():

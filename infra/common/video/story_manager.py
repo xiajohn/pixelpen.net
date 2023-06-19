@@ -38,8 +38,8 @@ class StoryManager:
         return np_img
 
     def getTextClip(self, text, start_time, end_time):
-        wrapped_text = self.wrap_text(text, 5)  # wrap text if more than 5 words
-        text_clip_img = self.add_text_with_outline(wrapped_text, fontsize=150, color='white')
+        wrapped_text = self.wrap_text(text, 3)  # wrap text if more than 5 words
+        text_clip_img = self.add_text_with_outline(wrapped_text, fontsize=80, color='white')
         text_clip = ImageClip(np.array(text_clip_img), duration=(end_time - start_time)).set_start(start_time).set_position('center')
 
         return text_clip
@@ -58,8 +58,10 @@ class StoryManager:
         return image
 
     def getSortedImageFiles(self, images_folder):
+        if not os.path.exists(images_folder):
+            return None
         return sorted([os.path.join(images_folder, f) for f in os.listdir(images_folder) if f.endswith(('.png', '.jpg'))])
-    
+
     def wrap_text(self, text, limit):
         words = text.split()
         if len(words) <= limit:
@@ -71,8 +73,8 @@ class StoryManager:
 
     def get_random_clips(self, sentences, images_folder, durations):
         image_files = self.getSortedImageFiles(images_folder)
-        num_images = len(image_files)
-        num_nothings = 2
+        num_images = 0
+        num_nothings = 0
         clip_types = ['sentence'] * len(sentences) + ['image'] * num_images + ['nothing'] * num_nothings
         np.random.shuffle(clip_types)
         clips = []
@@ -88,9 +90,9 @@ class StoryManager:
 
         return clips
 
-    def add_clips_to_video(self, video_path, clips):
-        original_video = VideoFileClip(video_path)
-        final_clips = [original_video]
+    def add_clips_to_video(self, original_video, clips):
+        final_clips = original_video
+        main_video = original_video[0]
 
         # Keep track of the cumulative duration of added clips
         cumulative_duration = 0
@@ -99,7 +101,7 @@ class StoryManager:
             if clip['type'] == 'sentence':
                 clip_duration = clip['end_time'] - clip['start_time']
                 # Check if adding this clip would exceed the original video duration
-                if cumulative_duration + clip_duration > original_video.duration:
+                if cumulative_duration + clip_duration > main_video.duration:
                     break
                 text_clip = self.getTextClip(clip['content'], clip['start_time'], clip['end_time'])
                 final_clips.append(text_clip)
@@ -109,9 +111,9 @@ class StoryManager:
                 start_time, end_time = clip['start_time'], clip['end_time']
                 clip_duration = end_time - start_time
                 # Check if adding this clip would exceed the original video duration
-                if cumulative_duration + clip_duration > original_video.duration:
+                if cumulative_duration + clip_duration > main_video.duration:
                     break
-                image_clip = self.getSlideInAndFadeOutImageClip(clip['content'], start_time, end_time, original_video.size)
+                image_clip = self.getSlideInAndFadeOutImageClip(clip['content'], start_time, end_time, main_video.size)
                 final_clips.append(image_clip)
                 cumulative_duration += clip_duration
 
@@ -120,10 +122,7 @@ class StoryManager:
 
         final_video = CompositeVideoClip(final_clips)
 
-        final_path = video_path.replace(".mp4", "Final.mp4")
-        final_video.write_videofile(final_path, codec='libx264')
-
-        return final_path
+        return final_video
 
 
 
