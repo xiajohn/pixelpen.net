@@ -1,5 +1,4 @@
 .footer {
-  
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -29,7 +28,6 @@
 }
 
 .footer a {
-  color: #000;  /* to make the Facebook icon visible on dark background */
   font-size: 1.5rem; /* size of the icon */
 }
 
@@ -48,10 +46,27 @@
     margin-bottom: 0.5rem;
   }
 }
+
 .social-icon {
+  margin-left: 1rem; /* Additional margin */
+}
+
+.facebook:hover {
+  color: #8b9dc3;  /* Lighten color on hover for interaction feedback */
+}
+
+.fa-facebook-square {
   color: #3b5998;  /* Facebook's brand color */
 }
 
-.social-icon:hover {
+.fa-facebook-square:hover {
   color: #8b9dc3;  /* Lighten color on hover for interaction feedback */
+}
+
+.fa-youtube {
+  color: #c62020; /* YouTube's brand color */
+}
+
+.fa-youtube:hover {
+  color: #ce9b9b; /* Lighten color on hover for interaction feedback */
 }

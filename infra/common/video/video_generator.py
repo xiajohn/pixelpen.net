@@ -64,17 +64,15 @@ class VideoGenerator(ContentGenerator):
     def getVideo(self, target_length, query):
         path = f'{self.folder_name}/video.mp4'
         if self.metadata_manager.check_metadata(Constants.video, self.folder_name):
-            return VideoFileClip(path)
+            return VideoFileClip(path), []
         data = self.get_video_data(query)
         clips, temp_files = self.generate_clips(data, target_length, query)
         final_clip = concatenate_videoclips(clips)
         final_clip.write_videofile(path, codec='libx264')
         for clip in clips:
             clip.close()
-        for file in temp_files:
-            if os.path.exists(file):
-                os.remove(file)
-        return final_clip
+        
+        return final_clip, temp_files
 
     def get_video_data(self, query):
         url = f'https://pixabay.com/api/videos/?key={os.getenv("PIXABAY_KEY")}&q={query}'
@@ -174,7 +172,7 @@ class VideoGenerator(ContentGenerator):
     def makeVideo(self, video):
         audio_prompt = video.get('audio')
         self.create_folder(audio_prompt)
-        self.generate_thumbnail(video.get('video'), audio_prompt)
+       # self.generate_thumbnail(video.get('video'), audio_prompt)
         script = video.get('script')
         if script is None:
             logging.info(f"Generating script for {audio_prompt}...")
@@ -183,7 +181,7 @@ class VideoGenerator(ContentGenerator):
         else:
             logging.info(f"Using provided script for {audio_prompt}...")
         audio_clip = self.audio_generator.getBadAudio(script, self.folder_name)
-        video_clip = self.getVideo(audio_clip.duration, video.get('video'))
+        video_clip, temp_files = self.getVideo(audio_clip.duration, video.get('video'))
         music_clip = self.get_music().subclip(0, video_clip.duration)
         sentences = self.script_to_list(script)
         self.generate_and_download_images(sentences, video.get('images'))
@@ -193,8 +191,13 @@ class VideoGenerator(ContentGenerator):
         print(clips)
         video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
         final_video = self.story_manager.add_clips_to_video([video_clip], clips)
-        final_video.write_videofile(f'{self.folder_name}/videoFinal.mp4', codec='libx264')
+        if not os.path.exists('{self.folder_name}/videoFinal.mp4'):
+            final_video.write_videofile(f'{self.folder_name}/videoFinal.mp4', codec='libx264')
+        final_video.close()
         logging.info("Video creation complete!")
+        for file in temp_files:
+            if os.path.exists(file):
+                os.remove(file)
 
 
 

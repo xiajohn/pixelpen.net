@@ -8,6 +8,36 @@
                 "images": 0,
                 "video": "stars",
                 "script": "Struggling to love yourself? Remember, the most powerful relationship you'll ever have is the relationship with yourself. Cherish and nurture it."
+            },
+            {
+                "audio": "motivational short1", 
+                "images": 0,
+                "video": "water",
+                "script": "Feeling overwhelmed with negativity? Let's turn it around. Find one thing to be grateful for each day, and watch how your perspective changes."
+            },
+            {
+                "audio": "motivational short2", 
+                "images": 0,
+                "video": "mountains",
+                "script": "Feel like you're facing an insurmountable task? Remember, mountains are climbed one step at a time. Keep pushing, your summit is within reach."
+            },
+            {
+                "audio": "motivational short3", 
+                "images": 0,
+                "video": "forest",
+                "script": "Finding it hard to make a decision? Imagine you're in a forest. Every path leads somewhere new. The 'right' path is the one you choose and commit to walking."
+            },
+            {
+                "audio": "motivational short4", 
+                "images": 0,
+                "video": "ocean",
+                "script": "Feel like you're lost in the vastness of life? Like the ocean, life is deep and wide, but remember, in that vastness, you are not a drop in the ocean. You are the entire ocean in a drop."
+            },
+            {
+                "audio": "motivational short5", 
+                "images": 0,
+                "video": "sunrise",
+                "script": "Feeling disheartened? Remember, the sun rises every day, offering a new beginning. Embrace it, and let yourself shine bright."
             }
         ]
     }
