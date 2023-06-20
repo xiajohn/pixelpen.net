@@ -89,18 +89,25 @@ class VideoGenerator(ContentGenerator):
 
     def generate_clips(self, data, target_length, query):
         clips = []
-        temp_files = [] 
+        temp_files = []
         videos = data["hits"]
         current_length = 0
-        for i, video in enumerate(videos):
+        num_videos = len(videos)  # Get the total number of videos
+
+        # Create a list of video indices, then shuffle it
+        indices = list(range(num_videos))
+        random.shuffle(indices)
+
+        for idx in indices:  # Iterate over shuffled indices
             if current_length >= target_length:
                 break
-            temp_video_path = f'{query}{i}.mp4'
-            Utils.download_file(video["videos"]["medium"]["url"], temp_video_path)
+            temp_video_path = f'{query}{idx}.mp4'
+            Utils.download_file(videos[idx]["videos"]["medium"]["url"], temp_video_path)
             clip, segment_length = self.get_clip_segment(temp_video_path, target_length, current_length)
             clips.append(clip)
             current_length += segment_length
             temp_files.append(temp_video_path)  # Save temp file path
+
         return clips, temp_files
 
 
@@ -175,7 +182,7 @@ class VideoGenerator(ContentGenerator):
 
     def get_music(self, duration):
         music_path = self.get_random_music_file()
-        music = AudioFileClip(music_path)
+        music = AudioFileClip(music_path).volumex(0.1)
         latest_start_time = max(0, music.duration - duration)
         start_time = random.uniform(0, latest_start_time)
         music_clip = music.subclip(start_time, start_time + duration)
@@ -218,14 +225,11 @@ class VideoGenerator(ContentGenerator):
             'personal growth',
             'positivity',
             'forgiveness',
-            'humility',
             'patience',
             'empathy',
             'compassion',
             'creativity',
             'courage',
-            'self-discipline',
-            'integrity',
             'kindness',
             'optimism',
             'passion',
@@ -292,7 +296,7 @@ def makeVideo():
     # Convert to string
     date_string = current_date.strftime("%Y-%m-%d")
     for category, category_data in video_data.items():
-        for i in range(3,5):
+        for i in range(0,2):
             vg = VideoGenerator(f'{Constants.video_file_path}{Utils.sanitize_folder_name(date_string)}{i}')
             vg.makeVideo()
     Utils.remove_mp4_files('')
