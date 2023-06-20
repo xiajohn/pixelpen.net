@@ -11,7 +11,7 @@ async function generateEssay(event) {
 
   try {
     const openaiURL = 'https://api.openai.com/v1/completions';
-    let prompt = `Write about the business value on the topic "${topic}" in approximately 300 words. Use a single html new line character to separate paragraphs.`;
+    let prompt = `Write about the business value on the topic "${topic}" in approximately 150 words. Use a single html new line character to separate paragraphs.`;
 
     const response = await axios.post(
       openaiURL,

@@ -262,7 +262,7 @@ class VideoGenerator(ContentGenerator):
             "snippet": {
                 "title": f'{self.generate_text(self.build_title_prompt(script))} #shorts' ,
                 "description": f'{self.generate_text(self.build_description_prompt(script))}' ,
-                "tags": [background, audio_prompt],
+                "tags": [audio_prompt],
                 "categoryId": "27"  # Category ID for People & Blogs; can be changed according to your need
             },
             "status": {

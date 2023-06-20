@@ -43,7 +43,8 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
         console.error('Error generating essay:', error.message);
       }
       setIsLoading(false);
-      essayRef.current.scrollIntoView({ behavior: 'smooth' });
+      window.scrollTo(0, document.body.scrollHeight);
+
     } else {
       setIsLoading(false);
       return;
