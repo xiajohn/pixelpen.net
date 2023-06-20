@@ -11,3 +11,5 @@ tmp
 *.mp3
 *.mp4
 generated/*
+youtube.json
+common/video/youtube.json

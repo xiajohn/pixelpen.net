@@ -263,11 +263,13 @@ class VideoGenerator(ContentGenerator):
                 "title": f'{self.generate_text(self.build_title_prompt(script))} #shorts' ,
                 "description": f'{self.generate_text(self.build_description_prompt(script))}' ,
                 "tags": [audio_prompt],
-                "categoryId": "27"  # Category ID for People & Blogs; can be changed according to your need
+                "categoryId": "22"  # Category ID for People & Blogs; can be changed according to your need
             },
             "status": {
                 "privacyStatus": "public",  # or "public" or "unlisted"
-                "selfDeclaredMadeForKids": False
+                "selfDeclaredMadeForKids": False,
+                "defaultLanguage": "en",
+                "defaultAudioLanguage": "en"
             }
         }
         
@@ -290,7 +292,7 @@ def makeVideo():
     # Convert to string
     date_string = current_date.strftime("%Y-%m-%d")
     for category, category_data in video_data.items():
-        for i in range(0,2):
+        for i in range(3,5):
             vg = VideoGenerator(f'{Constants.video_file_path}{Utils.sanitize_folder_name(date_string)}{i}')
             vg.makeVideo()
     Utils.remove_mp4_files('')
