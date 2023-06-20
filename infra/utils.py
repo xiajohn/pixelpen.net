@@ -2,6 +2,7 @@ from enum import Enum
 import json
 import os
 import requests
+import glob
 class TopicType(Enum):
     TRANSACTIONAL = "TRANSACTIONAL"
     INFORMATIONAL = "INFORMATIONAL"
@@ -42,3 +43,15 @@ class Utils:
         sanitized_name = ''.join(
             c if c not in invalid_chars else '_' for c in name)
         return sanitized_name
+    @staticmethod
+    def remove_mp4_files(directory):
+    # Get a list of all the .mp4 files in the directory
+        mp4_files = glob.glob(os.path.join(directory, "*.mp4"))
+        print(os.path.join(directory, "*.mp4"))
+        # Iterate over the list of filepaths & remove each file.
+        for file in mp4_files:
+            try:
+                os.remove(file)
+                print(f"File {file} has been removed successfully")
+            except Exception as e:
+                print(f"Error occurred while deleting file {file}. Reason: {str(e)}")

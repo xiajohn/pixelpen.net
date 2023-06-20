@@ -14,6 +14,7 @@ from common.makememe.generator.design.image_manager import Image_Manager
 import json
 from dotenv import find_dotenv, load_dotenv
 from common.video.story_manager import StoryManager
+from datetime import datetime
 load_dotenv(find_dotenv('../../.env'))
 import warnings
 import random
@@ -21,6 +22,7 @@ import re
 from collections import deque
 from common.content_generator import ContentGenerator
 from clients.midjourney_api import MidjourneyApi
+from common.video.video_uploader import upload_video
 class VideoGenerator(ContentGenerator):
     def __init__(self, folder_name):
         self.px = pixabay.core(os.getenv("PIXABAY_KEY"))
@@ -63,8 +65,9 @@ class VideoGenerator(ContentGenerator):
 
     def getVideo(self, target_length, query):
         path = f'{self.folder_name}/video.mp4'
+        print(query)
         if self.metadata_manager.check_metadata(Constants.video, self.folder_name):
-            return VideoFileClip(path), []
+            return VideoFileClip(path)
         data = self.get_video_data(query)
         clips, temp_files = self.generate_clips(data, target_length, query)
         final_clip = concatenate_videoclips(clips)
@@ -72,7 +75,7 @@ class VideoGenerator(ContentGenerator):
         for clip in clips:
             clip.close()
         
-        return final_clip, temp_files
+        return final_clip
 
     def get_video_data(self, query):
         url = f'https://pixabay.com/api/videos/?key={os.getenv("PIXABAY_KEY")}&q={query}'
@@ -118,8 +121,9 @@ class VideoGenerator(ContentGenerator):
 
 
     def build_prompt(self, user_input):
-        intro = f"In this audio, we're going to dive right into the exciting world of {user_input}.\n\n"
-        script_prompt = f"{intro}We want to start the audio with a captivating hook. For instance, you could start with something like 'Imagine a world where {user_input} is at the forefront of every conversation.' But remember, that's just an example. We want you to come up with an original and engaging hook that fits the topic of {user_input}. After the hook, proceed directly into the informative content for a 1-minute audio script."
+        intro = f"Generate a short, motivational script that offers a positive and encouraging message related to the theme: '{user_input}'.\n\n"
+        script_prompt = f"{intro}The script should be short (10 seconds). The script should provide an uplifting perspective on common human experiences or feelings, similar to these examples: \n\n 1. 'Struggling to love yourself? Remember, the most powerful relationship you'll ever have is the relationship with yourself. Cherish and nurture it.' \n\n 2. 'Feeling overwhelmed with negativity? Let's turn it around. Find one thing to be grateful for each day, and watch how your perspective changes.' \n\n Please continue in a similar style."
+        
         return script_prompt
 
     def get_random_music_file(self, folder="music"):
@@ -134,6 +138,14 @@ class VideoGenerator(ContentGenerator):
         keywords = ["how to", "why", "guide", "tutorial", "strategy", "tips", "methods"]
         prompt = f'Create a catchy and SEO-friendly thumbnail text for a {purpose} YouTube video titled "{audio_prompt}". The text should be short (5 words or less) and could include some of the following keywords: {", ".join(keywords)}.'
         return prompt
+    
+    def build_title_prompt(self, script):
+        prompt = f'Generate a catchy and inspiring title for a YouTube Shorts video. Keep it short (5 words). The video offers a motivational message about self-improvement and personal growth. The script is {script}'
+        return prompt
+    
+    def build_description_prompt(self, script):
+        prompt = f'Compose a captivating and detailed description for a YouTube Shorts video. Keep it short (15 words). The video is a minute-long motivational clip focusing on the themes of self-love and personal development. The script is {script}'
+        return prompt
 
     def saveText(self, prompt, resource_type):
         script_path = os.path.join(self.folder_name, f'{resource_type}.txt')
@@ -146,9 +158,6 @@ class VideoGenerator(ContentGenerator):
         with open(os.path.join(self.folder_name, f'{resource_type}.txt'), 'w') as f:
             f.write(text)
         return text
-
-    def create_folder(self, audio_prompt):
-        self.folder_name = f'{Constants.video_file_path}{Utils.sanitize_folder_name(audio_prompt)}'
 
     def generate_thumbnail(self, video_type, audio_prompt):
         logging.info("Creating thumbnail...")
@@ -164,16 +173,73 @@ class VideoGenerator(ContentGenerator):
         audio_path = self.audio_generator.getBadAudio(script, self.folder_name)
         return script, audio_path
 
-    def get_music(self):
+    def get_music(self, duration):
         music_path = self.get_random_music_file()
         music = AudioFileClip(music_path)
-        return music
+        latest_start_time = max(0, music.duration - duration)
+        start_time = random.uniform(0, latest_start_time)
+        music_clip = music.subclip(start_time, start_time + duration)
+        return music_clip
 
-    def makeVideo(self, video):
-        audio_prompt = video.get('audio')
-        self.create_folder(audio_prompt)
-       # self.generate_thumbnail(video.get('video'), audio_prompt)
-        script = video.get('script')
+    def makeVideo(self):
+        backgrounds = [
+            'water', 
+            'forest', 
+            'mountains', 
+            'desert', 
+            'stars',
+            'sunrise',
+            'sunset',
+            'beach',
+            'cityscape',
+            'river',
+            'snow',
+            'rain',
+            'clouds',
+            'moon',
+            'ocean',
+            'lake',
+            'tundra',
+            'jungle',
+            'night sky',
+            'volcano'
+        ]
+        themes = [
+            'self-love', 
+            'gratitude', 
+            'perseverance', 
+            'decision-making', 
+            'self-worth', 
+            'new beginnings',
+            'embracing change',
+            'mindfulness',
+            'overcoming fear',
+            'resilience',
+            'personal growth',
+            'positivity',
+            'forgiveness',
+            'humility',
+            'patience',
+            'empathy',
+            'compassion',
+            'creativity',
+            'courage',
+            'self-discipline',
+            'integrity',
+            'kindness',
+            'optimism',
+            'passion',
+            'mind-body connection',
+            'joy',
+            'peace',
+            'spirituality',
+            'balance',
+            'inner strength',
+            'harmony'
+        ]
+        background = random.choice(backgrounds)
+        audio_prompt = random.choice(themes)
+        script = None
         if script is None:
             logging.info(f"Generating script for {audio_prompt}...")
             prompt = self.build_prompt(audio_prompt)
@@ -181,23 +247,36 @@ class VideoGenerator(ContentGenerator):
         else:
             logging.info(f"Using provided script for {audio_prompt}...")
         audio_clip = self.audio_generator.getBadAudio(script, self.folder_name)
-        video_clip, temp_files = self.getVideo(audio_clip.duration, video.get('video'))
-        music_clip = self.get_music().subclip(0, video_clip.duration)
+        video_clip = self.getVideo(audio_clip.duration, background)
+        music_clip = self.get_music(video_clip.duration)
         sentences = self.script_to_list(script)
-        self.generate_and_download_images(sentences, video.get('images'))
+        #self.generate_and_download_images(sentences, video.get('images'))
         video_duration = video_clip.duration
         durations = self.generate_sentence_timestamps(script, video_duration)
         clips = self.story_manager.get_random_clips(sentences, f'{self.folder_name}/images', durations)
-        print(clips)
+        
         video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
         final_video = self.story_manager.add_clips_to_video([video_clip], clips)
-        if not os.path.exists('{self.folder_name}/videoFinal.mp4'):
+
+        video_metadata = {
+            "snippet": {
+                "title": f'{self.generate_text(self.build_title_prompt(script))} #shorts' ,
+                "description": f'{self.generate_text(self.build_description_prompt(script))}' ,
+                "tags": [background, audio_prompt],
+                "categoryId": "27"  # Category ID for People & Blogs; can be changed according to your need
+            },
+            "status": {
+                "privacyStatus": "public",  # or "public" or "unlisted"
+                "selfDeclaredMadeForKids": False
+            }
+        }
+        
+        if not os.path.exists(f'{self.folder_name}/videoFinal.mp4'):
             final_video.write_videofile(f'{self.folder_name}/videoFinal.mp4', codec='libx264')
         final_video.close()
+        upload_video(f'{self.folder_name}/videoFinal.mp4', video_metadata)
         logging.info("Video creation complete!")
-        for file in temp_files:
-            if os.path.exists(file):
-                os.remove(file)
+    
 
 
 
@@ -206,9 +285,13 @@ def makeVideo():
     # Set up logging
     logging.basicConfig(level=logging.INFO)
     video_data = Utils.load_json("common/video/video_input.json")
+    current_date = datetime.now()
+
+    # Convert to string
+    date_string = current_date.strftime("%Y-%m-%d")
     for category, category_data in video_data.items():
-        for video in category_data['video']:
-            audio_prompt = video.get('audio')
-            vg = VideoGenerator(Utils.sanitize_folder_name(audio_prompt))
-            vg.makeVideo(video)
+        for i in range(0,2):
+            vg = VideoGenerator(f'{Constants.video_file_path}{Utils.sanitize_folder_name(date_string)}{i}')
+            vg.makeVideo()
+    Utils.remove_mp4_files('')
 
