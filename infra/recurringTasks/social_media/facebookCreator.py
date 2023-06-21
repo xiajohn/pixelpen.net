@@ -113,8 +113,8 @@ class FacebookCreator(ContentGenerator):
         image = self.upload_image(image)
         print(f'uploaded image {image}')
         # Construct Facebook post content
-        tie_in_text = "Check out our blog for more insights: "
-        post_content = f"{title}\n\n{text_content}\n\n{tie_in_text}\nhttps://www.pixelpen.net/creative-showcase\n\n#PixelPen {hashtags}"
+        tie_in_text = "Check out our website and youtube for more insights: "
+        post_content = f"{title}\n\n{text_content}\n\n{tie_in_text}\nwebsite: https://www.pixelpen.net youtube: https://www.youtube.com/channel/UCSEGGNe3H8534_1YUgDR7QA\n\n#PixelPen {hashtags}"
 
         # Create the post
         print("Posting to Facebook:")

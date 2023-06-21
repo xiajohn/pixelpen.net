@@ -261,26 +261,27 @@ class VideoGenerator(ContentGenerator):
         
         video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
         final_video = self.story_manager.add_clips_to_video([video_clip], clips)
-
+        metadata_title = self.generate_text(self.build_title_prompt(script)).strip('"')
+        metadata_desc = self.generate_text(self.build_description_prompt(script)).strip('"')
+        print(metadata_title)
+        print(metadata_desc)
         video_metadata = {
             "snippet": {
-                "title": f'{self.generate_text(self.build_title_prompt(script))} #shorts' ,
-                "description": f'{self.generate_text(self.build_description_prompt(script))}' ,
-                "tags": [audio_prompt],
+                "title": f'{metadata_title} #shorts' ,
+                "description": f'{metadata_desc}' ,
+                "tags": [],
                 "categoryId": "22"  # Category ID for People & Blogs; can be changed according to your need
             },
             "status": {
                 "privacyStatus": "public",  # or "public" or "unlisted"
                 "selfDeclaredMadeForKids": False,
-                "defaultLanguage": "en",
-                "defaultAudioLanguage": "en"
             }
         }
         
         if not os.path.exists(f'{self.folder_name}/videoFinal.mp4'):
             final_video.write_videofile(f'{self.folder_name}/videoFinal.mp4', codec='libx264')
         final_video.close()
-        upload_video(f'{self.folder_name}/videoFinal.mp4', video_metadata)
+        #upload_video(f'{self.folder_name}/videoFinal.mp4', video_metadata)
         logging.info("Video creation complete!")
     
 
@@ -294,10 +295,10 @@ def makeVideo():
     current_date = datetime.now()
 
     # Convert to string
-    date_string = current_date.strftime("%Y-%m-%d")
+    datetime_string = current_date.strftime("%Y-%m-%d_%H-%M-%S")
     for category, category_data in video_data.items():
-        for i in range(0,2):
-            vg = VideoGenerator(f'{Constants.video_file_path}{Utils.sanitize_folder_name(date_string)}{i}')
+        for i in range(0,1):
+            vg = VideoGenerator(f'{Constants.video_file_path}{Utils.sanitize_folder_name(datetime_string)}{i}')
             vg.makeVideo()
     Utils.remove_mp4_files('')
 
