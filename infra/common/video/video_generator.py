@@ -261,14 +261,14 @@ class VideoGenerator(ContentGenerator):
         
         video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
         final_video = self.story_manager.add_clips_to_video([video_clip], clips)
-        metadata_title = self.generate_text(self.build_title_prompt(script)).strip('"')
-        metadata_desc = self.generate_text(self.build_description_prompt(script)).strip('"')
+        metadata_title = f'{self.generate_text(self.build_title_prompt(script))} #shorts'
+        metadata_desc = f'{self.generate_text(self.build_description_prompt(script))} #shorts'
         print(metadata_title)
         print(metadata_desc)
         video_metadata = {
             "snippet": {
-                "title": f'{metadata_title} #shorts' ,
-                "description": f'{metadata_desc}' ,
+                "title": metadata_title.strip('"'),
+                "description": metadata_desc.strip('"') ,
                 "tags": [],
                 "categoryId": "22"  # Category ID for People & Blogs; can be changed according to your need
             },
@@ -297,7 +297,7 @@ def makeVideo():
     # Convert to string
     datetime_string = current_date.strftime("%Y-%m-%d_%H-%M-%S")
     for category, category_data in video_data.items():
-        for i in range(0,1):
+        for i in range(0,2):
             vg = VideoGenerator(f'{Constants.video_file_path}{Utils.sanitize_folder_name(datetime_string)}{i}')
             vg.makeVideo()
     Utils.remove_mp4_files('')

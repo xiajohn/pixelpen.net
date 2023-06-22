@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookSquare, faYoutube } from '@fortawesome/free-brands-svg-icons';  // Import YouTube icon
+import { faFacebookSquare, faYoutube, faTiktok } from '@fortawesome/free-brands-svg-icons';
 import '../css/Footer.css';
 
 function Footer() {
@@ -13,6 +13,10 @@ function Footer() {
         <a href="https://www.youtube.com/channel/UCSEGGNe3H8534_1YUgDR7QA" target="_blank" rel="noreferrer">
           <FontAwesomeIcon icon={faYoutube} size="2x" className="social-icon" />  {/* Add YouTube icon */}
         </a>
+        <a href="https://www.tiktok.com/@pixelpenmotivation" target="_blank" rel="noreferrer">
+          <FontAwesomeIcon icon={faTiktok} size="2x" className="social-icon" />
+        </a>
+
       </div>
       <div className="center">
         <p>&copy; 2023 PixelPen</p>

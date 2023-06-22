@@ -50,6 +50,13 @@
 .social-icon {
   margin-left: 1rem; /* Additional margin */
 }
+.fa-tiktok {
+  color: #000; /* TikTok's brand color */
+}
+
+.fa-tiktok:hover {
+  color: #706363; /* Lighten color on hover for interaction feedback */
+}
 
 .facebook:hover {
   color: #8b9dc3;  /* Lighten color on hover for interaction feedback */
