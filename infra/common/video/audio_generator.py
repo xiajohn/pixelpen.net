@@ -40,7 +40,7 @@ class AudioGenerator(ContentGenerator):
         if self.metadata_manager.check_metadata(Constants.video_with_audio, folder_name):
             return AudioFileClip(final_location)
         audio = AudioFileClip(audio_path).fx(afx.volumex, 0.7)
-        music = AudioFileClip(music_path).fx(afx.volumex, 0.1)
+        music = AudioFileClip(music_path).fx(afx.volumex, 0.3)
         if music.duration > audio.duration:
             music = music.subclip(0, audio.duration)
         final_clip = VideoFileClip(video_path).subclip(0, audio.duration)

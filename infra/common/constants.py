@@ -9,4 +9,61 @@ class Constants:
     final_video = "final_video"
     thumbnail = "thumbnail"
     thumbnail_image = "thumbnail_image"
+    motivation = [
+            'water', 
+            'forest', 
+            'mountains', 
+            'desert', 
+            'stars',
+            'sunrise',
+            'sunset',
+            'beach',
+            'cityscape',
+            'river',
+            'snow',
+            'rain',
+            'clouds',
+            'moon',
+            'ocean',
+            'lake',
+            'tundra',
+            'jungle',
+            'night sky',
+            'volcano'
+        ]
+    themes = [
+            'self-love', 
+            'gratitude', 
+            'perseverance', 
+            'decision-making', 
+            'self-worth', 
+            'new beginnings',
+            'embracing change',
+            'mindfulness',
+            'overcoming fear',
+            'resilience',
+            'personal growth',
+            'positivity',
+            'forgiveness',
+            'patience',
+            'empathy',
+            'compassion',
+            'creativity',
+            'courage',
+            'kindness',
+            'optimism',
+            'passion',
+            'mind-body connection',
+            'joy',
+            'peace',
+            'spirituality',
+            'balance',
+            'inner strength',
+            'harmony'
+        ]
+    cat = [
+        'black cat',
+        'white cat',
+        'fat cat'
+    ]
     

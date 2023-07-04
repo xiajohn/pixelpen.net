@@ -160,7 +160,7 @@ class VideoGenerator(ContentGenerator):
             with open(script_path, 'r') as f:
                 text = f.read()
             return text
-        text = self.generate_text(prompt)
+        text = self.generate_text(prompt,500,1)
         os.makedirs(self.folder_name, exist_ok=True)
         with open(os.path.join(self.folder_name, f'{resource_type}.txt'), 'w') as f:
             f.write(text)
@@ -189,82 +189,55 @@ class VideoGenerator(ContentGenerator):
         return music_clip
 
     def makeVideo(self):
-        backgrounds = [
-            'water', 
-            'forest', 
-            'mountains', 
-            'desert', 
-            'stars',
-            'sunrise',
-            'sunset',
-            'beach',
-            'cityscape',
-            'river',
-            'snow',
-            'rain',
-            'clouds',
-            'moon',
-            'ocean',
-            'lake',
-            'tundra',
-            'jungle',
-            'night sky',
-            'volcano'
-        ]
+        DEFAULT_DURATION = 10  # define your constant duration here (in seconds)
+        video_output_path = f'{self.folder_name}/videoFinal.mp4'
+        
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(video_output_path), exist_ok=True)
+        backgrounds = Constants.cat
         themes = [
-            'self-love', 
-            'gratitude', 
-            'perseverance', 
-            'decision-making', 
-            'self-worth', 
-            'new beginnings',
-            'embracing change',
-            'mindfulness',
-            'overcoming fear',
-            'resilience',
-            'personal growth',
-            'positivity',
-            'forgiveness',
-            'patience',
-            'empathy',
-            'compassion',
-            'creativity',
-            'courage',
-            'kindness',
-            'optimism',
-            'passion',
-            'mind-body connection',
-            'joy',
-            'peace',
-            'spirituality',
-            'balance',
-            'inner strength',
-            'harmony'
+            # themes list...
         ]
         background = random.choice(backgrounds)
-        audio_prompt = random.choice(themes)
-        script = None
+
+        script = ""
         if script is None:
-            logging.info(f"Generating script for {audio_prompt}...")
             prompt = self.build_prompt(audio_prompt)
-            script = self.saveText(prompt, Constants.script)
-        else:
-            logging.info(f"Using provided script for {audio_prompt}...")
-        audio_clip = self.audio_generator.getBadAudio(script, self.folder_name)
-        video_clip = self.getVideo(audio_clip.duration, background)
-        music_clip = self.get_music(video_clip.duration)
-        sentences = self.script_to_list(script)
-        #self.generate_and_download_images(sentences, video.get('images'))
-        video_duration = video_clip.duration
-        durations = self.generate_sentence_timestamps(script, video_duration)
-        clips = self.story_manager.get_random_clips(sentences, f'{self.folder_name}/images', durations)
+            script = self.saveText(prompt, Constants.script).strip('"')
         
-        video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
+        
+
+        if script:
+            
+            audio_prompt = random.choice(themes)
+            audio_clip = self.audio_generator.getBadAudio(script, self.folder_name)
+            video_clip = self.getVideo(audio_clip.duration, background)
+            music_clip = self.get_music(audio_clip.duration)
+            video_clip = video_clip.set_duration(audio_clip.duration)
+            video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
+            sentences = self.script_to_list(script)
+            durations = self.generate_sentence_timestamps(script, video_clip.duration)
+        else:
+            video_clip = self.getVideo(DEFAULT_DURATION + 20, background)
+            video_clip = video_clip.set_duration(DEFAULT_DURATION)
+            music_clip = self.get_music(DEFAULT_DURATION)
+            video_clip = video_clip.set_audio(CompositeAudioClip([ music_clip]))
+            sentences = []
+            durations = []
+
+        clips = self.story_manager.get_random_clips(sentences, f'{self.folder_name}/images', durations)
         final_video = self.story_manager.add_clips_to_video([video_clip], clips)
-        metadata_title = f'{self.generate_text(self.build_title_prompt(script))} #shorts'
-        metadata_desc = f'{self.generate_text(self.build_description_prompt(script))} #shorts'
+
+        if script:
+            metadata_title = f'{self.generate_text(self.build_title_prompt(script))} #shorts'
+            metadata_desc = f'{self.generate_text(self.build_description_prompt(script))} #shorts'
+        else:
+            metadata_title = f'Inspiring Video with {background} Background #shorts'
+            metadata_desc = f'Enjoy this inspiring video featuring a beautiful {background} background. #shorts'
+            
         print(metadata_title)
         print(metadata_desc)
+
         video_metadata = {
             "snippet": {
                 "title": metadata_title.strip('"'),
@@ -273,18 +246,16 @@ class VideoGenerator(ContentGenerator):
                 "categoryId": "22"  # Category ID for People & Blogs; can be changed according to your need
             },
             "status": {
-                "privacyStatus": "public",  # or "public" or "unlisted"
+                "privacyStatus": "unlisted",  # or "public" or "unlisted"
                 "selfDeclaredMadeForKids": False,
             }
         }
-        
+
         if not os.path.exists(f'{self.folder_name}/videoFinal.mp4'):
             final_video.write_videofile(f'{self.folder_name}/videoFinal.mp4', codec='libx264')
         final_video.close()
-        #upload_video(f'{self.folder_name}/videoFinal.mp4', video_metadata)
+        upload_video(f'{self.folder_name}/videoFinal.mp4', video_metadata)
         logging.info("Video creation complete!")
-    
-
 
 
 
@@ -297,8 +268,10 @@ def makeVideo():
     # Convert to string
     datetime_string = current_date.strftime("%Y-%m-%d_%H-%M-%S")
     for category, category_data in video_data.items():
-        for i in range(0,2):
+        for i in range(0,3):
             vg = VideoGenerator(f'{Constants.video_file_path}{Utils.sanitize_folder_name(datetime_string)}{i}')
             vg.makeVideo()
     Utils.remove_mp4_files('')
+
+
 
