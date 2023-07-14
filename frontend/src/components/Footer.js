@@ -11,7 +11,7 @@ function Footer() {
           <FontAwesomeIcon icon={faFacebookSquare} size="2x" className="facebook" />
         </a>
         <a href="https://www.youtube.com/channel/UCSEGGNe3H8534_1YUgDR7QA" target="_blank" rel="noreferrer">
-          <FontAwesomeIcon icon={faYoutube} size="2x" className="social-icon" />  {/* Add YouTube icon */}
+          <FontAwesomeIcon icon={faYoutube} size="2x" className="social-icon" />  
         </a>
         <a href="https://www.tiktok.com/@pixelpenmotivation" target="_blank" rel="noreferrer">
           <FontAwesomeIcon icon={faTiktok} size="2x" className="social-icon" />

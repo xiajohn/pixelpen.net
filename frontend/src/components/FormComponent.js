@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import '../css/Form.css';
 import { getServerURL } from '../util/utils';
+import styles from '../css/Essay.module.css';
 
 function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef }) {
   const [showTopicError, setShowTopicError] = useState(false);
@@ -39,6 +40,15 @@ function FormComponent({ formData, setFormData, setEssay, setIsLoading, essayRef
         const response = await axios.post(generateEssayURL, payload);
         const essay = response.data.essay;
         setEssay(essay);
+        essayRef.current.classList.add(styles.highlight);
+        if (essayRef.current) {
+          essayRef.current.classList.add(styles.highlight);
+          setTimeout(() => {
+            if (essayRef.current) {
+              essayRef.current.classList.remove(styles.highlight);
+            }
+          }, 3000);
+        }
       } catch (error) {
         console.error('Error generating essay:', error.message);
       }

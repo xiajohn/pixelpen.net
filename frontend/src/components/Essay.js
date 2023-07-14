@@ -3,7 +3,7 @@ import styles from '../css/Essay.module.css';
 import { Row, Col } from 'react-bootstrap';
 const Essay = forwardRef(({ content }, ref) => {
   return (
-    <div className={styles.essay} ref={ref}>
+    <div className={styles.essay} >
       
       <Row>
         <Col>
@@ -19,7 +19,7 @@ const Essay = forwardRef(({ content }, ref) => {
         </Col>
       </Row>
       <h3>Pixel Pen Preview</h3>
-      <p dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br>') }}></p>
+      <p ref={ref} dangerouslySetInnerHTML={{ __html: content }}></p>
     </div>
   );
 })

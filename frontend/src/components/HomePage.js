@@ -49,7 +49,7 @@ function HomePage() {
       </section>
 
      
-        <Essay content={essay} />
+        <Essay content={essay} ref={essayRef}/>
      
     </>
 

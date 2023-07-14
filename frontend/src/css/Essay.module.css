@@ -8,6 +8,16 @@
 }
 
 
+@keyframes highlight {
+  0% {background-color: transparent;}
+  50% {background-color: yellow;}
+  100% {background-color: transparent;}
+}
+
+.highlight {
+  animation-name: highlight;
+  animation-duration: 3s;
+}
 
 
 .essay p {
