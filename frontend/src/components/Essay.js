@@ -1,10 +1,16 @@
 import React, { forwardRef } from 'react';
 import styles from '../css/Essay.module.css';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 const Essay = forwardRef(({ content }, ref) => {
+  const navigate = useNavigate();
+
+  const navigateToContact = () => {
+    navigate('/contact');
+  }
   return (
     <div className={styles.essay} >
-      
+
       <Row>
         <Col>
           <h2>Our Services</h2>
@@ -20,6 +26,11 @@ const Essay = forwardRef(({ content }, ref) => {
       </Row>
       <h3>Pixel Pen Preview</h3>
       <p ref={ref} dangerouslySetInnerHTML={{ __html: content }}></p>
+      <div className={styles.centerButton}>
+        <Button variant="primary" onClick={navigateToContact} className={styles.contactBtn}>
+          Book a free Consultation
+        </Button>
+      </div>
     </div>
   );
 })

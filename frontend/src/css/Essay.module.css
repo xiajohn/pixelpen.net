@@ -13,7 +13,18 @@
   50% {background-color: yellow;}
   100% {background-color: transparent;}
 }
+.centerButton {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
 
+.contactBtn{
+  background-color: #4e6cc6db;
+}
+.contactBtn:hover{
+  background-color: #134c89;
+}
 .highlight {
   animation-name: highlight;
   animation-duration: 3s;
