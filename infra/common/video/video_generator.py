@@ -127,9 +127,9 @@ class VideoGenerator(ContentGenerator):
         return clip, segment_length
 
 
-    def build_prompt(self, user_input):
+    def build_prompt(self, user_input, scriptLength):
         intro = f"Generate a short, motivational script that offers a positive and encouraging message related to the theme: '{user_input}'.\n\n"
-        script_prompt = f"{intro}The script should be short (10 seconds). The script should provide an uplifting perspective on common human experiences or feelings, similar to these examples: \n\n 1. 'Struggling to love yourself? Remember, the most powerful relationship you'll ever have is the relationship with yourself. Cherish and nurture it.' \n\n 2. 'Feeling overwhelmed with negativity? Let's turn it around. Find one thing to be grateful for each day, and watch how your perspective changes.' \n\n Please continue in a similar style."
+        script_prompt = f"{intro}The script should be short ({scriptLength} seconds). The script should provide an uplifting perspective on common human experiences or feelings, similar to these examples: \n\n 1. 'Struggling to love yourself? Remember, the most powerful relationship you'll ever have is the relationship with yourself. Cherish and nurture it.' \n\n 2. 'Feeling overwhelmed with negativity? Let's turn it around. Find one thing to be grateful for each day, and watch how your perspective changes.' \n\n Please continue in a similar style."
         
         return script_prompt
 
@@ -182,49 +182,44 @@ class VideoGenerator(ContentGenerator):
 
     def get_music(self, duration):
         music_path = self.get_random_music_file()
-        music = AudioFileClip(music_path).volumex(0.1)
+        music = AudioFileClip(music_path).volumex(0.9)
         latest_start_time = max(0, music.duration - duration)
         start_time = random.uniform(0, latest_start_time)
         music_clip = music.subclip(start_time, start_time + duration)
         return music_clip
 
     def makeVideo(self):
-        DEFAULT_DURATION = 10  # define your constant duration here (in seconds)
+        DEFAULT_DURATION = 55  # define your constant duration here (in seconds)
         video_output_path = f'{self.folder_name}/videoFinal.mp4'
         
         # Create directory if it doesn't exist
         os.makedirs(os.path.dirname(video_output_path), exist_ok=True)
-        backgrounds = Constants.cat
-        themes = [
-            # themes list...
-        ]
-        background = random.choice(backgrounds)
-
-        script = ""
-        if script is None:
-            prompt = self.build_prompt(audio_prompt)
+        background = random.choice(Constants.cat)
+        script = "MAKE_TEXT"
+        audio_prompt = random.choice(self.get_topics_from_blog())
+       
+        if script == "MAKE_TEXT":
+            prompt = self.build_prompt(audio_prompt, DEFAULT_DURATION)
             script = self.saveText(prompt, Constants.script).strip('"')
-        
+            sentences = self.script_to_list(script)
+            video_clip = self.getVideo(DEFAULT_DURATION, background)
         
 
-        if script:
+        if script == "CUSTOM_TEXT":
+            video_clip = self.getVideo(DEFAULT_DURATION, background)
+            music_clip = self.get_music(DEFAULT_DURATION)
             
-            audio_prompt = random.choice(themes)
-            audio_clip = self.audio_generator.getBadAudio(script, self.folder_name)
-            video_clip = self.getVideo(audio_clip.duration, background)
-            music_clip = self.get_music(audio_clip.duration)
-            video_clip = video_clip.set_duration(audio_clip.duration)
-            video_clip = video_clip.set_audio(CompositeAudioClip([audio_clip, music_clip]))
             sentences = self.script_to_list(script)
-            durations = self.generate_sentence_timestamps(script, video_clip.duration)
-        else:
+            
+        if script == "MUSIC_ONLY":
             video_clip = self.getVideo(DEFAULT_DURATION + 20, background)
             video_clip = video_clip.set_duration(DEFAULT_DURATION)
             music_clip = self.get_music(DEFAULT_DURATION)
-            video_clip = video_clip.set_audio(CompositeAudioClip([ music_clip]))
             sentences = []
             durations = []
 
+        video_clip = video_clip.set_audio(CompositeAudioClip([music_clip]))
+        durations = self.generate_sentence_timestamps(script, video_clip.duration)
         clips = self.story_manager.get_random_clips(sentences, f'{self.folder_name}/images', durations)
         final_video = self.story_manager.add_clips_to_video([video_clip], clips)
 

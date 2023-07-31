@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+from utils import Utils
 
 def clean_generated_folder(topics, base_path="generated"):
     # Create a set of folder names that should exist, based on the given topics
@@ -18,7 +19,7 @@ def clean_generated_folder(topics, base_path="generated"):
     for folder_name in expected_folders:
         folder_path = os.path.join(base_path, folder_name)
         if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
+            os.makedirs(Utils.sanitize_folder_name(folder_path))
 def sanitize_folder_name(name):
     return name.replace(':', '').replace(' ', '-')
 

@@ -63,8 +63,8 @@ class Constants:
         ]
     cat = [
         'black cat',
-        'white cat',
-        'fat cat',
-        'baby cat'
+        # 'white cat',
+        # 'fat cat',
+        # 'baby cat'
     ]
     

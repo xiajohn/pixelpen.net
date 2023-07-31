@@ -6,7 +6,7 @@ import textwrap
 import base64
 import io
 import requests, json
-import random
+from utils import Utils
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv('../.env'))
 import time 
@@ -93,3 +93,24 @@ class ContentGenerator:
         response = requests.post(url, headers=headers, data=json.dumps(data))
         embedding = response.json()['data'][0]['embedding']
         return embedding
+    
+    import json
+
+    def get_topics_from_blog(self):
+        """
+        Get all the topics from the blog JSON data.
+
+        Args:
+        blog_json (str): The blog data in JSON format.
+
+        Returns:
+        list: A list of topics from the blog.
+        """
+        # Load the JSON data
+        blog_data = Utils.load_json("user_input.json")
+
+        # Get the topics
+        topics = [item['topic'] for item in blog_data['website_building']['topics']]
+
+        return topics
+

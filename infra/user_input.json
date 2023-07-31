@@ -1,70 +1,24 @@
 {
-    "soil": {
+    "website_building": {
         "topics": [
-            {"topic": "types of soil", "type": "TRANSACTIONAL"},
-            {"topic": "most fertile soil in the world", "type": "TRANSACTIONAL"},
-            {"topic": "websoilsurvey", "type": "TRANSACTIONAL"},
-            {"topic": "caliche", "type": "TRANSACTIONAL"},
-            {"topic": "cbr test", "type": "TRANSACTIONAL"},
-            {"topic": "best soil for mushrooms", "type": "TRANSACTIONAL"},
-            {"topic": "key nurtrients in soil", "type": "TRANSACTIONAL"},
-            {"topic": "finding the best soil", "type": "TRANSACTIONAL"},
-            {"topic": "brown vs black soil", "type": "TRANSACTIONAL"},
-            {"topic": "how to find worms", "type": "TRANSACTIONAL"}
+            {"topic": "types of websites to build", "type": "INFORMATIONAL"},
+            {"topic": "most successful website designs", "type": "INFORMATIONAL"},
+            {"topic": "using website building platforms", "type": "INFORMATIONAL"},
+            {"topic": "responsive design", "type": "INFORMATIONAL"},
+            {"topic": "SEO optimization for websites", "type": "INFORMATIONAL"},
+            {"topic": "best platform for e-commerce sites", "type": "INFORMATIONAL"},
+            {"topic": "key elements of website design", "type": "INFORMATIONAL"},
+            {"topic": "finding the best website builder", "type": "INFORMATIONAL"},
+            {"topic": "comparison: custom-built vs template-based websites", "type": "INFORMATIONAL"},
+            {"topic": "how to increase website traffic", "type": "INFORMATIONAL"},
+            {"topic": "why hire a freelance website builder", "type": "INFORMATIONAL"},
+            {"topic": "flexibility and customization with freelancers", "type": "INFORMATIONAL"},
+            {"topic": "cost-effectiveness of hiring a freelancer", "type": "INFORMATIONAL"},
+            {"topic": "freelancer vs agency: which to choose?", "type": "INFORMATIONAL"},
+            {"topic": "building a relationship with your freelancer", "type": "INFORMATIONAL"},
+            {"topic": "case studies: successful websites built by freelancers", "type": "INFORMATIONAL"}
+       
         ],
-        "affiliate_links": [
-            {"name": "Soil Testing", "url": "https://salemsoilsolutions.com"},
-            {"name": "Brut Worm Castings ", "url": "https://amzn.to/3LlWs7X"},
-            {"name": "The Andersons HumiChar Organic Soil", "url": "https://amzn.to/41XWJoU"}
-        ]
-    },
-    "summer": {
-        "topics": [
-            {"topic": "seattle summer", "type": "TRANSACTIONAL"},
-            {"topic": "seattle parks and recreation summer camps", "type": "TRANSACTIONAL"},
-            {"topic": "camp seattle", "type": "INFORMATIONAL"},
-            {"topic": "seattle", "type": "INFORMATIONAL"},
-            {"topic": "pike place market", "type": "INFORMATIONAL"},
-            {"topic": "seattle to portland", "type": "INFORMATIONAL"},
-            {"topic": "pink door seattle", "type": "INFORMATIONAL"},
-            {"topic": "capitol hill seattle", "type": "TRANSACTIONAL"},
-            {"topic": "warwick seattle", "type": "INFORMATIONAL"},
-            {"topic": "alki beach", "type": "INFORMATIONAL"}
-        ],
-        "affiliate_links": [
-            {"name": "FURTALK Sun Visor Hats", "url": "https://amzn.to/3Lp8Bce"},
-            {"name": "NPJY Bucket Hat for Women Men  ",
-                "url": "https://amzn.to/3LHPdZr"},
-            {"name": "Gildan A-Shirt Tanks", "url": "https://amzn.to/3nfAFGX"},
-            {"name": "Neutrogena Beach Defense Water-Resistant",
-                "url": "https://amzn.to/3LiLWyd"}
-        ]
-    },
-    "bbq": {
-       "topics": [
-           {"topic": "Best bbq summer 2023", "type": "TRANSACTIONAL"},
-            {"topic": "Grill Hacks 2023", "type": "TRANSACTIONAL"},
-            {"topic": "Summer grilling 2023", "type": "TRANSACTIONAL"},
-            {"topic": "What to grill", "type": "TRANSACTIONAL"},
-            {"topic": "Is grilling healthy for you", "type": "INFORMATIONAL"}
-       ],
-       "affiliate_links": [
-           {"name": "Royal Gourmet CC1830F Charcoal Grill", "url": "https://amzn.to/3NzkgYV"},
-           {"name": "American Gourmet 463672717  ", "url": "https://amzn.to/41TbitP"},
-            {"name": "Grill brush", "url": "https://amzn.to/44gZwef"},
-           {"name": "GRILLART Grill Brush and Scraper", "url": "https://amzn.to/3LK2f8D"}
-       ]
-    },
-    "tennis": {
-        "topics": [
-            {"topic": "tennis", "type": "TRANSACTIONAL"},
-             {"topic": "ostapenko outfit", "type": "TRANSACTIONAL"},
-             {"topic": "tennis shorts", "type": "TRANSACTIONAL"}
-        ],
-        "affiliate_links": [
-            {"name": "Tennis Elbow Strap", "url": "https://amzn.to/3ptE6uF"},
-            {"name": "Tennis balls  ", "url": "https://amzn.to/3NWNGAd"},
-             {"name": "Tennis Racket", "url": "https://amzn.to/42mR5Nb"}
-        ]
-     }
+        "affiliate_links":[]
+    }
 }
